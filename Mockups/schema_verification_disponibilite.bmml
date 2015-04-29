@@ -1,0 +1,71 @@
+<mockup version="1.0" skin="sketch" fontFace="Balsamiq Sans" measuredW="1069" measuredH="130" mockupW="1009" mockupH="113">
+  <controls>
+    <control controlID="2" controlTypeID="com.balsamiq.mockups::Arrow" x="206" y="51" w="68" h="10" measuredW="150" measuredH="100" zOrder="1" locked="false" isInGroup="-1">
+      <controlProperties>
+        <leftArrow>false</leftArrow>
+      </controlProperties>
+    </control>
+    <control controlID="5" controlTypeID="__group__" x="60" y="32" w="161" h="78" measuredW="161" measuredH="78" zOrder="0" locked="false" isInGroup="-1">
+      <groupChildrenDescriptors>
+        <control controlID="0" controlTypeID="com.balsamiq.mockups::Image" x="41" y="0" w="-1" h="-1" measuredW="48" measuredH="48" zOrder="0" locked="false" isInGroup="5">
+          <controlProperties>
+            <src>./assets/iconmonstr-user-6-icon-48.png</src>
+          </controlProperties>
+        </control>
+        <control controlID="1" controlTypeID="com.balsamiq.mockups::Label" x="0" y="54" w="-1" h="-1" measuredW="161" measuredH="24" zOrder="1" locked="false" isInGroup="5">
+          <controlProperties>
+            <size>16</size>
+            <text>Demande%20une%20s%E9ance</text>
+          </controlProperties>
+        </control>
+      </groupChildrenDescriptors>
+    </control>
+    <control controlID="6" controlTypeID="__group__" x="289" y="32" w="174" h="80" measuredW="174" measuredH="80" zOrder="2" locked="false" isInGroup="-1">
+      <groupChildrenDescriptors>
+        <control controlID="0" controlTypeID="com.balsamiq.mockups::MultilineButton" x="0" y="0" w="147" h="46" measuredW="106" measuredH="66" zOrder="0" locked="false" isInGroup="6">
+          <controlProperties>
+            <text>The%20Hobbit%0A14%3A30%20-%2017%3A30</text>
+          </controlProperties>
+        </control>
+        <control controlID="1" controlTypeID="com.balsamiq.mockups::Label" x="5" y="56" w="-1" h="-1" measuredW="169" measuredH="24" zOrder="1" locked="false" isInGroup="6">
+          <controlProperties>
+            <size>16</size>
+            <text>S%E9lection%20de%20la%20s%E9ance</text>
+          </controlProperties>
+        </control>
+      </groupChildrenDescriptors>
+    </control>
+    <control controlID="9" controlTypeID="__group__" x="527" y="30" w="168" h="81" measuredW="168" measuredH="81" zOrder="3" locked="false" isInGroup="-1">
+      <groupChildrenDescriptors>
+        <control controlID="0" controlTypeID="com.balsamiq.mockups::Image" x="44" y="0" w="-1" h="-1" measuredW="48" measuredH="48" zOrder="0" locked="false" isInGroup="9">
+          <controlProperties>
+            <src>./assets/iconmonstr-loading-12-icon-48.png</src>
+          </controlProperties>
+        </control>
+        <control controlID="1" controlTypeID="com.balsamiq.mockups::Label" x="0" y="57" w="-1" h="-1" measuredW="168" measuredH="24" zOrder="1" locked="false" isInGroup="9">
+          <controlProperties>
+            <size>16</size>
+            <text>V%E9rification%20des%20places</text>
+          </controlProperties>
+        </control>
+      </groupChildrenDescriptors>
+    </control>
+    <control controlID="10" controlTypeID="com.balsamiq.mockups::Arrow" x="459" y="51" w="68" h="10" measuredW="150" measuredH="100" zOrder="4" locked="false" isInGroup="-1">
+      <controlProperties>
+        <leftArrow>false</leftArrow>
+      </controlProperties>
+    </control>
+    <control controlID="11" controlTypeID="com.balsamiq.mockups::Arrow" x="678" y="51" w="180" h="10" measuredW="150" measuredH="100" zOrder="5" locked="false" isInGroup="-1">
+      <controlProperties>
+        <backgroundAlpha>1</backgroundAlpha>
+        <leftArrow>false</leftArrow>
+        <text>Erreur%20s%E9ance%20compl%E8te</text>
+      </controlProperties>
+    </control>
+    <control controlID="12" controlTypeID="com.balsamiq.mockups::Alert" x="866" y="17" w="203" h="113" measuredW="200" measuredH="133" zOrder="6" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Complet%0AD%E9soler%20mais%20la%20s%E9ance%20s%E9lectionn%E9e%20est%20compl%E8te%20%21%0AOk</text>
+      </controlProperties>
+    </control>
+  </controls>
+</mockup>
