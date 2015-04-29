@@ -1,0 +1,100 @@
+<mockup version="1.0" skin="sketch" fontFace="Balsamiq Sans" measuredW="581" measuredH="275" mockupW="542" mockupH="240">
+  <controls>
+    <control controlID="2" controlTypeID="__group__" x="39" y="35" w="542" h="240" measuredW="542" measuredH="240" zOrder="0" locked="false" isInGroup="-1">
+      <groupChildrenDescriptors>
+        <control controlID="13" controlTypeID="__group__" x="20" y="61" w="289" h="142" measuredW="289" measuredH="142" zOrder="1" locked="false" isInGroup="2">
+          <groupChildrenDescriptors>
+            <control controlID="0" controlTypeID="com.balsamiq.mockups::FieldSet" x="0" y="0" w="289" h="142" measuredW="200" measuredH="170" zOrder="0" locked="false" isInGroup="13">
+              <controlProperties>
+                <text>Statistique%20vente</text>
+              </controlProperties>
+            </control>
+            <control controlID="1" controlTypeID="com.balsamiq.mockups::Label" x="124" y="19" w="-1" h="-1" measuredW="105" measuredH="21" zOrder="1" locked="false" isInGroup="13">
+              <controlProperties>
+                <text>Billet%20total%20vendu%20%3A</text>
+              </controlProperties>
+            </control>
+            <control controlID="2" controlTypeID="com.balsamiq.mockups::Label" x="15" y="40" w="-1" h="-1" measuredW="214" measuredH="21" zOrder="2" locked="false" isInGroup="13">
+              <controlProperties>
+                <text>Billet%20vendu%20durant%20le%20mois%20courrant%20%3A</text>
+              </controlProperties>
+            </control>
+            <control controlID="3" controlTypeID="com.balsamiq.mockups::Label" x="244" y="19" w="-1" h="-1" measuredW="21" measuredH="21" zOrder="3" locked="false" isInGroup="13">
+              <controlProperties>
+                <text>100</text>
+              </controlProperties>
+            </control>
+            <control controlID="4" controlTypeID="com.balsamiq.mockups::Label" x="244" y="40" w="-1" h="-1" measuredW="16" measuredH="21" zOrder="4" locked="false" isInGroup="13">
+              <controlProperties>
+                <text>50</text>
+              </controlProperties>
+            </control>
+            <control controlID="5" controlTypeID="com.balsamiq.mockups::Label" x="106" y="61" w="-1" h="-1" measuredW="123" measuredH="21" zOrder="5" locked="false" isInGroup="13">
+              <controlProperties>
+                <text>Billet%20enfants%20vendu%20%3A</text>
+              </controlProperties>
+            </control>
+            <control controlID="6" controlTypeID="com.balsamiq.mockups::Label" x="244" y="61" w="-1" h="-1" measuredW="13" measuredH="21" zOrder="6" locked="false" isInGroup="13">
+              <controlProperties>
+                <text>15</text>
+              </controlProperties>
+            </control>
+            <control controlID="7" controlTypeID="com.balsamiq.mockups::Label" x="106" y="82" w="-1" h="-1" measuredW="123" measuredH="21" zOrder="7" locked="false" isInGroup="13">
+              <controlProperties>
+                <text>Billet%20adultes%20vendu%20%3A</text>
+              </controlProperties>
+            </control>
+            <control controlID="8" controlTypeID="com.balsamiq.mockups::Label" x="25" y="106" w="-1" h="-1" measuredW="206" measuredH="21" zOrder="8" locked="false" isInGroup="13">
+              <controlProperties>
+                <text>Billet%20etudiants%20/%20A.V.S%20/%20A.I%20vendu%20%3A</text>
+              </controlProperties>
+            </control>
+            <control controlID="9" controlTypeID="com.balsamiq.mockups::Label" x="244" y="82" w="-1" h="-1" measuredW="14" measuredH="21" zOrder="9" locked="false" isInGroup="13">
+              <controlProperties>
+                <text>10</text>
+              </controlProperties>
+            </control>
+            <control controlID="10" controlTypeID="com.balsamiq.mockups::Label" x="244" y="106" w="-1" h="-1" measuredW="16" measuredH="21" zOrder="10" locked="false" isInGroup="13">
+              <controlProperties>
+                <text>25</text>
+              </controlProperties>
+            </control>
+          </groupChildrenDescriptors>
+        </control>
+        <control controlID="14" controlTypeID="__group__" x="0" y="0" w="542" h="240" measuredW="542" measuredH="240" zOrder="0" locked="false" isInGroup="2">
+          <groupChildrenDescriptors>
+            <control controlID="0" controlTypeID="com.balsamiq.mockups::TitleWindow" x="0" y="0" w="542" h="240" measuredW="450" measuredH="400" zOrder="0" locked="false" isInGroup="14">
+              <controlProperties>
+                <text>OneWay%20Tickets</text>
+              </controlProperties>
+            </control>
+            <control controlID="1" controlTypeID="com.balsamiq.mockups::MenuBar" x="0" y="21" w="542" h="29" measuredW="115" measuredH="29" zOrder="1" locked="false" isInGroup="14">
+              <controlProperties>
+                <text>Gestions</text>
+              </controlProperties>
+            </control>
+          </groupChildrenDescriptors>
+        </control>
+        <control controlID="18" controlTypeID="__group__" x="324" y="61" w="207" h="58" measuredW="207" measuredH="58" zOrder="2" locked="false" isInGroup="2">
+          <groupChildrenDescriptors>
+            <control controlID="0" controlTypeID="com.balsamiq.mockups::FieldSet" x="0" y="0" w="207" h="58" measuredW="200" measuredH="170" zOrder="0" locked="false" isInGroup="18">
+              <controlProperties>
+                <text>Films</text>
+              </controlProperties>
+            </control>
+            <control controlID="1" controlTypeID="com.balsamiq.mockups::Label" x="15" y="22" w="-1" h="-1" measuredW="98" measuredH="21" zOrder="1" locked="false" isInGroup="18">
+              <controlProperties>
+                <text>Films%20le%20plus%20vu%20%3A</text>
+              </controlProperties>
+            </control>
+            <control controlID="2" controlTypeID="com.balsamiq.mockups::Label" x="128" y="22" w="-1" h="-1" measuredW="64" measuredH="21" zOrder="2" locked="false" isInGroup="18">
+              <controlProperties>
+                <text>The%20Hobbit</text>
+              </controlProperties>
+            </control>
+          </groupChildrenDescriptors>
+        </control>
+      </groupChildrenDescriptors>
+    </control>
+  </controls>
+</mockup>

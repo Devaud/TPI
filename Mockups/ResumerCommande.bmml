@@ -85,60 +85,69 @@
         </control>
       </groupChildrenDescriptors>
     </control>
-    <control controlID="4" controlTypeID="com.balsamiq.mockups::FieldSet" x="635" y="90" w="270" h="193" measuredW="200" measuredH="170" zOrder="3" locked="false" isInGroup="-1">
-      <controlProperties>
-        <text>Billets</text>
-      </controlProperties>
-    </control>
-    <control controlID="5" controlTypeID="com.balsamiq.mockups::Label" x="653" y="114" w="-1" h="-1" measuredW="62" measuredH="21" zOrder="4" locked="false" isInGroup="-1">
-      <controlProperties>
-        <text>Enfant%28s%29%20%3A</text>
-      </controlProperties>
-    </control>
-    <control controlID="7" controlTypeID="com.balsamiq.mockups::Label" x="662" y="153" w="-1" h="-1" measuredW="61" measuredH="21" zOrder="5" locked="false" isInGroup="-1">
-      <controlProperties>
-        <text>Adulte%28s%29%20%3A</text>
-      </controlProperties>
-    </control>
-    <control controlID="9" controlTypeID="com.balsamiq.mockups::Label" x="653" y="192" w="-1" h="-1" measuredW="140" measuredH="21" zOrder="6" locked="false" isInGroup="-1">
-      <controlProperties>
-        <text>Etudiant%28s%29%20/%20A.V.S/%20A.I%20%3A</text>
-      </controlProperties>
-    </control>
-    <control controlID="12" controlTypeID="com.balsamiq.mockups::Label" x="734" y="153" w="-1" h="-1" measuredW="88" measuredH="21" zOrder="7" locked="false" isInGroup="-1">
-      <controlProperties>
-        <text>2%20x%2024.00%20CHF</text>
-      </controlProperties>
-    </control>
-    <control controlID="13" controlTypeID="com.balsamiq.mockups::Label" x="734" y="219" w="-1" h="-1" measuredW="83" measuredH="21" zOrder="8" locked="false" isInGroup="-1">
-      <controlProperties>
-        <text>2%20x%2015.00%20CHF</text>
-      </controlProperties>
-    </control>
-    <control controlID="14" controlTypeID="com.balsamiq.mockups::Label" x="734" y="114" w="-1" h="-1" measuredW="81" measuredH="21" zOrder="9" locked="false" isInGroup="-1">
-      <controlProperties>
-        <text>1%20x%2010.00%20CHF</text>
-      </controlProperties>
-    </control>
-    <control controlID="15" controlTypeID="com.balsamiq.mockups::Button" x="614" y="305" w="157" h="38" measuredW="157" measuredH="27" zOrder="10" locked="false" isInGroup="-1">
+    <control controlID="15" controlTypeID="com.balsamiq.mockups::Button" x="614" y="305" w="157" h="38" measuredW="157" measuredH="27" zOrder="3" locked="false" isInGroup="-1">
       <controlProperties>
         <text>Corriger%20la%20r%E9servation</text>
       </controlProperties>
     </control>
-    <control controlID="16" controlTypeID="com.balsamiq.mockups::Button" x="778" y="305" w="157" h="38" measuredW="153" measuredH="27" zOrder="11" locked="false" isInGroup="-1">
+    <control controlID="16" controlTypeID="com.balsamiq.mockups::Button" x="778" y="305" w="157" h="38" measuredW="153" measuredH="27" zOrder="4" locked="false" isInGroup="-1">
       <controlProperties>
         <text>Annuler%20la%20r%E9servation</text>
       </controlProperties>
     </control>
-    <control controlID="17" controlTypeID="com.balsamiq.mockups::Button" x="692" y="351" w="157" h="38" measuredW="138" measuredH="27" zOrder="12" locked="false" isInGroup="-1">
+    <control controlID="17" controlTypeID="com.balsamiq.mockups::Button" x="692" y="351" w="157" h="38" measuredW="138" measuredH="27" zOrder="5" locked="false" isInGroup="-1">
       <controlProperties>
         <text>Valider%20le%20payement</text>
       </controlProperties>
     </control>
-    <control controlID="18" controlTypeID="com.balsamiq.mockups::Label" x="669" y="255" w="-1" h="-1" measuredW="47" measuredH="21" zOrder="13" locked="false" isInGroup="-1">
-      <controlProperties>
-        <text>Totale%20%3A%20</text>
-      </controlProperties>
+    <control controlID="20" controlTypeID="__group__" x="635" y="90" w="270" h="193" measuredW="270" measuredH="193" zOrder="6" locked="false" isInGroup="-1">
+      <groupChildrenDescriptors>
+        <control controlID="0" controlTypeID="com.balsamiq.mockups::FieldSet" x="0" y="0" w="270" h="193" measuredW="200" measuredH="170" zOrder="0" locked="false" isInGroup="20">
+          <controlProperties>
+            <text>Billets</text>
+          </controlProperties>
+        </control>
+        <control controlID="1" controlTypeID="com.balsamiq.mockups::Label" x="26" y="24" w="-1" h="-1" measuredW="62" measuredH="21" zOrder="1" locked="false" isInGroup="20">
+          <controlProperties>
+            <text>Enfant%28s%29%20%3A</text>
+          </controlProperties>
+        </control>
+        <control controlID="2" controlTypeID="com.balsamiq.mockups::Label" x="27" y="63" w="-1" h="-1" measuredW="61" measuredH="21" zOrder="2" locked="false" isInGroup="20">
+          <controlProperties>
+            <text>Adulte%28s%29%20%3A</text>
+          </controlProperties>
+        </control>
+        <control controlID="3" controlTypeID="com.balsamiq.mockups::Label" x="18" y="102" w="-1" h="-1" measuredW="140" measuredH="21" zOrder="3" locked="false" isInGroup="20">
+          <controlProperties>
+            <text>Etudiant%28s%29%20/%20A.V.S/%20A.I%20%3A</text>
+          </controlProperties>
+        </control>
+        <control controlID="4" controlTypeID="com.balsamiq.mockups::Label" x="99" y="63" w="-1" h="-1" measuredW="88" measuredH="21" zOrder="4" locked="false" isInGroup="20">
+          <controlProperties>
+            <text>2%20x%2024.00%20CHF</text>
+          </controlProperties>
+        </control>
+        <control controlID="5" controlTypeID="com.balsamiq.mockups::Label" x="99" y="129" w="-1" h="-1" measuredW="83" measuredH="21" zOrder="5" locked="false" isInGroup="20">
+          <controlProperties>
+            <text>2%20x%2015.00%20CHF</text>
+          </controlProperties>
+        </control>
+        <control controlID="6" controlTypeID="com.balsamiq.mockups::Label" x="99" y="24" w="-1" h="-1" measuredW="81" measuredH="21" zOrder="6" locked="false" isInGroup="20">
+          <controlProperties>
+            <text>1%20x%2010.00%20CHF</text>
+          </controlProperties>
+        </control>
+        <control controlID="7" controlTypeID="com.balsamiq.mockups::Label" x="48" y="165" w="-1" h="-1" measuredW="40" measuredH="21" zOrder="7" locked="false" isInGroup="20">
+          <controlProperties>
+            <text>Total%20%3A%20</text>
+          </controlProperties>
+        </control>
+        <control controlID="8" controlTypeID="com.balsamiq.mockups::Label" x="99" y="165" w="-1" h="-1" measuredW="63" measuredH="21" zOrder="8" locked="false" isInGroup="20">
+          <controlProperties>
+            <text>88.00%20CHF</text>
+          </controlProperties>
+        </control>
+      </groupChildrenDescriptors>
     </control>
   </controls>
 </mockup>
