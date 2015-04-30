@@ -23,17 +23,21 @@ Type
   public
     constructor Create(AOwner: TComponent; nomFilm, horaire : String; x, y : integer); overload;
     procedure changeCouleur(couleur: TColor);
-    procedure setText(texte: string; objet: string); 
+    procedure setText(texte: string; objet: string);
+    procedure Click(Sender: TObject); 
   end;
 
 CONST
 
   WIDTH_IMAGE   : integer = 193;
   HEIGHT_IMAGE  : integer = 57;
-  MIN_CARACTERE : integer = 0;
+  MIN_CARACTERE : integer = 1;
   MAX_CARACTERE : integer = 20;
 
 implementation
+
+uses
+  U_OneWayTickets_Reservation;
 
 { ****************************************************************************
   *** Constructeur de ImageBouton                                          ***
@@ -100,6 +104,9 @@ Begin
   // Initialise le texte des champs
   self.setText(horaire, 'horaire');
   self.setText(nomFilm, 'nom');
+
+  // Ajout d'évènement
+  OnClick:= Click;
 end;
 
 { ****************************************************************************
@@ -132,6 +139,17 @@ Begin
     if objet = 'nom' then
       lblNomFilm.Caption:= texte; 
   end;
+end;
+
+
+{ ****************************************************************************
+  *** Ouvre la fenêtre de réservation                                      ***
+  *** @params TObject Sender - Appel l'objet appeler                       ***
+  **************************************************************************** }
+procedure TImageBouton.Click(Sender: TObject);
+Begin
+  FrmReservation.lblNomFilm.Caption:= self.lblNomFilm.Caption;
+  FrmReservation.ShowModal;
 end;
 
 end.
