@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
-  Menus, StdCtrls, ExtCtrls;
+  Menus, StdCtrls, ExtCtrls, U_ImageBouton;
 
 type
   TFrmOneWayTickets = class(TForm)
@@ -22,9 +22,13 @@ type
     lblHeureCourante: TLabel;
     Label2: TLabel;
     Button1: TButton;
+    Image1: TImage;
+    Label1: TLabel;
+    Label3: TLabel;
     procedure Quitter1Click(Sender: TObject);
     procedure Timer1Timer(Sender: TObject);
     procedure Button1Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
   private
     { Déclarations privées }
   public
@@ -53,6 +57,17 @@ end;
 procedure TFrmOneWayTickets.Button1Click(Sender: TObject);
 begin
   FrmReservation.showModal;
+end;
+
+procedure TFrmOneWayTickets.FormCreate(Sender: TObject);
+var
+  Test: TImageBouton;
+begin
+  Test := TImageBouton.Create(FrmOneWayTickets, 'The hobbit', 'dasa');
+  Test.setText('vhjauifnca', 'horaire');
+  Test.setText('The H', 'nom');
+  
+
 end;
 
 end.

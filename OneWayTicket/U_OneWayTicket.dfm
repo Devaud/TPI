@@ -1,27 +1,28 @@
 object FrmOneWayTickets: TFrmOneWayTickets
-  Left = 263
-  Top = 147
+  Left = 282
+  Top = 142
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
   Caption = 'OneWay Tickets'
   ClientHeight = 419
   ClientWidth = 620
   Color = clBtnFace
-  Font.Charset = DEFAULT_CHARSET
+  Font.Charset = ANSI_CHARSET
   Font.Color = clWindowText
   Font.Height = -11
-  Font.Name = 'MS Sans Serif'
+  Font.Name = 'Arial'
   Font.Style = []
   Menu = MainMenu1
   OldCreateOrder = False
   Position = poScreenCenter
+  OnCreate = FormCreate
   PixelsPerInch = 96
-  TextHeight = 13
+  TextHeight = 14
   object lblHeureCourante: TLabel
     Left = 297
     Top = 336
     Width = 42
-    Height = 13
+    Height = 14
     Caption = '10:00:00'
   end
   object Label2: TLabel
@@ -36,6 +37,36 @@ object FrmOneWayTickets: TFrmOneWayTickets
     Font.Name = 'MS Sans Serif'
     Font.Style = [fsBold]
     ParentFont = False
+  end
+  object Image1: TImage
+    Left = 160
+    Top = 96
+    Width = 193
+    Height = 57
+  end
+  object Label1: TLabel
+    Left = 160
+    Top = 104
+    Width = 193
+    Height = 16
+    Alignment = taCenter
+    AutoSize = False
+    Caption = 'The Hobbit'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -13
+    Font.Name = 'MS Sans Serif'
+    Font.Style = [fsBold]
+    ParentFont = False
+  end
+  object Label3: TLabel
+    Left = 160
+    Top = 130
+    Width = 193
+    Height = 14
+    Alignment = taCenter
+    AutoSize = False
+    Caption = '14:30 - 17:30'
   end
   object BtnSeancePrecedente: TButton
     Left = 16
@@ -62,8 +93,8 @@ object FrmOneWayTickets: TFrmOneWayTickets
     TabOrder = 2
   end
   object Button1: TButton
-    Left = 104
-    Top = 72
+    Left = 24
+    Top = 264
     Width = 75
     Height = 25
     Caption = 'Button1'
