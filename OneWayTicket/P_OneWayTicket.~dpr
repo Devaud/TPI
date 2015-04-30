@@ -3,7 +3,8 @@ program P_OneWayTicket;
 uses
   Forms,
   U_OneWayTicket in 'U_OneWayTicket.pas' {FrmOneWayTickets},
-  U_OneWayTickets_Reservation in 'U_OneWayTickets_Reservation.pas' {FrmReservation};
+  U_OneWayTickets_Reservation in 'U_OneWayTickets_Reservation.pas' {FrmReservation},
+  U_ImageBouton in 'U_ImageBouton.pas';
 
 {$R *.RES}
 

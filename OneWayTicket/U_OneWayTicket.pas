@@ -1,3 +1,12 @@
+{ ****************************************************************************
+  *** Projet               : OneWayTickets                                 ***
+  *** Auteur               : Devaud Alan                                   ***
+  *** Description          : OneWay Tickets est un logiciel de billetteries***
+  ***                        séance                                        ***
+  *** Version              : 1.0                                           ***
+  *** Date de création     : 30.04.2015                                    ***
+  ***         Modification :                                               ***
+  **************************************************************************** }
 unit U_OneWayTicket;
 
 interface
@@ -94,8 +103,7 @@ end;
 
 procedure TFrmOneWayTickets.FormCreate(Sender: TObject);
 begin
-  Initialisation(); 
-
+  Initialisation();
 end;
 
 end.

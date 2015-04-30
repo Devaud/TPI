@@ -1,11 +1,9 @@
-object FrmReservation: TFrmReservation
-  Left = 836
-  Top = 128
-  BorderIcons = [biSystemMenu, biMinimize]
-  BorderStyle = bsSingle
-  Caption = 'OneWay Tickets - Réservation'
-  ClientHeight = 325
-  ClientWidth = 534
+object FrmReservationAvance: TFrmReservationAvance
+  Left = 260
+  Top = 117
+  Width = 638
+  Height = 599
+  Caption = 'OneWay Tickets - Réservation en avance'
   Color = clBtnFace
   Font.Charset = ANSI_CHARSET
   Font.Color = clWindowText
@@ -13,17 +11,40 @@ object FrmReservation: TFrmReservation
   Font.Name = 'Arial'
   Font.Style = []
   OldCreateOrder = False
-  Position = poScreenCenter
   PixelsPerInch = 96
   TextHeight = 14
-  object GroupBox1: TGroupBox
-    Left = 16
-    Top = 16
+  object Label1: TLabel
+    Left = 8
+    Top = 8
+    Width = 84
+    Height = 15
+    Caption = 'Choisir un film:'
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -12
+    Font.Name = 'Arial'
+    Font.Style = [fsBold]
+    ParentFont = False
+  end
+  object CbxFilm: TComboBox
+    Left = 8
+    Top = 24
+    Width = 505
+    Height = 22
+    ItemHeight = 14
+    TabOrder = 0
+    Text = 'CbxFilm'
+    Items.Strings = (
+      'The Hobbit')
+  end
+  object GroupBox2: TGroupBox
+    Left = 8
+    Top = 56
     Width = 249
     Height = 185
     Caption = ' Information sur le film '
-    TabOrder = 0
-    object Label1: TLabel
+    TabOrder = 1
+    object Label5: TLabel
       Left = 42
       Top = 24
       Width = 32
@@ -36,7 +57,7 @@ object FrmReservation: TFrmReservation
       Font.Style = [fsBold]
       ParentFont = False
     end
-    object Label2: TLabel
+    object Label6: TLabel
       Left = 32
       Top = 56
       Width = 40
@@ -49,7 +70,7 @@ object FrmReservation: TFrmReservation
       Font.Style = [fsBold]
       ParentFont = False
     end
-    object Label3: TLabel
+    object Label7: TLabel
       Left = 15
       Top = 88
       Width = 58
@@ -97,13 +118,13 @@ object FrmReservation: TFrmReservation
       TabOrder = 0
     end
   end
-  object GroupBox2: TGroupBox
-    Left = 280
-    Top = 16
+  object GroupBox1: TGroupBox
+    Left = 272
+    Top = 64
     Width = 241
     Height = 185
     Caption = ' Billets '
-    TabOrder = 1
+    TabOrder = 2
     object Label4: TLabel
       Left = 26
       Top = 26
@@ -117,7 +138,7 @@ object FrmReservation: TFrmReservation
       Font.Style = [fsBold]
       ParentFont = False
     end
-    object Label5: TLabel
+    object Label2: TLabel
       Left = 26
       Top = 64
       Width = 57
@@ -130,7 +151,7 @@ object FrmReservation: TFrmReservation
       Font.Style = [fsBold]
       ParentFont = False
     end
-    object Label6: TLabel
+    object Label3: TLabel
       Left = 26
       Top = 96
       Width = 128
@@ -182,7 +203,7 @@ object FrmReservation: TFrmReservation
       Font.Style = [fsBold]
       ParentFont = False
     end
-    object Label7: TLabel
+    object Label8: TLabel
       Left = 136
       Top = 149
       Width = 66
@@ -196,7 +217,7 @@ object FrmReservation: TFrmReservation
       Font.Style = [fsBold]
       ParentFont = False
     end
-    object Label8: TLabel
+    object Label9: TLabel
       Left = 96
       Top = 149
       Width = 33
@@ -210,77 +231,14 @@ object FrmReservation: TFrmReservation
       ParentFont = False
     end
   end
-  object EdtNbBilletsEnfants: TEdit
-    Left = 368
-    Top = 40
-    Width = 25
-    Height = 22
-    MaxLength = 2
-    ReadOnly = True
-    TabOrder = 2
-    Text = '0'
-  end
-  object UDNBilletsEnfants: TUpDown
-    Left = 393
-    Top = 40
-    Width = 16
-    Height = 22
-    Associate = EdtNbBilletsEnfants
-    Min = 0
-    Position = 0
-    TabOrder = 3
-    Wrap = False
-  end
-  object EdtNbBilletsAdultes: TEdit
-    Left = 368
-    Top = 78
-    Width = 25
-    Height = 22
-    MaxLength = 2
-    ReadOnly = True
-    TabOrder = 4
-    Text = '1'
-  end
-  object UDNBilletsAdultes: TUpDown
-    Left = 393
-    Top = 78
-    Width = 16
-    Height = 22
-    Associate = EdtNbBilletsAdultes
-    Min = 0
-    Position = 1
-    TabOrder = 5
-    Wrap = False
-  end
-  object EdtNbBilletsEAA: TEdit
-    Left = 368
-    Top = 133
-    Width = 25
-    Height = 22
-    MaxLength = 2
-    ReadOnly = True
-    TabOrder = 6
-    Text = '0'
-  end
-  object UDNBilletsEAA: TUpDown
-    Left = 393
-    Top = 133
-    Width = 16
-    Height = 22
-    Associate = EdtNbBilletsEAA
-    Min = 0
-    Position = 0
-    TabOrder = 7
-    Wrap = False
-  end
   object GroupBox3: TGroupBox
-    Left = 16
-    Top = 216
+    Left = 272
+    Top = 264
     Width = 249
     Height = 97
     Caption = ' Information sur la séance '
-    TabOrder = 8
-    object Label9: TLabel
+    TabOrder = 3
+    object Label10: TLabel
       Left = 70
       Top = 48
       Width = 48
@@ -293,7 +251,7 @@ object FrmReservation: TFrmReservation
       Font.Style = [fsBold]
       ParentFont = False
     end
-    object Label10: TLabel
+    object Label11: TLabel
       Left = 84
       Top = 24
       Width = 34
@@ -306,7 +264,7 @@ object FrmReservation: TFrmReservation
       Font.Style = [fsBold]
       ParentFont = False
     end
-    object Label11: TLabel
+    object Label12: TLabel
       Left = 15
       Top = 72
       Width = 103
@@ -343,21 +301,5 @@ object FrmReservation: TFrmReservation
       AutoSize = False
       Caption = '150'
     end
-  end
-  object BtnAnnuler: TButton
-    Left = 280
-    Top = 224
-    Width = 241
-    Height = 41
-    Caption = 'Annuler'
-    TabOrder = 9
-  end
-  object BtnValiderReservation: TButton
-    Left = 280
-    Top = 272
-    Width = 241
-    Height = 41
-    Caption = 'Valider la réservation'
-    TabOrder = 10
   end
 end

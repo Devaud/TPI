@@ -147,7 +147,7 @@ object FrmReservation: TFrmReservation
       Left = 136
       Top = 25
       Width = 66
-      Height = 17
+      Height = 15
       Caption = 'x 10.00 CHF'
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText

@@ -141,7 +141,6 @@ Begin
   end;
 end;
 
-
 { ****************************************************************************
   *** Ouvre la fenêtre de réservation                                      ***
   *** @params TObject Sender - Appel l'objet appeler                       ***
