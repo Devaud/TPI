@@ -3,13 +3,13 @@ program P_OneWayTicket;
 uses
   Forms,
   U_OneWayTicket in 'U_OneWayTicket.pas' {FrmOneWayTickets},
-  U_OneWayTickets_Reservation in 'U_OneWayTickets_Reservation.pas' {FrmReservation};
+  U_OneWayTickets_Reservation in 'U_OneWayTickets_Reservation.pas' {Form1};
 
 {$R *.RES}
 
 begin
   Application.Initialize;
   Application.CreateForm(TFrmOneWayTickets, FrmOneWayTickets);
-  Application.CreateForm(TFrmReservation, FrmReservation);
+  Application.CreateForm(TForm1, Form1);
   Application.Run;
 end.

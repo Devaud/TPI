@@ -7,7 +7,7 @@ uses
   Menus, StdCtrls, ExtCtrls;
 
 type
-  TForm1 = class(TForm)
+  TFrmOneWayTickets = class(TForm)
     MainMenu1: TMainMenu;
     Fichier1: TMenuItem;
     Quitter1: TMenuItem;
@@ -21,8 +21,10 @@ type
     Timer1: TTimer;
     lblHeureCourante: TLabel;
     Label2: TLabel;
+    Button1: TButton;
     procedure Quitter1Click(Sender: TObject);
     procedure Timer1Timer(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
   private
     { Déclarations privées }
   public
@@ -30,20 +32,27 @@ type
   end;
 
 var
-  Form1: TForm1;
+  FrmOneWayTickets: TFrmOneWayTickets;
 
 implementation
 
+uses U_OneWayTickets_Reservation;
+
 {$R *.DFM}
 
-procedure TForm1.Quitter1Click(Sender: TObject);
+procedure TFrmOneWayTickets.Quitter1Click(Sender: TObject);
 begin
   close;
 end;
 
-procedure TForm1.Timer1Timer(Sender: TObject);
+procedure TFrmOneWayTickets.Timer1Timer(Sender: TObject);
 begin
   lblHeureCourante.Caption:= TimeToStr(now());
+end;
+
+procedure TFrmOneWayTickets.Button1Click(Sender: TObject);
+begin
+  FrmReservation.showModal;
 end;
 
 end.

@@ -53,7 +53,7 @@ RunParams=
 HostApplication=
 [Language]
 ActiveLang=
-ProjectLang=
+ProjectLang=$0000100C
 RootDir=
 [Version Info]
 IncludeVerInfo=0

@@ -1,9 +1,9 @@
-object Form1: TForm1
-  Left = 400
-  Top = 174
+object FrmOneWayTickets: TFrmOneWayTickets
+  Left = 263
+  Top = 147
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
-  Caption = 'Form1'
+  Caption = 'OneWay Tickets'
   ClientHeight = 419
   ClientWidth = 620
   Color = clBtnFace
@@ -59,6 +59,15 @@ object Form1: TForm1
     Height = 41
     Caption = 'Réserver une séance en avance'
     TabOrder = 2
+  end
+  object Button1: TButton
+    Left = 104
+    Top = 72
+    Width = 75
+    Height = 25
+    Caption = 'Button1'
+    TabOrder = 3
+    OnClick = Button1Click
   end
   object MainMenu1: TMainMenu
     Left = 40
@@ -284,6 +293,7 @@ object Form1: TForm1
     end
   end
   object Timer1: TTimer
+    Interval = 500
     OnTimer = Timer1Timer
     Left = 8
     Top = 8
