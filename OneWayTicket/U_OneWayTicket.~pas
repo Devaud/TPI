@@ -21,14 +21,11 @@ type
     Timer1: TTimer;
     lblHeureCourante: TLabel;
     Label2: TLabel;
-    Button1: TButton;
-    Image1: TImage;
-    Label1: TLabel;
-    Label3: TLabel;
     procedure Quitter1Click(Sender: TObject);
     procedure Timer1Timer(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
+    procedure Initialisation();
   private
     { Déclarations privées }
   public
@@ -37,12 +34,48 @@ type
 
 var
   FrmOneWayTickets: TFrmOneWayTickets;
+  listImageBouton : TList; // Liste qui contient tous les bouton
+  nbImageBouton : integer = 11;
+
+CONST
+  START          : integer = 10;
+  ECART_X        : integer = 10;
+  ECART_Y        : integer = 10;
+  TAILLE_WIDTH   : integer = 193;
+  TAILLE_HEIGHT  : integer = 57;
 
 implementation
 
 uses U_OneWayTickets_Reservation;
 
 {$R *.DFM}
+
+{ ****************************************************************************
+  *** Initialisation de l'affichage                                        ***
+  **************************************************************************** }
+procedure TFrmOneWayTickets.Initialisation();
+var
+  i, x, y: integer;
+Begin
+  //Initialisation des boutons
+  x:= START; // Position X de départ du bouton
+  y:= START; // Position Y de départ du bouton
+
+  // Crée la liste des bouton
+  listImageBouton:= TList.Create();
+  for i:= 0 to nbImageBouton do
+  Begin
+    listImageBouton.add(TImageBouton.Create(FrmOneWayTickets, IntToStr(i), '14:00 - 17:00', x, y));
+    x := x + TAILLE_WIDTH + ECART_X; // Déplace le prochain bouton sur la droite
+
+    // Regare s'il y a déjà trois bouton sur une ligne
+    if listImageBouton.Count mod 3 = 0 then
+    Begin
+      y:= y + TAILLE_HEIGHT + ECART_X; // Déplace les prochain bouton sur la seconde ligne
+      x:= START; // Redémare la ligne au début
+    end;
+  end;
+end;
 
 procedure TFrmOneWayTickets.Quitter1Click(Sender: TObject);
 begin
@@ -60,13 +93,8 @@ begin
 end;
 
 procedure TFrmOneWayTickets.FormCreate(Sender: TObject);
-var
-  Test: TImageBouton;
 begin
-  Test := TImageBouton.Create(FrmOneWayTickets, 'The hobbit', 'dasa');
-  Test.setText('vhjauifnca', 'horaire');
-  Test.setText('The H', 'nom');
-  
+  Initialisation(); 
 
 end;
 

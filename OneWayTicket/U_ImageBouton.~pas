@@ -21,17 +21,16 @@ Type
     lblNomFilm  : TLabel;
     lblHoraire : TLabel;
   public
-    constructor Create(AOwner: TComponent; nomFilm, horaire : String); overload;
+    constructor Create(AOwner: TComponent; nomFilm, horaire : String; x, y : integer); overload;
     procedure changeCouleur(couleur: TColor);
     procedure setText(texte: string; objet: string); 
   end;
 
 CONST
-  START_TOP     : integer = 20;
-  START_LEFT    : integer = 10;
+
   WIDTH_IMAGE   : integer = 193;
   HEIGHT_IMAGE  : integer = 57;
-  MIN_CARACTERE : integer = 1;
+  MIN_CARACTERE : integer = 0;
   MAX_CARACTERE : integer = 20;
 
 implementation
@@ -43,7 +42,7 @@ implementation
   *** @params String nomFilm - Nom du film à afficher                      ***
   *** @params String horaire - horaire du film à afficher                  ***
   **************************************************************************** }
-constructor TImageBouton.Create(AOwner : TComponent; nomFilm, horaire: String);
+constructor TImageBouton.Create(AOwner : TComponent; nomFilm, horaire: String; x, y : integer);
 Begin
   inherited Create(AOwner);
 
@@ -53,8 +52,8 @@ Begin
     Parent:= (AOwner as TForm);
     Width:= WIDTH_IMAGE;
     Height:= HEIGHT_IMAGE;
-    Top:= START_TOP;
-    Left:= START_LEFT;
+    Top:= y;
+    Left:= x;
   end;
 
   self.changeCouleur(clGreen);

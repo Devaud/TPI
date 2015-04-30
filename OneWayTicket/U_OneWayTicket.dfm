@@ -1,10 +1,10 @@
 object FrmOneWayTickets: TFrmOneWayTickets
-  Left = 282
-  Top = 142
+  Left = 2050
+  Top = 145
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
   Caption = 'OneWay Tickets'
-  ClientHeight = 419
+  ClientHeight = 389
   ClientWidth = 620
   Color = clBtnFace
   Font.Charset = ANSI_CHARSET
@@ -20,14 +20,14 @@ object FrmOneWayTickets: TFrmOneWayTickets
   TextHeight = 14
   object lblHeureCourante: TLabel
     Left = 297
-    Top = 336
+    Top = 304
     Width = 42
     Height = 14
     Caption = '10:00:00'
   end
   object Label2: TLabel
     Left = 272
-    Top = 320
+    Top = 288
     Width = 92
     Height = 13
     Caption = 'Heure actuelle :'
@@ -38,39 +38,9 @@ object FrmOneWayTickets: TFrmOneWayTickets
     Font.Style = [fsBold]
     ParentFont = False
   end
-  object Image1: TImage
-    Left = 160
-    Top = 96
-    Width = 193
-    Height = 57
-  end
-  object Label1: TLabel
-    Left = 160
-    Top = 104
-    Width = 193
-    Height = 16
-    Alignment = taCenter
-    AutoSize = False
-    Caption = 'The Hobbit'
-    Font.Charset = DEFAULT_CHARSET
-    Font.Color = clWindowText
-    Font.Height = -13
-    Font.Name = 'MS Sans Serif'
-    Font.Style = [fsBold]
-    ParentFont = False
-  end
-  object Label3: TLabel
-    Left = 160
-    Top = 130
-    Width = 193
-    Height = 14
-    Alignment = taCenter
-    AutoSize = False
-    Caption = '14:30 - 17:30'
-  end
   object BtnSeancePrecedente: TButton
     Left = 16
-    Top = 312
+    Top = 280
     Width = 177
     Height = 41
     Caption = 'Afficher les séances précédentes'
@@ -78,7 +48,7 @@ object FrmOneWayTickets: TFrmOneWayTickets
   end
   object BtnSeanceSuivante: TButton
     Left = 432
-    Top = 312
+    Top = 280
     Width = 177
     Height = 41
     Caption = 'Afficher les séances suivantes'
@@ -86,20 +56,11 @@ object FrmOneWayTickets: TFrmOneWayTickets
   end
   object BtnReserverAvance: TButton
     Left = 16
-    Top = 368
+    Top = 336
     Width = 593
     Height = 41
     Caption = 'Réserver une séance en avance'
     TabOrder = 2
-  end
-  object Button1: TButton
-    Left = 24
-    Top = 264
-    Width = 75
-    Height = 25
-    Caption = 'Button1'
-    TabOrder = 3
-    OnClick = Button1Click
   end
   object MainMenu1: TMainMenu
     Left = 40
