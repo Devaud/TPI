@@ -324,9 +324,9 @@
         <text/>
       </controlProperties>
     </control>
-    <control controlID="52" controlTypeID="com.balsamiq.mockups::Image" x="467" y="357" w="-1" h="-1" measuredW="32" measuredH="32" zOrder="40" locked="false" isInGroup="-1">
+    <control controlID="52" controlTypeID="com.balsamiq.mockups::Image" x="461" y="354" w="45" h="40" measuredW="32" measuredH="32" zOrder="40" locked="false" isInGroup="-1">
       <controlProperties>
-        <src>./assets/iconmonstr-home-4-icon-32.png</src>
+        <src>../assets/iconmonstr-home-4-icon-32.png</src>
       </controlProperties>
     </control>
     <control controlID="53" controlTypeID="com.balsamiq.mockups::RoundButton" x="1110" y="552" w="159" h="45" measuredW="32" measuredH="32" zOrder="41" locked="false" isInGroup="-1">
@@ -353,6 +353,31 @@
         <leftArrow>true</leftArrow>
         <rightArrow>false</rightArrow>
         <stroke>solid</stroke>
+        <text/>
+      </controlProperties>
+    </control>
+    <control controlID="56" controlTypeID="com.balsamiq.mockups::RoundButton" x="686" y="446" w="164" h="56" measuredW="32" measuredH="32" zOrder="44" locked="false" isInGroup="-1">
+      <controlProperties>
+        <borderColor>9684093</borderColor>
+        <shape>rectangle</shape>
+        <text>R%E9servation%20en%20avance</text>
+      </controlProperties>
+    </control>
+    <control controlID="57" controlTypeID="com.balsamiq.mockups::Arrow" x="591" y="445" w="95" h="32" measuredW="150" measuredH="100" zOrder="45" locked="false" isInGroup="-1">
+      <controlProperties>
+        <curvature>-1</curvature>
+        <direction>top</direction>
+        <leftArrow>false</leftArrow>
+        <rightArrow>true</rightArrow>
+        <text/>
+      </controlProperties>
+    </control>
+    <control controlID="58" controlTypeID="com.balsamiq.mockups::Arrow" x="850" y="377" w="119" h="100" measuredW="150" measuredH="100" zOrder="46" locked="false" isInGroup="-1">
+      <controlProperties>
+        <curvature>-1</curvature>
+        <direction>bottom</direction>
+        <leftArrow>false</leftArrow>
+        <rightArrow>true</rightArrow>
         <text/>
       </controlProperties>
     </control>
