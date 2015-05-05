@@ -42,6 +42,7 @@ type
     { Déclarations privées }
   public
     { Déclarations publiques }
+    function Split(chaine: String; delimiteur: string): TStringList;
   end;
 
 var
@@ -55,7 +56,8 @@ CONST
   ECART_Y        : integer = 10;
   TAILLE_WIDTH   : integer = 193;
   TAILLE_HEIGHT  : integer = 57;
-  MDP_ADMIN      : String = 'Neko1';
+  MDP_ADMIN      : String  = 'Neko1';
+  FICHIER_STATS  : String  = './Res/statistiques.csv';
 
 implementation
 
@@ -63,6 +65,25 @@ uses U_OneWayTickets_Reservation, U_OneWayTickets_ReservationAvance,
   U_OneWayTickets_Login, U_OneWayTickets_MenuAdministrateur;
 
 {$R *.DFM}
+
+
+{ ****************************************************************************
+  *** Split une chaine de caractère                                        ***
+  *** Code trouvé sur le web, utilisateur qui donne le code : Aos          ***
+  *** http://www.developpez.net/forums/d639683/environnements-developpement***
+  *** /delphi/debutant/fonction-split-delphi/                              ***
+  *** @params String chaine - Chaine a splitée                             ***
+  *** @params String delimiteur - Délimiteur pour le split                 ***
+  *** @Result TStringList - List des éléments splité                       ***
+  **************************************************************************** }
+function Split(chaine: String; delimiteur: string): TStringList;
+var
+  L : TStringList;
+Begin
+  L:= TStringList.Create;
+  L.Text:= StringReplace(chaine, delimiteur, #13#10, [rfReplaceAll]);
+  Split:= L;
+end;
 
 { ****************************************************************************
   *** Initialisation de l'affichage                                        ***
@@ -125,11 +146,15 @@ begin
 end;
 
 { ****************************************************************************
-  *** Permet la connexion en tant qu'administrateur                        ***
+  *** Permet la connexion en tant qu'administrateur et initialise les      ***
+  *** données de statistiques                                              ***
   **************************************************************************** }
 procedure TFrmOneWayTickets.Connexion1Click(Sender: TObject);
 var
-  mdp : string;
+  mdp, ligne : string;
+  OutPutList : TStringList;
+  i: integer;
+  f: TextFile;
 begin
   // Vide le champ text du mot de passe
   FrmLogin.edtMdpAdmin.Text:= '';
@@ -142,17 +167,52 @@ begin
     // Test si le mot de passe est valide
     if mdp = MDP_ADMIN then
     Begin
-      FrmOneWayTickets.Visible:= false;
+    
+      // Test si le fichier existe
+      if FileExists(FICHIER_STATS) then
+      Begin
+        OutPutList:= TStringList.Create; // Crée la liste pour le split
 
-      // Initialisation des labels du menu administrateur
-      FrmMenuAdministrateur.lblBilletTotalVendu.Caption:= '0';
-      FrmMenuAdministrateur.lblBilletVenduMoisCourrant.Caption:= '0';
-      FrmMenuAdministrateur.lblBilletEnfantsVendu.Caption:= '0';
-      FrmMenuAdministrateur.lblBilletAdultesVendu.Caption:= '0';
-      FrmMenuAdministrateur.lblBilletEtudiantsVendu.Caption:= '0';
-      FrmMenuAdministrateur.lblFilmPlusVu.Caption:= 'Aucun film';
-      
+        // Assigne le fichier a lire
+        AssignFile(f, FICHIER_STATS);
+        Reset(f);
+        repeat
+          Readln(f, ligne);
+          OutPutList:= Split(ligne, ';');
+
+          // Initialisation des labels du menu administrateur
+          // Test quel label il faut mettre à jour
+          if OutPutList[0] = 'BilletTotal' then
+            FrmMenuAdministrateur.lblBilletTotalVendu.Caption:= OutPutList[1];
+
+          if OutPutList[0] = 'BilletEnfants' then
+            FrmMenuAdministrateur.lblBilletEnfantsVendu.Caption:= OutPutList[1];
+
+          if OutPutList[0] = 'BilletAdults' then
+            FrmMenuAdministrateur.lblBilletAdultesVendu.Caption:= OutPutList[1];
+
+          if OutPutList[0] = 'BilletEtudiants' then
+            FrmMenuAdministrateur.lblBilletEtudiantsVendu.Caption:= OutPutList[1];
+
+          if OutPutList[0] = 'BilletParMois' then
+            FrmMenuAdministrateur.lblBilletVenduMoisCourrant.Caption:= OutPutList[1];
+
+          if OutPutList[0] = 'FilmPlusVu' then
+            FrmMenuAdministrateur.lblFilmPlusVu.Caption:= OutPutList[1];
+            
+        until eof(f);
+
+        OutPutList.free; // Libère la liste
+        CloseFile(f); // Ferme le flux entre le fichier et le programe
+      end
+      else
+      Begin
+        ShowMessage('Fichier des statistiques manquantes');
+      end;
+
+      FrmOneWayTickets.Visible:= false;
       FrmMenuAdministrateur.Visible:= true; // Affiche la fenêtre administrateur
+      
     end
     else
     Begin

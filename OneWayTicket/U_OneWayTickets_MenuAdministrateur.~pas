@@ -55,6 +55,7 @@ var
 
 const
   FRM_MODAL_HEIGHT : integer = 359; // Hauteur d'une fenêtre modal
+  FICHIER_FILMS    : String  = './Res/films.csv';
 
 implementation
 
@@ -63,12 +64,18 @@ uses U_OneWayTickets_GestionFilms, U_OneWayTickets_GestionSalles,
 
 {$R *.DFM}
 
+
 { ****************************************************************************
   *** Affiche la fenêtre de gestion des films                              ***
   **************************************************************************** }
 procedure TFrmMenuAdministrateur.Films1Click(Sender: TObject);
 begin
-  FrmGestionFilms.Height:= FRM_MODAL_HEIGHT; // Initialise la taille de la fenêtre
+  // Initialise la fenêtre
+  FrmGestionFilms.Height:= FRM_MODAL_HEIGHT;
+  FrmGestionFilms.LbxListeFilms.Clear;
+  FrmGestionFilms.chargeListeFilm();
+  FrmGestionFilms.LbxListeFilms.ItemIndex:= 0;
+
   FrmGestionFilms.Visible:= true;
 end;
 

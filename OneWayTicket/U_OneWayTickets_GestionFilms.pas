@@ -1,3 +1,12 @@
+{ ****************************************************************************
+  *** Projet               : OneWayTickets                                 ***
+  *** Fenêtre              : GestionFilms                                  *** 
+  *** Auteur               : Devaud Alan                                   ***
+  *** Description          : Donne accès au fonctionnalité de la gestion   ***
+  ***                        des films                                     ***
+  *** Version              : 1.0                                           ***
+  *** Date de création     : 05.05.2015                                    ***
+  **************************************************************************** }
 unit U_OneWayTickets_GestionFilms;
 
 interface
@@ -29,6 +38,7 @@ type
     { Déclarations privées }
   public
     { Déclarations publiques }
+    procedure chargeListeFilm(); // Est disponible depuis l'extérieur
   end;
 
 var
@@ -37,26 +47,134 @@ var
 const
   FRM_HEIGHT_MAX : integer = 527;
   FRM_HEIGHT_MIN : integer = 358;
+  FICHIER_FILMS   : String  = './Res/films.csv';
 
 implementation
 
-uses U_OneWayTickets_AjouterFilm;
+uses U_OneWayTickets_AjouterFilm, U_OneWayTicket;
 
 {$R *.DFM}
 
+
+{ ****************************************************************************
+  *** Ajout un nombre d'espace avant ou après le text                      ***
+  *** @params String text - Text qui va prendre des espaces                ***
+  *** @params Boolean avant - La modification doit être placée avant ou    ***
+  ***                         apres                                        ***
+  *** @params Integer tailleEspace - Nombre d'espace souhaité              ***
+  *** @Result string - Retourne le text modifié                            ***
+  **************************************************************************** }
+function AjoutEspace(tailleEspace: integer): string;
+var
+  i, aAjouter: integer;
+  text: string;
+Begin
+  text:= '';
+  // Ajoute ce qu'il faut
+  for i:= 0 to tailleEspace do
+  Begin
+    text:= text + ' ';
+  end;
+
+  Result:= text; // Retourne le text modifier
+end;
+
+{ ****************************************************************************
+  *** Charge et affiche les films depuis un fichier csv                    ***   
+  **************************************************************************** }
+procedure TFrmGestionFilms.chargeListeFilm();
+var
+  f: TextFile;
+  ligne, ligneFormate : String;
+  OutPutList : TStringList;
+  premiereLigne : boolean;
+Begin
+  premiereLigne:= true;
+  LbxListeFilms.Clear;
+  
+  // Test si le fichier existe
+  if FileExists(FICHIER_FILMS) then
+  Begin
+    // Assigne le fichier
+    AssignFile(f, FICHIER_FILMS);
+    Reset(f);
+    repeat
+      Readln(f, ligne);
+
+      if premiereLigne then
+        premiereLigne:= false
+      else
+      Begin
+        OutPutList:= FrmOneWayTickets.Split(ligne, ';');
+
+        // Formate le text
+        ligneFormate:= OutPutList[0] + AjoutEspace(10);
+        ligneFormate:= ligneFormate + AjoutEspace(10) + OutPutList[1] + AjoutEspace(10);
+        ligneFormate:= ligneFormate + AjoutEspace(10) + OutPutList[2] + AjoutEspace(10) ;
+        ligneFormate:= ligneFormate + AjoutEspace(10) + OutPutList[3];
+        
+        LbxListeFilms.Items.Add(ligneFormate);
+      end;
+        
+    until eof(f);
+
+    OutPutList.free;
+
+    CloseFile(f);
+  end;
+end;
+
+{ ****************************************************************************
+  *** Ouvre les paramètres de modifications                                ***
+  **************************************************************************** }
 procedure TFrmGestionFilms.BtnModifierClick(Sender: TObject);
 begin
   self.Height:= FRM_HEIGHT_MAX;
 end;
 
+{ ****************************************************************************
+  *** Annule les modification                                              ***
+  **************************************************************************** }
 procedure TFrmGestionFilms.BtnAnuulerClick(Sender: TObject);
 begin
   self.Height:= FRM_HEIGHT_MIN;
 end;
 
+{ ****************************************************************************
+  *** Ouvre la fenêtre pour ajouter un film                               ***
+  **************************************************************************** }
 procedure TFrmGestionFilms.BtnAjouterClick(Sender: TObject);
+var
+  film: String; // Contient tous les éléments prêt pour être mis dans un fichier text
+  f: TextFile;
 begin
-  FrmAjouterFilm.showModal;
+  // Initialisation des composants
+  with FrmAjouterFilm do
+  Begin
+    edtNomFilm.Text:= '';
+    edtDureeFilm.Text:= '90';
+    edtPrixFilm.Text:= '5';
+    MmoSynopsis.Clear;
+  end;
+  
+  if FrmAjouterFilm.showModal = mrOk then
+  Begin
+    // Initialise la ligne qui sera enregistrée dans le fichier
+    film:= FrmAjouterFilm.edtNomFilm.Text + ';' + FrmAjouterFilm.edtDureeFilm.Text + ';' +
+      FrmAjouterFilm.MmoSynopsis.Text + ';' + FrmAjouterFilm.edtPrixFilm.Text;
+
+    // Test si le fichier existe
+    if FileExists(FICHIER_FILMS) then
+    Begin
+      AssignFile(f, FICHIER_FILMS);
+      Append(f);
+      Writeln(f, film);
+      CloseFile(f);
+      ShowMessage('Film ajouté avec succès !');
+    end;
+
+    chargeListeFilm();
+  end;
 end;
 
 end.

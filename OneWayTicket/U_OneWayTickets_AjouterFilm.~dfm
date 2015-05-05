@@ -1,10 +1,10 @@
 object FrmAjouterFilm: TFrmAjouterFilm
-  Left = 216
-  Top = 126
+  Left = 2180
+  Top = 321
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsDialog
   Caption = 'OneWay Tickets - Ajouter un film'
-  ClientHeight = 227
+  ClientHeight = 250
   ClientWidth = 332
   Color = clBtnFace
   Font.Charset = ANSI_CHARSET
@@ -44,10 +44,23 @@ object FrmAjouterFilm: TFrmAjouterFilm
   end
   object Label3: TLabel
     Left = 23
-    Top = 80
+    Top = 112
     Width = 58
     Height = 15
     Caption = 'Synopsis :'
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -12
+    Font.Name = 'Arial'
+    Font.Style = [fsBold]
+    ParentFont = False
+  end
+  object Label4: TLabel
+    Left = 19
+    Top = 80
+    Width = 62
+    Height = 15
+    Caption = 'Prix (CHF) :'
     Font.Charset = ANSI_CHARSET
     Font.Color = clWindowText
     Font.Height = -12
@@ -63,28 +76,33 @@ object FrmAjouterFilm: TFrmAjouterFilm
     MaxLength = 20
     TabOrder = 0
     Text = 'The Hobbit'
+    OnChange = edtDureeFilmChange
   end
   object edtDureeFilm: TEdit
     Left = 96
     Top = 48
-    Width = 225
+    Width = 209
     Height = 22
     MaxLength = 20
     TabOrder = 1
-    Text = '169'
+    Text = '0'
+    OnChange = edtDureeFilmChange
+    OnKeyPress = edtDureeFilmKeyPress
   end
   object MmoSynopsis: TMemo
     Left = 96
-    Top = 80
+    Top = 112
     Width = 225
     Height = 89
     Lines.Strings = (
       'MmoSynopsis')
+    MaxLength = 150
     TabOrder = 2
+    OnChange = MmoSynopsisChange
   end
   object BtnAnnuler: TButton
     Left = 8
-    Top = 184
+    Top = 208
     Width = 153
     Height = 33
     Caption = 'Annuler'
@@ -93,12 +111,47 @@ object FrmAjouterFilm: TFrmAjouterFilm
   end
   object BtnAjouter: TButton
     Left = 168
-    Top = 184
+    Top = 208
     Width = 153
     Height = 33
     Caption = 'Ajouter'
     Enabled = False
-    ModalResult = 2
+    ModalResult = 1
     TabOrder = 4
+  end
+  object edtPrixFilm: TEdit
+    Left = 96
+    Top = 80
+    Width = 209
+    Height = 22
+    MaxLength = 20
+    TabOrder = 5
+    Text = '0'
+    OnChange = edtDureeFilmChange
+    OnKeyPress = edtDureeFilmKeyPress
+  end
+  object UDDuree: TUpDown
+    Left = 305
+    Top = 48
+    Width = 16
+    Height = 22
+    Associate = edtDureeFilm
+    Min = 0
+    Max = 400
+    Position = 0
+    TabOrder = 6
+    Wrap = False
+  end
+  object UDPrix: TUpDown
+    Left = 305
+    Top = 80
+    Width = 16
+    Height = 22
+    Associate = edtPrixFilm
+    Min = 0
+    Max = 20
+    Position = 0
+    TabOrder = 7
+    Wrap = False
   end
 end

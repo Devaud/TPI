@@ -1,6 +1,6 @@
 object FrmMenuAdministrateur: TFrmMenuAdministrateur
-  Left = 474
-  Top = 194
+  Left = 191
+  Top = 126
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
   Caption = 'OneWayTickets - Menu Administrateur'
@@ -96,7 +96,7 @@ object FrmMenuAdministrateur: TFrmMenuAdministrateur
       Width = 57
       Height = 14
       AutoSize = False
-      Caption = '10000'
+      Caption = 'N/A'
     end
     object lblBilletVenduMoisCourrant: TLabel
       Left = 224
@@ -104,7 +104,7 @@ object FrmMenuAdministrateur: TFrmMenuAdministrateur
       Width = 57
       Height = 14
       AutoSize = False
-      Caption = '50'
+      Caption = 'N/A'
     end
     object lblBilletEnfantsVendu: TLabel
       Left = 224
@@ -112,7 +112,7 @@ object FrmMenuAdministrateur: TFrmMenuAdministrateur
       Width = 57
       Height = 14
       AutoSize = False
-      Caption = '15'
+      Caption = 'N/A'
     end
     object lblBilletAdultesVendu: TLabel
       Left = 224
@@ -120,7 +120,7 @@ object FrmMenuAdministrateur: TFrmMenuAdministrateur
       Width = 57
       Height = 14
       AutoSize = False
-      Caption = '10'
+      Caption = 'N/A'
     end
     object lblBilletEtudiantsVendu: TLabel
       Left = 224
@@ -128,7 +128,7 @@ object FrmMenuAdministrateur: TFrmMenuAdministrateur
       Width = 57
       Height = 14
       AutoSize = False
-      Caption = '25'
+      Caption = 'N/A'
     end
   end
   object GroupBox2: TGroupBox
@@ -154,9 +154,10 @@ object FrmMenuAdministrateur: TFrmMenuAdministrateur
     object lblFilmPlusVu: TLabel
       Left = 104
       Top = 20
-      Width = 51
+      Width = 105
       Height = 14
-      Caption = 'The Hobbit'
+      AutoSize = False
+      Caption = 'N/A'
     end
   end
   object BtnDeconnexion: TButton

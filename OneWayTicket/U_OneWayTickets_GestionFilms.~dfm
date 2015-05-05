@@ -1,11 +1,11 @@
 object FrmGestionFilms: TFrmGestionFilms
-  Left = 196
-  Top = 214
+  Left = 328
+  Top = 183
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
   Caption = 'OneWay Tickets - Gestion des films'
   ClientHeight = 503
-  ClientWidth = 432
+  ClientWidth = 465
   Color = clBtnFace
   Font.Charset = ANSI_CHARSET
   Font.Color = clWindowText
@@ -19,22 +19,22 @@ object FrmGestionFilms: TFrmGestionFilms
   object Label1: TLabel
     Left = 8
     Top = 8
-    Width = 417
+    Width = 449
     Height = 22
     Alignment = taCenter
     AutoSize = False
     Caption = 'Gestion des films'
     Font.Charset = ANSI_CHARSET
     Font.Color = clWindowText
-    Font.Height = -11
+    Font.Height = -19
     Font.Name = 'Arial'
-    Font.Style = []
+    Font.Style = [fsBold]
     ParentFont = False
   end
   object LbxListeFilms: TListBox
     Left = 8
     Top = 40
-    Width = 417
+    Width = 449
     Height = 233
     Font.Charset = ANSI_CHARSET
     Font.Color = clWindowText
@@ -76,7 +76,7 @@ object FrmGestionFilms: TFrmGestionFilms
   object BtnModifier: TButton
     Left = 8
     Top = 280
-    Width = 129
+    Width = 145
     Height = 33
     Caption = 'Modifier'
     Font.Charset = ANSI_CHARSET
@@ -89,9 +89,9 @@ object FrmGestionFilms: TFrmGestionFilms
     OnClick = BtnModifierClick
   end
   object BtnSupprimer: TButton
-    Left = 152
+    Left = 160
     Top = 280
-    Width = 129
+    Width = 145
     Height = 33
     Caption = 'Supprimer'
     Enabled = False
@@ -104,9 +104,9 @@ object FrmGestionFilms: TFrmGestionFilms
     TabOrder = 2
   end
   object BtnAjouter: TButton
-    Left = 296
+    Left = 312
     Top = 280
-    Width = 129
+    Width = 145
     Height = 33
     Caption = 'Ajouter'
     Font.Charset = ANSI_CHARSET
@@ -121,7 +121,7 @@ object FrmGestionFilms: TFrmGestionFilms
   object GroupBox1: TGroupBox
     Left = 8
     Top = 328
-    Width = 417
+    Width = 449
     Height = 161
     Caption = ' Modification '
     Font.Charset = ANSI_CHARSET
@@ -200,7 +200,7 @@ object FrmGestionFilms: TFrmGestionFilms
     object BtnValiderModification: TButton
       Left = 264
       Top = 125
-      Width = 145
+      Width = 177
       Height = 28
       Caption = 'Valider les modifications'
       Enabled = False
@@ -209,7 +209,7 @@ object FrmGestionFilms: TFrmGestionFilms
     object BtnAnuuler: TButton
       Left = 264
       Top = 88
-      Width = 145
+      Width = 177
       Height = 28
       Caption = 'Annuler les modifications'
       TabOrder = 4

@@ -62,6 +62,7 @@ object FrmOneWayTickets: TFrmOneWayTickets
     Width = 593
     Height = 41
     Caption = 'Réserver une séance en avance'
+    Enabled = False
     TabOrder = 2
     OnClick = BtnReserverAvanceClick
   end
