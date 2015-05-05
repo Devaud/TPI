@@ -1,6 +1,6 @@
 object FrmMenuAdministrateur: TFrmMenuAdministrateur
-  Left = 500
-  Top = 208
+  Left = 474
+  Top = 194
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
   Caption = 'OneWayTickets - Menu Administrateur'
@@ -15,6 +15,7 @@ object FrmMenuAdministrateur: TFrmMenuAdministrateur
   Menu = MainMenu1
   OldCreateOrder = False
   Position = poScreenCenter
+  OnClose = FormClose
   PixelsPerInch = 96
   TextHeight = 14
   object GroupBox1: TGroupBox
@@ -97,7 +98,7 @@ object FrmMenuAdministrateur: TFrmMenuAdministrateur
       AutoSize = False
       Caption = '10000'
     end
-    object BilletVenduMoisCourrant: TLabel
+    object lblBilletVenduMoisCourrant: TLabel
       Left = 224
       Top = 40
       Width = 57
@@ -105,7 +106,7 @@ object FrmMenuAdministrateur: TFrmMenuAdministrateur
       AutoSize = False
       Caption = '50'
     end
-    object BilletEnfantsVendu: TLabel
+    object lblBilletEnfantsVendu: TLabel
       Left = 224
       Top = 64
       Width = 57
@@ -113,7 +114,7 @@ object FrmMenuAdministrateur: TFrmMenuAdministrateur
       AutoSize = False
       Caption = '15'
     end
-    object BilletAdultesVendu: TLabel
+    object lblBilletAdultesVendu: TLabel
       Left = 224
       Top = 88
       Width = 57
@@ -121,7 +122,7 @@ object FrmMenuAdministrateur: TFrmMenuAdministrateur
       AutoSize = False
       Caption = '10'
     end
-    object BilletEtudiantsVendu: TLabel
+    object lblBilletEtudiantsVendu: TLabel
       Left = 224
       Top = 112
       Width = 57

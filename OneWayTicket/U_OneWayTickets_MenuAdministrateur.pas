@@ -24,10 +24,10 @@ type
     Label4: TLabel;
     Label5: TLabel;
     lblBilletTotalVendu: TLabel;
-    BilletVenduMoisCourrant: TLabel;
-    BilletEnfantsVendu: TLabel;
-    BilletAdultesVendu: TLabel;
-    BilletEtudiantsVendu: TLabel;
+    lblBilletVenduMoisCourrant: TLabel;
+    lblBilletEnfantsVendu: TLabel;
+    lblBilletAdultesVendu: TLabel;
+    lblBilletEtudiantsVendu: TLabel;
     GroupBox2: TGroupBox;
     Label6: TLabel;
     lblFilmPlusVu: TLabel;
@@ -43,6 +43,7 @@ type
     procedure Salles1Click(Sender: TObject);
     procedure Seance1Click(Sender: TObject);
     procedure BtnDeconnexionClick(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
   private
     { Déclarations privées }
   public
@@ -67,8 +68,8 @@ uses U_OneWayTickets_GestionFilms, U_OneWayTickets_GestionSalles,
   **************************************************************************** }
 procedure TFrmMenuAdministrateur.Films1Click(Sender: TObject);
 begin
-  FrmGestionFilms.Height:= FRM_MODAL_HEIGHT;
-  FrmGestionFilms.showModal;
+  FrmGestionFilms.Height:= FRM_MODAL_HEIGHT; // Initialise la taille de la fenêtre
+  FrmGestionFilms.Visible:= true;
 end;
 
 { ****************************************************************************
@@ -76,7 +77,7 @@ end;
   **************************************************************************** }
 procedure TFrmMenuAdministrateur.Salles1Click(Sender: TObject);
 begin
-  FrmGestionSalles.Height:= FRM_MODAL_HEIGHT;
+  FrmGestionSalles.Height:= FRM_MODAL_HEIGHT; // Initialise la taille de la fenêtre
   FrmGestionSalles.showModal;
 end;
 
@@ -85,7 +86,7 @@ end;
   **************************************************************************** }
 procedure TFrmMenuAdministrateur.Seance1Click(Sender: TObject);
 begin
-  FrmGestionSeances.Height:= FRM_MODAL_HEIGHT;
+  FrmGestionSeances.Height:= FRM_MODAL_HEIGHT; // Initialise la taille de la fenêtre
   FrmGestionSeances.showModal;
 end;
 
@@ -96,6 +97,15 @@ end;
 procedure TFrmMenuAdministrateur.BtnDeconnexionClick(Sender: TObject);
 begin
   FrmMenuAdministrateur.Visible:= false;
+  FrmOneWayTickets.Visible:= true;
+end;
+
+{ ****************************************************************************
+  *** Affiche le menu utilisateur                                          ***
+  **************************************************************************** }
+procedure TFrmMenuAdministrateur.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
   FrmOneWayTickets.Visible:= true;
 end;
 

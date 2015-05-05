@@ -145,6 +145,13 @@ begin
       FrmOneWayTickets.Visible:= false;
 
       // Initialisation des labels du menu administrateur
+      FrmMenuAdministrateur.lblBilletTotalVendu.Caption:= '0';
+      FrmMenuAdministrateur.lblBilletVenduMoisCourrant.Caption:= '0';
+      FrmMenuAdministrateur.lblBilletEnfantsVendu.Caption:= '0';
+      FrmMenuAdministrateur.lblBilletAdultesVendu.Caption:= '0';
+      FrmMenuAdministrateur.lblBilletEtudiantsVendu.Caption:= '0';
+      FrmMenuAdministrateur.lblFilmPlusVu.Caption:= 'Aucun film';
+      
       FrmMenuAdministrateur.Visible:= true; // Affiche la fenêtre administrateur
     end
     else
