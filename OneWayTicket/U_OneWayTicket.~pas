@@ -6,8 +6,8 @@
   *** Version              : 1.0                                           ***
   *** Date de création     : 30.04.2015                                    ***
   ***         Modification :                                               ***
-  ***         05.05.2015 - AD - Ajout de l'accès au login administarteur
-                                Ajout l'accès au menu réservation en avance
+  ***         05.05.2015 - Ajout de l'accès au login administarteur        ***
+  ***                      Ajout l'accès au menu réservation en avance     ***
   **************************************************************************** }
 unit U_OneWayTicket;
 
