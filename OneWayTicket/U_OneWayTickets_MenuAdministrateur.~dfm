@@ -1,6 +1,6 @@
 object FrmMenuAdministrateur: TFrmMenuAdministrateur
-  Left = 351
-  Top = 149
+  Left = 239
+  Top = 151
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
   Caption = 'OneWayTickets - Menu Administrateur'
@@ -379,6 +379,7 @@ object FrmMenuAdministrateur: TFrmMenuAdministrateur
           FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF}
         Caption = '&Films'
         ShortCut = 16454
+        OnClick = Films1Click
       end
       object Salles1: TMenuItem
         Caption = '&Salles'

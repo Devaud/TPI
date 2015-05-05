@@ -379,6 +379,7 @@ object FrmMenuAdministrateur: TFrmMenuAdministrateur
           FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF}
         Caption = '&Films'
         ShortCut = 16454
+        OnClick = Films1Click
       end
       object Salles1: TMenuItem
         Caption = '&Salles'

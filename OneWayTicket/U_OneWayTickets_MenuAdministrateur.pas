@@ -30,6 +30,7 @@ type
     Films1: TMenuItem;
     Salles1: TMenuItem;
     Sance1: TMenuItem;
+    procedure Films1Click(Sender: TObject);
   private
     { Déclarations privées }
   public
@@ -41,6 +42,14 @@ var
 
 implementation
 
+uses U_OneWayTickets_GestionFilms;
+
 {$R *.DFM}
+
+procedure TFrmMenuAdministrateur.Films1Click(Sender: TObject);
+begin
+  FrmGestionFilms.Height:= 359;
+  FrmGestionFilms.showModal;
+end;
 
 end.
