@@ -41,13 +41,22 @@ type
     procedure chargeListeFilm(); // Est disponible depuis l'extérieur
   end;
 
+Type
+  TFilm = record
+    NomFilm  : String;
+    Duree    : String;
+    Prix     : String;
+    Synopsis : String;
+  end;
+
 var
-  FrmGestionFilms: TFrmGestionFilms;
+  FrmGestionFilms      : TFrmGestionFilms;
+  listeFilms           : array of TFilm;
 
 const
   FRM_HEIGHT_MAX : integer = 527;
   FRM_HEIGHT_MIN : integer = 358;
-  FICHIER_FILMS   : String  = './Res/films.csv';
+  FICHIER_FILMS  : String  = './Res/films.csv';
 
 implementation
 
@@ -66,7 +75,7 @@ uses U_OneWayTickets_AjouterFilm, U_OneWayTicket;
   **************************************************************************** }
 function AjoutEspace(tailleEspace: integer): string;
 var
-  i, aAjouter: integer;
+  i : integer;
   text: string;
 Begin
   text:= '';
@@ -79,6 +88,26 @@ Begin
   Result:= text; // Retourne le text modifier
 end;
 
+function AjusterText(text: string; taille: integer): string;
+var
+  difference: integer;
+Begin
+  
+  if length(text) > taille then
+  Begin
+    text:= copy(text, 1, taille - 3);
+    text:= text + '...';
+  end;
+
+  if length(text) < taille then
+  Begin
+    difference:= taille - length(text);
+    text:= text + AjoutEspace(difference);
+  end;
+
+  Result:= text;
+end;
+
 { ****************************************************************************
   *** Charge et affiche les films depuis un fichier csv                    ***   
   **************************************************************************** }
@@ -88,9 +117,12 @@ var
   ligne, ligneFormate : String;
   OutPutList : TStringList;
   premiereLigne : boolean;
+  i: integer;
 Begin
   premiereLigne:= true;
-  FrmGestionFilms.LbxListeFilms.Clear;
+  LbxListeFilms.Clear;
+  SetLength(listeFilms, 250);
+  i:= 0;
   
   // Test si le fichier existe
   if FileExists(FICHIER_FILMS) then
@@ -108,12 +140,18 @@ Begin
         OutPutList:= FrmOneWayTickets.Split(ligne, ';');
 
         // Formate le text
-        ligneFormate:= OutPutList[0] + AjoutEspace(10);
+        ligneFormate:= ajusterText(OutPutList[0], 10) + AjoutEspace(10);
         ligneFormate:= ligneFormate + AjoutEspace(10) + OutPutList[1] + AjoutEspace(10);
-        ligneFormate:= ligneFormate + AjoutEspace(10) + OutPutList[2] + AjoutEspace(10) ;
+        ligneFormate:= ligneFormate + AjoutEspace(10) + ajusterText(OutPutList[2], 32) + AjoutEspace(10);
         ligneFormate:= ligneFormate + AjoutEspace(10) + OutPutList[3];
-        
-        FrmGestionFilms.LbxListeFilms.Items.Add(ligneFormate);
+
+        // Assigne les films a la liste
+        listeFilms[i].NomFilm:= OutPutList[0];
+        listeFilms[i].Duree:= OutPutList[1];
+        listeFilms[i].Synopsis:= OutPutList[2];
+        listeFilms[i].Prix:= OutPutList[3];
+
+        LbxListeFilms.Items.Add(ligneFormate);
       end;
         
     until eof(f);
@@ -128,7 +166,16 @@ end;
   *** Ouvre les paramètres de modifications                                ***
   **************************************************************************** }
 procedure TFrmGestionFilms.BtnModifierClick(Sender: TObject);
+var
+  index : integer;
 begin
+  // Récupère l'indice
+  index:= LbxListeFilms.ItemIndex;
+
+  // Affiche les données dans les bon champs
+  edtNomFilm.Text:= listefilms[index].NomFilm;
+  edtDureeFilm.Text:= listefilms[index].Duree;
+
   self.Height:= FRM_HEIGHT_MAX;
 end;
 

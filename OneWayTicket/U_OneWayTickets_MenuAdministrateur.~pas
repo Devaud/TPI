@@ -72,10 +72,8 @@ procedure TFrmMenuAdministrateur.Films1Click(Sender: TObject);
 begin
   // Initialise la fenêtre
   FrmGestionFilms.Height:= FRM_MODAL_HEIGHT;
-  FrmGestionFilms.LbxListeFilms.Clear;
   FrmGestionFilms.chargeListeFilm();
   FrmGestionFilms.LbxListeFilms.ItemIndex:= 0;
-
   FrmGestionFilms.Visible:= true;
 end;
 

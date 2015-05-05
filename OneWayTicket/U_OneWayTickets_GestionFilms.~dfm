@@ -1,6 +1,6 @@
 object FrmGestionFilms: TFrmGestionFilms
-  Left = 328
-  Top = 183
+  Left = 203
+  Top = 126
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
   Caption = 'OneWay Tickets - Gestion des films'
@@ -195,6 +195,7 @@ object FrmGestionFilms: TFrmGestionFilms
       Height = 65
       Lines.Strings = (
         'Lorem ipsum')
+      MaxLength = 150
       TabOrder = 2
     end
     object BtnValiderModification: TButton

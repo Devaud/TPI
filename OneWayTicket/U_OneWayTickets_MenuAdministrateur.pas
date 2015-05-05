@@ -74,7 +74,6 @@ begin
   FrmGestionFilms.Height:= FRM_MODAL_HEIGHT;
   FrmGestionFilms.chargeListeFilm();
   FrmGestionFilms.LbxListeFilms.ItemIndex:= 0;
-
   FrmGestionFilms.Visible:= true;
 end;
 

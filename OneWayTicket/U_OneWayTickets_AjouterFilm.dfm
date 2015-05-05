@@ -73,7 +73,7 @@ object FrmAjouterFilm: TFrmAjouterFilm
     Top = 16
     Width = 225
     Height = 22
-    MaxLength = 20
+    MaxLength = 10
     TabOrder = 0
     Text = 'The Hobbit'
     OnChange = edtDureeFilmChange
