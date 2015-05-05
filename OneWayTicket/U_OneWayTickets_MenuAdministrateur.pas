@@ -42,6 +42,9 @@ type
 var
   FrmMenuAdministrateur: TFrmMenuAdministrateur;
 
+const
+  FRM_MODAL_HEIGHT : integer = 359;
+
 implementation
 
 uses U_OneWayTickets_GestionFilms, U_OneWayTickets_GestionSalles,
@@ -51,18 +54,19 @@ uses U_OneWayTickets_GestionFilms, U_OneWayTickets_GestionSalles,
 
 procedure TFrmMenuAdministrateur.Films1Click(Sender: TObject);
 begin
-  FrmGestionFilms.Height:= 359;
+  FrmGestionFilms.Height:= FRM_MODAL_HEIGHT;
   FrmGestionFilms.showModal;
 end;
 
 procedure TFrmMenuAdministrateur.Salles1Click(Sender: TObject);
 begin
-  FrmGestionSalles.Height:= 359;
+  FrmGestionSalles.Height:= FRM_MODAL_HEIGHT;
   FrmGestionSalles.showModal;
 end;
 
 procedure TFrmMenuAdministrateur.Sance1Click(Sender: TObject);
 begin
+  FrmGestionSeances.Height:= FRM_MODAL_HEIGHT;
   FrmGestionSeances.showModal;
 end;
 

@@ -36,6 +36,11 @@ object FrmGestionFilms: TFrmGestionFilms
     Top = 40
     Width = 417
     Height = 233
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Arial'
+    Font.Style = []
     ItemHeight = 14
     Items.Strings = (
       
@@ -65,6 +70,7 @@ object FrmGestionFilms: TFrmGestionFilms
       
         'The Hobbit                                  169                 ' +
         '                lorem ipsum')
+    ParentFont = False
     TabOrder = 0
   end
   object BtnModifier: TButton
@@ -73,6 +79,12 @@ object FrmGestionFilms: TFrmGestionFilms
     Width = 129
     Height = 33
     Caption = 'Modifier'
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Arial'
+    Font.Style = []
+    ParentFont = False
     TabOrder = 1
     OnClick = BtnModifierClick
   end
@@ -83,6 +95,12 @@ object FrmGestionFilms: TFrmGestionFilms
     Height = 33
     Caption = 'Supprimer'
     Enabled = False
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Arial'
+    Font.Style = []
+    ParentFont = False
     TabOrder = 2
   end
   object BtnAjouter: TButton
@@ -91,6 +109,12 @@ object FrmGestionFilms: TFrmGestionFilms
     Width = 129
     Height = 33
     Caption = 'Ajouter'
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Arial'
+    Font.Style = []
+    ParentFont = False
     TabOrder = 3
     OnClick = BtnAjouterClick
   end
@@ -100,6 +124,12 @@ object FrmGestionFilms: TFrmGestionFilms
     Width = 417
     Height = 161
     Caption = ' Modification '
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Arial'
+    Font.Style = []
+    ParentFont = False
     TabOrder = 4
     object Label2: TLabel
       Left = 8

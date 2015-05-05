@@ -11,7 +11,9 @@ uses
   U_OneWayTickets_GestionFilms in 'U_OneWayTickets_GestionFilms.pas' {FrmGestionFilms},
   U_OneWayTickets_AjouterFilm in 'U_OneWayTickets_AjouterFilm.pas' {FrmAjouterFilm},
   U_OneWayTickets_GestionSalles in 'U_OneWayTickets_GestionSalles.pas' {FrmGestionSalles},
-  U_OneWayTickets_AjouterSalle in 'U_OneWayTickets_AjouterSalle.pas' {FrmAjouterSalle};
+  U_OneWayTickets_AjouterSalle in 'U_OneWayTickets_AjouterSalle.pas' {FrmAjouterSalle},
+  U_OneWayTickets_GestionSeances in 'U_OneWayTickets_GestionSeances.pas' {FrmGestionSeances},
+  U_OneWayTickets_AjouterSeance in 'U_OneWayTickets_AjouterSeance.pas' {FrmAjouterSeance};
 
 {$R *.RES}
 
@@ -26,5 +28,7 @@ begin
   Application.CreateForm(TFrmAjouterFilm, FrmAjouterFilm);
   Application.CreateForm(TFrmGestionSalles, FrmGestionSalles);
   Application.CreateForm(TFrmAjouterSalle, FrmAjouterSalle);
+  Application.CreateForm(TFrmGestionSeances, FrmGestionSeances);
+  Application.CreateForm(TFrmAjouterSeance, FrmAjouterSeance);
   Application.Run;
 end.
