@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
-  StdCtrls;
+  StdCtrls, ComCtrls;
 
 type
   TFrmReservationAvance = class(TForm)
@@ -33,6 +33,19 @@ type
     lblSalle: TLabel;
     lblHoraire: TLabel;
     lblPlacesRestantes: TLabel;
+    EdtNbBilletsEnfants: TEdit;
+    UDNBilletsEnfants: TUpDown;
+    EdtNbBilletsAdultes: TEdit;
+    UDNBilletsAdultes: TUpDown;
+    EdtNbBilletsEAA: TEdit;
+    UDNBilletsEAA: TUpDown;
+    LbxSeance: TListBox;
+    Label13: TLabel;
+    Label14: TLabel;
+    Label15: TLabel;
+    Label16: TLabel;
+    BtnValider: TButton;
+    BtnAnnuler: TButton;
   private
     { Déclarations privées }
   public

@@ -6,6 +6,8 @@
   *** Version              : 1.0                                           ***
   *** Date de création     : 30.04.2015                                    ***
   ***         Modification :                                               ***
+  ***         05.05.2015 - Ajout de l'accès au login administarteur        ***
+  ***                      Ajout l'accès au menu réservation en avance     ***
   **************************************************************************** }
 unit U_OneWayTicket;
 
@@ -30,11 +32,14 @@ type
     Timer1: TTimer;
     lblHeureCourante: TLabel;
     Label2: TLabel;
+    Button1: TButton;
     procedure Quitter1Click(Sender: TObject);
     procedure Timer1Timer(Sender: TObject);
-    procedure Button1Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure Initialisation();
+    procedure BtnReserverAvanceClick(Sender: TObject);
+    procedure Connexion1Click(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
   private
     { Déclarations privées }
   public
@@ -55,7 +60,8 @@ CONST
 
 implementation
 
-uses U_OneWayTickets_Reservation;
+uses U_OneWayTickets_Reservation, U_OneWayTickets_ReservationAvance,
+  U_OneWayTickets_Login, U_OneWayTickets_MenuAdministrateur;
 
 {$R *.DFM}
 
@@ -96,14 +102,26 @@ begin
   lblHeureCourante.Caption:= TimeToStr(now());
 end;
 
-procedure TFrmOneWayTickets.Button1Click(Sender: TObject);
-begin
-  FrmReservation.showModal;
-end;
-
 procedure TFrmOneWayTickets.FormCreate(Sender: TObject);
 begin
   Initialisation();
+end;
+
+procedure TFrmOneWayTickets.BtnReserverAvanceClick(Sender: TObject);
+begin
+  FrmReservationAvance.CbxFilm.ItemIndex:= 0;
+  
+  FrmReservationAvance.showModal;
+end;
+
+procedure TFrmOneWayTickets.Connexion1Click(Sender: TObject);
+begin
+  FrmLogin.showModal;
+end;
+
+procedure TFrmOneWayTickets.Button1Click(Sender: TObject);
+begin
+  FrmMenuAdministrateur.showModal;
 end;
 
 end.
