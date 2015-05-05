@@ -1,6 +1,6 @@
 object FrmAjouterSeance: TFrmAjouterSeance
-  Left = 750
-  Top = 197
+  Left = 387
+  Top = 155
   BorderStyle = bsDialog
   Caption = 'OneWay Tickets - Ajouter une séance'
   ClientHeight = 260

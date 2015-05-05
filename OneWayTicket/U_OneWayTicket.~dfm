@@ -1,6 +1,6 @@
 object FrmOneWayTickets: TFrmOneWayTickets
-  Left = 659
-  Top = 152
+  Left = 543
+  Top = 274
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
   Caption = 'OneWay Tickets'
@@ -64,15 +64,6 @@ object FrmOneWayTickets: TFrmOneWayTickets
     Caption = 'Réserver une séance en avance'
     TabOrder = 2
     OnClick = BtnReserverAvanceClick
-  end
-  object Button1: TButton
-    Left = 96
-    Top = 144
-    Width = 75
-    Height = 25
-    Caption = 'Button1'
-    TabOrder = 3
-    OnClick = Button1Click
   end
   object MainMenu1: TMainMenu
     Left = 40

@@ -1,8 +1,8 @@
 object FrmLogin: TFrmLogin
-  Left = 258
-  Top = 138
+  Left = 205
+  Top = 122
   BorderIcons = [biSystemMenu, biMinimize]
-  BorderStyle = bsSingle
+  BorderStyle = bsDialog
   Caption = 'OneWay Tickets - Login'
   ClientHeight = 105
   ClientWidth = 276
@@ -37,13 +37,14 @@ object FrmLogin: TFrmLogin
     MaxLength = 20
     PasswordChar = '*'
     TabOrder = 0
+    OnChange = edtMdpAdminChange
   end
   object BtnConnexion: TButton
     Left = 8
     Top = 56
     Width = 121
     Height = 33
-    Caption = 'Connexion'
+    Caption = '&Connexion'
     Enabled = False
     ModalResult = 1
     TabOrder = 1
@@ -53,7 +54,7 @@ object FrmLogin: TFrmLogin
     Top = 56
     Width = 121
     Height = 33
-    Caption = 'Annuler'
+    Caption = '&Annuler'
     ModalResult = 2
     TabOrder = 2
   end

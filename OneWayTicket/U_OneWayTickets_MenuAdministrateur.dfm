@@ -1,6 +1,6 @@
 object FrmMenuAdministrateur: TFrmMenuAdministrateur
-  Left = 239
-  Top = 151
+  Left = 500
+  Top = 208
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
   Caption = 'OneWayTickets - Menu Administrateur'
@@ -163,12 +163,13 @@ object FrmMenuAdministrateur: TFrmMenuAdministrateur
     Top = 112
     Width = 225
     Height = 33
-    Caption = 'Déconnexion'
+    Caption = '&Déconnexion'
     TabOrder = 2
+    OnClick = BtnDeconnexionClick
   end
   object MainMenu1: TMainMenu
     Left = 312
-    Top = 64
+    Top = 72
     object Fichier1: TMenuItem
       Caption = '&Fichier'
       object Dconnexion1: TMenuItem
@@ -273,6 +274,7 @@ object FrmMenuAdministrateur: TFrmMenuAdministrateur
           FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF}
         Caption = '&Déconnexion'
         ShortCut = 16452
+        OnClick = BtnDeconnexionClick
       end
     end
     object Gestion1: TMenuItem
@@ -386,7 +388,7 @@ object FrmMenuAdministrateur: TFrmMenuAdministrateur
         ShortCut = 16467
         OnClick = Salles1Click
       end
-      object Sance1: TMenuItem
+      object Seance1: TMenuItem
         Bitmap.Data = {
           360C0000424D360C000000000000360000002800000020000000200000000100
           180000000000000C000000000000000000000000000000000000FFFFFFFFFFFF
@@ -488,7 +490,7 @@ object FrmMenuAdministrateur: TFrmMenuAdministrateur
           FFFFFFFFFFFFFFFFFFFFFFFAFAFAFFFFFFFFFFFFFFFFFFFFFFFF}
         Caption = 'Séanc&es'
         ShortCut = 16453
-        OnClick = Sance1Click
+        OnClick = Seance1Click
       end
     end
   end

@@ -32,14 +32,12 @@ type
     Timer1: TTimer;
     lblHeureCourante: TLabel;
     Label2: TLabel;
-    Button1: TButton;
     procedure Quitter1Click(Sender: TObject);
     procedure Timer1Timer(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure Initialisation();
     procedure BtnReserverAvanceClick(Sender: TObject);
     procedure Connexion1Click(Sender: TObject);
-    procedure Button1Click(Sender: TObject);
   private
     { Déclarations privées }
   public
@@ -57,6 +55,7 @@ CONST
   ECART_Y        : integer = 10;
   TAILLE_WIDTH   : integer = 193;
   TAILLE_HEIGHT  : integer = 57;
+  MDP_ADMIN      : String = 'Neko1';
 
 implementation
 
@@ -92,36 +91,68 @@ Begin
   end;
 end;
 
+{ ****************************************************************************
+  *** Quitter l'application                                                ***
+  **************************************************************************** }
 procedure TFrmOneWayTickets.Quitter1Click(Sender: TObject);
 begin
   close;
 end;
 
+{ ****************************************************************************
+  *** Affiche l'heure courante                                             ***
+  **************************************************************************** }
 procedure TFrmOneWayTickets.Timer1Timer(Sender: TObject);
 begin
   lblHeureCourante.Caption:= TimeToStr(now());
 end;
 
+{ ****************************************************************************
+  *** Evènement au démarrage de l'application                              ***
+  **************************************************************************** }
 procedure TFrmOneWayTickets.FormCreate(Sender: TObject);
 begin
   Initialisation();
 end;
 
+{ ****************************************************************************
+  *** Réservation en avance                                                ***
+  **************************************************************************** }
 procedure TFrmOneWayTickets.BtnReserverAvanceClick(Sender: TObject);
 begin
   FrmReservationAvance.CbxFilm.ItemIndex:= 0;
-  
   FrmReservationAvance.showModal;
 end;
 
+{ ****************************************************************************
+  *** Permet la connexion en tant qu'administrateur                        ***
+  **************************************************************************** }
 procedure TFrmOneWayTickets.Connexion1Click(Sender: TObject);
+var
+  mdp : string;
 begin
-  FrmLogin.showModal;
-end;
+  // Vide le champ text du mot de passe
+  FrmLogin.edtMdpAdmin.Text:= '';
 
-procedure TFrmOneWayTickets.Button1Click(Sender: TObject);
-begin
-  FrmMenuAdministrateur.showModal;
+  // Traitement de la fenêtre à la validation de la connexion
+  if FrmLogin.showModal = mrOk then
+  Begin
+    mdp:= FrmLogin.edtMdpAdmin.Text;
+
+    // Test si le mot de passe est valide
+    if mdp = MDP_ADMIN then
+    Begin
+      FrmOneWayTickets.Visible:= false;
+
+      // Initialisation des labels du menu administrateur
+      FrmMenuAdministrateur.Visible:= true; // Affiche la fenêtre administrateur
+    end
+    else
+    Begin
+      // Message d'erreur
+      ShowMessage('Connexion refusée ! Mot de passe administrateur refusé !');
+    end;
+  end;
 end;
 
 end.

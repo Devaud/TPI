@@ -1,3 +1,12 @@
+{ ****************************************************************************
+  *** Projet               : OneWayTickets                                 ***
+  *** Fenêtre              : Menu administrateur                           *** 
+  *** Auteur               : Devaud Alan                                   ***
+  *** Description          : Permet la gestion admin et de visionner les   ***
+  ***                        statistique de vente                          ***
+  *** Version              : 1.0                                           ***
+  *** Date de création     : 05.05.2015                                    ***
+  **************************************************************************** }
 unit U_OneWayTickets_MenuAdministrateur;
 
 interface
@@ -29,10 +38,11 @@ type
     Dconnexion1: TMenuItem;
     Films1: TMenuItem;
     Salles1: TMenuItem;
-    Sance1: TMenuItem;
+    Seance1: TMenuItem;
     procedure Films1Click(Sender: TObject);
     procedure Salles1Click(Sender: TObject);
-    procedure Sance1Click(Sender: TObject);
+    procedure Seance1Click(Sender: TObject);
+    procedure BtnDeconnexionClick(Sender: TObject);
   private
     { Déclarations privées }
   public
@@ -43,31 +53,50 @@ var
   FrmMenuAdministrateur: TFrmMenuAdministrateur;
 
 const
-  FRM_MODAL_HEIGHT : integer = 359;
+  FRM_MODAL_HEIGHT : integer = 359; // Hauteur d'une fenêtre modal
 
 implementation
 
 uses U_OneWayTickets_GestionFilms, U_OneWayTickets_GestionSalles,
-  U_OneWayTickets_GestionSeances;
+  U_OneWayTickets_GestionSeances, U_OneWayTicket;
 
 {$R *.DFM}
 
+{ ****************************************************************************
+  *** Affiche la fenêtre de gestion des films                              ***
+  **************************************************************************** }
 procedure TFrmMenuAdministrateur.Films1Click(Sender: TObject);
 begin
   FrmGestionFilms.Height:= FRM_MODAL_HEIGHT;
   FrmGestionFilms.showModal;
 end;
 
+{ ****************************************************************************
+  *** Affiche la fenêtre de gestion des salles                             ***
+  **************************************************************************** }
 procedure TFrmMenuAdministrateur.Salles1Click(Sender: TObject);
 begin
   FrmGestionSalles.Height:= FRM_MODAL_HEIGHT;
   FrmGestionSalles.showModal;
 end;
 
-procedure TFrmMenuAdministrateur.Sance1Click(Sender: TObject);
+{ ****************************************************************************
+  *** Affichage de la gestion des séances                                  ***
+  **************************************************************************** }
+procedure TFrmMenuAdministrateur.Seance1Click(Sender: TObject);
 begin
   FrmGestionSeances.Height:= FRM_MODAL_HEIGHT;
   FrmGestionSeances.showModal;
+end;
+
+
+{ ****************************************************************************
+  *** Déconnecte l'administrateur pour afficher le menu utilisateur        ***
+  **************************************************************************** }
+procedure TFrmMenuAdministrateur.BtnDeconnexionClick(Sender: TObject);
+begin
+  FrmMenuAdministrateur.Visible:= false;
+  FrmOneWayTickets.Visible:= true;
 end;
 
 end.
