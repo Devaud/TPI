@@ -27,6 +27,9 @@ type
     Fichier1: TMenuItem;
     Gestion1: TMenuItem;
     Dconnexion1: TMenuItem;
+    Films1: TMenuItem;
+    Salles1: TMenuItem;
+    Sance1: TMenuItem;
   private
     { Déclarations privées }
   public
