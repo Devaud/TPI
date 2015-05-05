@@ -384,6 +384,7 @@ object FrmMenuAdministrateur: TFrmMenuAdministrateur
       object Salles1: TMenuItem
         Caption = '&Salles'
         ShortCut = 16467
+        OnClick = Salles1Click
       end
       object Sance1: TMenuItem
         Bitmap.Data = {
@@ -487,6 +488,7 @@ object FrmMenuAdministrateur: TFrmMenuAdministrateur
           FFFFFFFFFFFFFFFFFFFFFFFAFAFAFFFFFFFFFFFFFFFFFFFFFFFF}
         Caption = 'Séanc&es'
         ShortCut = 16453
+        OnClick = Sance1Click
       end
     end
   end

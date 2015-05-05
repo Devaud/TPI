@@ -7,7 +7,10 @@ uses
   U_ImageBouton in 'U_ImageBouton.pas',
   U_OneWayTickets_ReservationAvance in 'U_OneWayTickets_ReservationAvance.pas' {FrmReservationAvance},
   U_OneWayTickets_Login in 'U_OneWayTickets_Login.pas' {FrmLogin},
-  U_OneWayTickets_MenuAdministrateur in 'U_OneWayTickets_MenuAdministrateur.pas' {FrmMenuAdministrateur};
+  U_OneWayTickets_MenuAdministrateur in 'U_OneWayTickets_MenuAdministrateur.pas' {FrmMenuAdministrateur},
+  U_OneWayTickets_GestionFilms in 'U_OneWayTickets_GestionFilms.pas' {FrmGestionFilms},
+  U_OneWayTickets_AjouterFilm in 'U_OneWayTickets_AjouterFilm.pas' {FrmAjouterFilm},
+  U_OneWayTickets_GestionSalles in 'U_OneWayTickets_GestionSalles.pas' {Form1};
 
 {$R *.RES}
 
@@ -18,5 +21,8 @@ begin
   Application.CreateForm(TFrmReservationAvance, FrmReservationAvance);
   Application.CreateForm(TFrmLogin, FrmLogin);
   Application.CreateForm(TFrmMenuAdministrateur, FrmMenuAdministrateur);
+  Application.CreateForm(TFrmGestionFilms, FrmGestionFilms);
+  Application.CreateForm(TFrmAjouterFilm, FrmAjouterFilm);
+  Application.CreateForm(TForm1, Form1);
   Application.Run;
 end.

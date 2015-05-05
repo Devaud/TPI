@@ -24,6 +24,7 @@ type
     BtnAnuuler: TButton;
     procedure BtnModifierClick(Sender: TObject);
     procedure BtnAnuulerClick(Sender: TObject);
+    procedure BtnAjouterClick(Sender: TObject);
   private
     { Déclarations privées }
   public
@@ -39,6 +40,8 @@ const
 
 implementation
 
+uses U_OneWayTickets_AjouterFilm;
+
 {$R *.DFM}
 
 procedure TFrmGestionFilms.BtnModifierClick(Sender: TObject);
@@ -49,6 +52,11 @@ end;
 procedure TFrmGestionFilms.BtnAnuulerClick(Sender: TObject);
 begin
   self.Height:= FRM_HEIGHT_MIN;
+end;
+
+procedure TFrmGestionFilms.BtnAjouterClick(Sender: TObject);
+begin
+  FrmAjouterFilm.showModal;
 end;
 
 end.

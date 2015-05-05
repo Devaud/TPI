@@ -1,11 +1,11 @@
 object FrmGestionFilms: TFrmGestionFilms
-  Left = 214
-  Top = 130
+  Left = 196
+  Top = 214
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
   Caption = 'OneWay Tickets - Gestion des films'
-  ClientHeight = 326
-  ClientWidth = 437
+  ClientHeight = 503
+  ClientWidth = 432
   Color = clBtnFace
   Font.Charset = ANSI_CHARSET
   Font.Color = clWindowText
@@ -91,8 +91,8 @@ object FrmGestionFilms: TFrmGestionFilms
     Width = 129
     Height = 33
     Caption = 'Ajouter'
-    Enabled = False
     TabOrder = 3
+    OnClick = BtnAjouterClick
   end
   object GroupBox1: TGroupBox
     Left = 8
