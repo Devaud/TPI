@@ -76,7 +76,7 @@ uses U_OneWayTickets_Reservation, U_OneWayTickets_ReservationAvance,
   *** @params String delimiteur - Délimiteur pour le split                 ***
   *** @Result TStringList - List des éléments splité                       ***
   **************************************************************************** }
-function Split(chaine: String; delimiteur: string): TStringList;
+function TFrmOneWayTickets.Split(chaine: String; delimiteur: string): TStringList;
 var
   L : TStringList;
 Begin

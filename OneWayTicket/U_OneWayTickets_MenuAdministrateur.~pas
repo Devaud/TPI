@@ -83,7 +83,9 @@ end;
 procedure TFrmMenuAdministrateur.Salles1Click(Sender: TObject);
 begin
   FrmGestionSalles.Height:= FRM_MODAL_HEIGHT; // Initialise la taille de la fenêtre
-  FrmGestionSalles.showModal;
+  FrmGestionSalles.chargeListeSalles();
+  FrmGestionSalles.LbxListeSalles.ItemIndex:= 0;
+  FrmGestionSalles.Visible:= true;
 end;
 
 { ****************************************************************************

@@ -1,6 +1,6 @@
 object FrmGestionSeances: TFrmGestionSeances
-  Left = 247
-  Top = 115
+  Left = 681
+  Top = 126
   BorderStyle = bsSingle
   Caption = 'OneWay Tickets - Gestion des séances'
   ClientHeight = 552
@@ -95,7 +95,7 @@ object FrmGestionSeances: TFrmGestionSeances
     TabOrder = 4
     object Label2: TLabel
       Left = 16
-      Top = 24
+      Top = 28
       Width = 29
       Height = 15
       Caption = 'Film :'
@@ -108,7 +108,7 @@ object FrmGestionSeances: TFrmGestionSeances
     end
     object Label3: TLabel
       Left = 11
-      Top = 56
+      Top = 60
       Width = 34
       Height = 15
       Caption = 'Salle :'

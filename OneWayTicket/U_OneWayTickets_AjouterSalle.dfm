@@ -41,23 +41,26 @@ object FrmAjouterSalle: TFrmAjouterSalle
     Font.Style = [fsBold]
     ParentFont = False
   end
-  object edtNomFilm: TEdit
+  object edtNomSalle: TEdit
     Left = 104
     Top = 16
     Width = 225
-    Height = 22
-    MaxLength = 20
+    Height = 21
+    MaxLength = 8
     TabOrder = 0
     Text = '13'
+    OnChange = edtNomSalleChange
   end
-  object edtDureeFilm: TEdit
+  object edtPlacesMax: TEdit
     Left = 104
     Top = 48
-    Width = 225
-    Height = 22
+    Width = 209
+    Height = 21
     MaxLength = 20
     TabOrder = 1
-    Text = '250'
+    Text = '1'
+    OnChange = edtNomSalleChange
+    OnKeyPress = edtPlacesMaxKeyPress
   end
   object BtnAnnuler: TButton
     Left = 8
@@ -77,5 +80,17 @@ object FrmAjouterSalle: TFrmAjouterSalle
     Enabled = False
     ModalResult = 1
     TabOrder = 3
+  end
+  object UDPlacesMax: TUpDown
+    Left = 313
+    Top = 48
+    Width = 16
+    Height = 21
+    Associate = edtPlacesMax
+    Min = 1
+    Max = 500
+    Position = 1
+    TabOrder = 4
+    Wrap = False
   end
 end

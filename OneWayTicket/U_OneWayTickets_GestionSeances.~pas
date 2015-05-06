@@ -50,14 +50,56 @@ var
   FrmGestionSeances: TFrmGestionSeances;
 
 const
-  FRM_WIDTH_MAX : integer = 580;
-  FRM_WIDTH_MIN : integer = 359;
+  FRM_WIDTH_MAX  : integer = 580;
+  FRM_WIDTH_MIN  : integer = 359;
+  FICHIER_FILMS  : String  = './Res/films.csv';
+  FICHIER_SALLES : String = './Res/salles.csv';
 
 implementation
 
-uses U_OneWayTickets_AjouterSeance;
+uses U_OneWayTickets_AjouterSeance, U_OneWayTicket;
 
 {$R *.DFM}
+
+{ ****************************************************************************
+  *** Ecrit les données d'un fichier dans un combobox                      ***
+  *** @params TCombobox cbs - Combobox qui reçois les données              ***
+  *** @params string fichier - Chemin du fichier                           ***
+  **************************************************************************** }
+procedure donneDansComboBox(cbx: TComboBox; fichier: String);
+var
+  f: TextFile;
+  ligne: string;
+  OutPutList : TStringList;
+  premiereLigne: Boolean;
+Begin
+  premiereLigne:= true;
+  cbx.Clear;
+
+  // Test si le fichier existe
+  if FileExists(fichier) then
+  Begin
+    AssignFile(f, fichier);
+    reset(f);
+
+    repeat
+      readln(f, ligne);
+      
+      if premiereLigne then
+        premiereLigne:= false
+      else
+      Begin
+        OutPutList:= FrmOneWayTickets.Split(ligne, ';');
+        cbx.Items.Add(OutPutList[0]); // Met les données dans la combobox
+      end;
+
+    until eof(f);
+
+    OutPutList.free;
+    CloseFile(f);
+    cbx.ItemIndex:= 0;
+  end;
+end;
 
 procedure TFrmGestionSeances.BtnModifierClick(Sender: TObject);
 begin
@@ -69,8 +111,17 @@ begin
   self.Height:= FRM_WIDTH_MIN;
 end;
 
+{ ****************************************************************************
+  *** Ouvre la fenêtre pour ajouter une séance                             ***
+  **************************************************************************** }
 procedure TFrmGestionSeances.BtnAjouterClick(Sender: TObject);
 begin
+  premiereLigne:= true;
+
+  donneDansComboBox(FrmAjouterSeance.CbxFilms, FICHIER_FILMS);
+  donneDansComboBox(FrmAjouterSeance.CbxSalles, FICHIER_SALLES);
+
+  
   FrmAjouterSeance.showModal;
 end;
 

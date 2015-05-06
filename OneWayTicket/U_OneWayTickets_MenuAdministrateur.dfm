@@ -1,6 +1,6 @@
 object FrmMenuAdministrateur: TFrmMenuAdministrateur
-  Left = 191
-  Top = 126
+  Left = 1024
+  Top = 503
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
   Caption = 'OneWayTickets - Menu Administrateur'

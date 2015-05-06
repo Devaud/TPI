@@ -6,6 +6,9 @@
   ***                        des films                                     ***
   *** Version              : 1.0                                           ***
   *** Date de création     : 05.05.2015                                    ***
+  ***         Modification :                                               ***
+  ***           06.05.2015 - AD - Modification de la modification          ***
+  ***                             Ajout de la suppression des films        ***
   **************************************************************************** }
 unit U_OneWayTickets_GestionFilms;
 
@@ -13,7 +16,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
-  StdCtrls, Grids;
+  StdCtrls, Grids, ComCtrls;
 
 type
   TFrmGestionFilms = class(TForm)
@@ -31,9 +34,24 @@ type
     MmoSynopsis: TMemo;
     BtnValiderModification: TButton;
     BtnAnuuler: TButton;
+    edtPrixFilm: TEdit;
+    Label5: TLabel;
+    UDDuree: TUpDown;
+    UDPrix: TUpDown;
+    Label6: TLabel;
+    Label7: TLabel;
+    Label8: TLabel;
+    Label9: TLabel;
     procedure BtnModifierClick(Sender: TObject);
     procedure BtnAnuulerClick(Sender: TObject);
     procedure BtnAjouterClick(Sender: TObject);
+    procedure edtDureeFilmChange(Sender: TObject);
+    procedure edtDureeFilmKeyPress(Sender: TObject; var Key: Char);
+    procedure testEdit();
+    procedure MmoSynopsisChange(Sender: TObject);
+    procedure BtnValiderModificationClick(Sender: TObject);
+    procedure changeEtat(active: boolean);
+    procedure BtnSupprimerClick(Sender: TObject);
   private
     { Déclarations privées }
   public
@@ -41,6 +59,7 @@ type
     procedure chargeListeFilm(); // Est disponible depuis l'extérieur
   end;
 
+// Information sur un film
 Type
   TFilm = record
     NomFilm  : String;
@@ -51,10 +70,10 @@ Type
 
 var
   FrmGestionFilms      : TFrmGestionFilms;
-  listeFilms           : array of TFilm;
+  listeFilms           : array of TFilm; // Enregistre tous les films pour une modification future
 
 const
-  FRM_HEIGHT_MAX : integer = 527;
+  FRM_HEIGHT_MAX : integer = 584;
   FRM_HEIGHT_MIN : integer = 358;
   FICHIER_FILMS  : String  = './Res/films.csv';
 
@@ -88,6 +107,12 @@ Begin
   Result:= text; // Retourne le text modifier
 end;
 
+{ ****************************************************************************
+  *** Ajuste la taille du text                                             ***
+  *** @params String text - Text qui va être ajusté                        ***
+  *** @params Integer taille - Taille final souhaitée                      ***
+  *** @Result string - Retourne le text modifié                            ***
+  **************************************************************************** }
 function AjusterText(text: string; taille: integer): string;
 var
   difference: integer;
@@ -106,6 +131,69 @@ Begin
   end;
 
   Result:= text;
+end;
+
+{ ****************************************************************************
+  *** Change l'état des éléments                                           ***
+  *** @params Boolean active - true ou false                               ***
+  **************************************************************************** }
+procedure TFrmGestionFilms.changeEtat(active: boolean);
+Begin
+  LbxListeFilms.Enabled:= active;
+  BtnModifier.Enabled:= active;
+  BtnAjouter.Enabled:= active;
+  BtnSupprimer.Enabled:= active;
+end;
+
+{ ****************************************************************************
+  *** Ecrit dans le fichier text                                           ***
+  *** @params array of TFilm films - Liste des films qui seront écrit      ***
+  *** @params string fichier - Chemin du fichier                           ***
+  *** @Result Boolean - Retourne vrai si l'écriture c'est bien passée      ***
+  **************************************************************************** }
+function ecritDansFichier(films: array of TFilm; fichier: string):Boolean;
+var
+  f: TextFile;
+  film: string;
+  index: integer;
+  success: boolean;
+Begin
+  success:= false;
+  
+  if FileExists(fichier) then
+  Begin
+    AssignFile(f, fichier);
+    rewrite(f);
+    writeln(f, 'NomFilm;Duree;Synopsis;Prix'); // Ecrit la première ligne
+    index:= 0;
+
+    // Parcoure le tableau et écrit les films dane le fichier
+    while (films[index].NomFilm <> '') and (index < length(films)) do
+    Begin
+      film:= films[index].NomFilm + ';' + films[index].Duree + ';' +
+        films[index].Synopsis + ';' + films[index].Prix;
+      writeln(f, film);
+      inc(index);
+    end;
+
+    CloseFile(f);
+
+    success:= true;
+  end;
+
+  Result:= success;
+end;
+
+{ ****************************************************************************
+  *** Permet de tester si les champs sont remplis                          ***
+  **************************************************************************** }
+procedure TFrmGestionFilms.testEdit();
+Begin
+  if (Length(edtNomFilm.Text) > 0) and (Length(edtDureeFilm.Text) > 0) and
+    (Length(edtPrixFilm.Text) > 0) and (Length(MmoSynopsis.Text) > 0) then
+    BtnValiderModification.Enabled:= true
+  else
+    BtnValiderModification.Enabled:= false;
 end;
 
 { ****************************************************************************
@@ -140,7 +228,7 @@ Begin
         OutPutList:= FrmOneWayTickets.Split(ligne, ';');
 
         // Formate le text
-        ligneFormate:= ajusterText(OutPutList[0], 10) + AjoutEspace(10);
+        ligneFormate:= ajusterText(OutPutList[0], 15) + AjoutEspace(5);
         ligneFormate:= ligneFormate + AjoutEspace(10) + OutPutList[1] + AjoutEspace(10);
         ligneFormate:= ligneFormate + AjoutEspace(10) + ajusterText(OutPutList[2], 32) + AjoutEspace(10);
         ligneFormate:= ligneFormate + AjoutEspace(10) + OutPutList[3];
@@ -152,6 +240,7 @@ Begin
         listeFilms[i].Prix:= OutPutList[3];
 
         LbxListeFilms.Items.Add(ligneFormate);
+        inc(i);
       end;
         
     until eof(f);
@@ -175,7 +264,10 @@ begin
   // Affiche les données dans les bon champs
   edtNomFilm.Text:= listefilms[index].NomFilm;
   edtDureeFilm.Text:= listefilms[index].Duree;
+  edtPrixFilm.Text:= listeFilms[index].Prix;
+  MmoSynopsis.Text:= listefilms[index].Synopsis;
 
+  changeEtat(false);
   self.Height:= FRM_HEIGHT_MAX;
 end;
 
@@ -184,6 +276,7 @@ end;
   **************************************************************************** }
 procedure TFrmGestionFilms.BtnAnuulerClick(Sender: TObject);
 begin
+  changeEtat(true);
   self.Height:= FRM_HEIGHT_MIN;
 end;
 
@@ -222,6 +315,105 @@ begin
 
     chargeListeFilm();
   end;
+end;
+
+{ ****************************************************************************
+  *** Test de la valeur d'un champ text                                    ***
+  **************************************************************************** }
+procedure TFrmGestionFilms.edtDureeFilmChange(Sender: TObject);
+begin
+  if ((Sender as TEdit).Name = 'edtDureeFilm') or ((Sender as TEdit).Name = 'edtPrixFilm') then
+    if StrToInt((Sender as TEdit).Text) > 400 then
+      (Sender as TEdit).Text:= '10';
+
+  testEdit();
+end;
+
+{ ****************************************************************************
+  *** Filtre les caractères d'un champ text                                ***
+  **************************************************************************** }
+procedure TFrmGestionFilms.edtDureeFilmKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if not(key in['0'..'9']) then
+    key:= #0; 
+end;
+
+{ ****************************************************************************
+  *** Procédure lors d'un changement dans le memo                          ***
+  **************************************************************************** }
+procedure TFrmGestionFilms.MmoSynopsisChange(Sender: TObject);
+begin
+  testEdit();
+end;
+
+{ ****************************************************************************
+  *** Procedure de la validation de la modification                        ***
+  **************************************************************************** }
+procedure TFrmGestionFilms.BtnValiderModificationClick(Sender: TObject);
+var
+  index: integer;
+begin
+  index:= LbxListeFilms.ItemIndex;
+
+  // Récupère les informations du film modifier et les mets dans le tableau
+  listeFilms[index].NomFilm:= edtNomFilm.Text;
+  listeFilms[index].Duree:= edtDureeFilm.Text;
+  listeFilms[index].Prix:= edtPrixFilm.Text;
+  listeFilms[index].Synopsis:= MmoSynopsis.Text;
+
+
+  if ecritDansFichier(listeFilms, FICHIER_FILMS) then
+    ShowMessage('Modification effectuée avec succès !')
+  else
+    ShowMessage('Une erreur est survenue lors de la suppression !');
+
+  chargeListeFilm(); // Charge la nouvelle liste
+  
+  // Remet la fenêtre comme elle se trouve au départ
+  changeEtat(true);
+  LbxListeFilms.ItemIndex:= 0;
+  self.Height:= FRM_HEIGHT_MIN;
+end;
+
+{ ****************************************************************************
+  *** Procedure de la suppression                                          ***
+  **************************************************************************** }
+procedure TFrmGestionFilms.BtnSupprimerClick(Sender: TObject);
+var
+  index, i: integer;
+  tabPropre: array of TFilm;
+begin
+  // Initialisation des variables
+  SetLength(tabPropre, length(listeFilms));
+  index:= LbxListeFilms.ItemIndex;
+
+  // "Suppresion" du film
+  listeFilms[index].NomFilm:= '';
+  listeFilms[index].Duree:= '';
+  listeFilms[index].Prix:= '';
+  listeFilms[index].Synopsis:= '';
+
+  index:= 0;
+  // Nettoyage du tableau (Enlève l'élément vide)
+  for i:= 0 to length(listeFilms) - 1 do
+  Begin
+    if listeFilms[i].NomFilm <> '' then
+    Begin
+      tabPropre[index].NomFilm:= listeFilms[i].NomFilm;
+      tabPropre[index].Duree:= listeFilms[i].Duree;
+      tabPropre[index].Prix:= listeFilms[i].Prix;
+      tabPropre[index].Synopsis:= listeFilms[i].Synopsis;
+      inc(index);
+    end;
+  end;
+
+  if ecritDansFichier(tabPropre, FICHIER_FILMS) then
+    ShowMessage('Le film a bien été supprimé !')
+  else
+    ShowMessage('Une erreur est survenue lors de la suppression !');
+
+  chargeListeFilm();
 end;
 
 end.

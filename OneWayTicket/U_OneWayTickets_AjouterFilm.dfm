@@ -1,6 +1,6 @@
 object FrmAjouterFilm: TFrmAjouterFilm
-  Left = 2180
-  Top = 321
+  Left = 471
+  Top = 339
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsDialog
   Caption = 'OneWay Tickets - Ajouter un film'
@@ -73,7 +73,7 @@ object FrmAjouterFilm: TFrmAjouterFilm
     Top = 16
     Width = 225
     Height = 22
-    MaxLength = 10
+    MaxLength = 20
     TabOrder = 0
     Text = 'The Hobbit'
     OnChange = edtDureeFilmChange

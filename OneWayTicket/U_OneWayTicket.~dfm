@@ -1,6 +1,6 @@
 object FrmOneWayTickets: TFrmOneWayTickets
-  Left = 543
-  Top = 274
+  Left = 750
+  Top = 181
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
   Caption = 'OneWay Tickets'
