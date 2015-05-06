@@ -1,9 +1,9 @@
 object FrmAjouterSeance: TFrmAjouterSeance
-  Left = 214
-  Top = 137
+  Left = 215
+  Top = 618
   BorderStyle = bsDialog
   Caption = 'OneWay Tickets - Ajouter une séance'
-  ClientHeight = 260
+  ClientHeight = 259
   ClientWidth = 429
   Color = clBtnFace
   Font.Charset = ANSI_CHARSET
@@ -77,7 +77,7 @@ object FrmAjouterSeance: TFrmAjouterSeance
     Font.Style = []
     ParentFont = False
     TabOrder = 2
-    object CbxLundi: TCheckBox
+    object ChxLundi: TCheckBox
       Left = 16
       Top = 24
       Width = 73
@@ -90,32 +90,36 @@ object FrmAjouterSeance: TFrmAjouterSeance
       Font.Style = []
       ParentFont = False
       TabOrder = 0
+      OnClick = edtHeure1Change
     end
-    object CbxSamedi: TCheckBox
+    object ChxSamedi: TCheckBox
       Left = 112
       Top = 48
       Width = 73
       Height = 17
       Caption = 'Samedi'
       TabOrder = 1
+      OnClick = edtHeure1Change
     end
-    object CbxVendredi: TCheckBox
+    object ChxVendredi: TCheckBox
       Left = 112
       Top = 24
       Width = 73
       Height = 17
       Caption = 'Vendredi'
       TabOrder = 2
+      OnClick = edtHeure1Change
     end
-    object CbxDimanche: TCheckBox
+    object ChxDimanche: TCheckBox
       Left = 112
       Top = 72
       Width = 73
       Height = 17
       Caption = 'Dimanche'
       TabOrder = 3
+      OnClick = edtHeure1Change
     end
-    object CbxMardi: TCheckBox
+    object ChxMardi: TCheckBox
       Left = 16
       Top = 48
       Width = 73
@@ -128,8 +132,9 @@ object FrmAjouterSeance: TFrmAjouterSeance
       Font.Style = []
       ParentFont = False
       TabOrder = 4
+      OnClick = edtHeure1Change
     end
-    object CbxMercredi: TCheckBox
+    object ChxMercredi: TCheckBox
       Left = 16
       Top = 72
       Width = 73
@@ -142,8 +147,9 @@ object FrmAjouterSeance: TFrmAjouterSeance
       Font.Style = []
       ParentFont = False
       TabOrder = 5
+      OnClick = edtHeure1Change
     end
-    object CbxJeudi: TCheckBox
+    object ChxJeudi: TCheckBox
       Left = 16
       Top = 96
       Width = 73
@@ -156,6 +162,7 @@ object FrmAjouterSeance: TFrmAjouterSeance
       Font.Style = []
       ParentFont = False
       TabOrder = 6
+      OnClick = edtHeure1Change
     end
   end
   object GroupBox3: TGroupBox
@@ -222,36 +229,48 @@ object FrmAjouterSeance: TFrmAjouterSeance
       Top = 20
       Width = 121
       Height = 22
-      MaxLength = 10
+      MaxLength = 5
       TabOrder = 0
       Text = '12:00'
+      OnChange = edtHeure1Change
+      OnKeyPress = edtHeure1KeyPress
+      OnKeyUp = edtHeure1KeyUp
     end
     object edtHeure2: TEdit
       Left = 64
       Top = 66
       Width = 121
       Height = 22
-      MaxLength = 10
+      MaxLength = 5
       TabOrder = 1
       Text = '12:00'
+      OnChange = edtHeure1Change
+      OnKeyPress = edtHeure1KeyPress
+      OnKeyUp = edtHeure1KeyUp
     end
     object edtHeure3: TEdit
       Left = 64
       Top = 110
       Width = 121
       Height = 22
-      MaxLength = 10
+      MaxLength = 5
       TabOrder = 2
       Text = '12:00'
+      OnChange = edtHeure1Change
+      OnKeyPress = edtHeure1KeyPress
+      OnKeyUp = edtHeure1KeyUp
     end
     object edtHeure4: TEdit
       Left = 64
       Top = 156
       Width = 121
       Height = 22
-      MaxLength = 10
+      MaxLength = 5
       TabOrder = 3
       Text = '12:00'
+      OnChange = edtHeure1Change
+      OnKeyPress = edtHeure1KeyPress
+      OnKeyUp = edtHeure1KeyUp
     end
   end
   object BtnAnnuler: TButton

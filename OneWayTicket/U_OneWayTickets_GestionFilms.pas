@@ -318,7 +318,7 @@ begin
 end;
 
 { ****************************************************************************
-  *** Test de la valeur d'un champ text                                    ***
+  *** Test de la valeur des champs text                                    ***
   **************************************************************************** }
 procedure TFrmGestionFilms.edtDureeFilmChange(Sender: TObject);
 begin
