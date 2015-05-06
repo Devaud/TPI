@@ -4,7 +4,7 @@ object FrmGestionSeances: TFrmGestionSeances
   BorderStyle = bsSingle
   Caption = 'OneWay Tickets - Gestion des séances'
   ClientHeight = 552
-  ClientWidth = 613
+  ClientWidth = 627
   Color = clBtnFace
   Font.Charset = ANSI_CHARSET
   Font.Color = clWindowText
@@ -18,7 +18,7 @@ object FrmGestionSeances: TFrmGestionSeances
   object Label1: TLabel
     Left = 8
     Top = 8
-    Width = 593
+    Width = 609
     Height = 22
     Alignment = taCenter
     AutoSize = False
@@ -33,7 +33,7 @@ object FrmGestionSeances: TFrmGestionSeances
   object LbxListeSeances: TListBox
     Left = 8
     Top = 40
-    Width = 593
+    Width = 609
     Height = 233
     ItemHeight = 14
     Items.Strings = (
@@ -69,7 +69,7 @@ object FrmGestionSeances: TFrmGestionSeances
     OnClick = BtnModifierClick
   end
   object BtnSupprimer: TButton
-    Left = 208
+    Left = 216
     Top = 280
     Width = 193
     Height = 33
@@ -78,7 +78,7 @@ object FrmGestionSeances: TFrmGestionSeances
     TabOrder = 2
   end
   object BtnAjouter: TButton
-    Left = 408
+    Left = 424
     Top = 280
     Width = 193
     Height = 33
@@ -89,7 +89,7 @@ object FrmGestionSeances: TFrmGestionSeances
   object GroupBox1: TGroupBox
     Left = 8
     Top = 328
-    Width = 593
+    Width = 609
     Height = 217
     Caption = ' Modification '
     TabOrder = 4
@@ -122,7 +122,7 @@ object FrmGestionSeances: TFrmGestionSeances
     object BtnValiderModification: TButton
       Left = 424
       Top = 176
-      Width = 161
+      Width = 177
       Height = 33
       Caption = 'Valider les modifications'
       TabOrder = 0
@@ -130,7 +130,7 @@ object FrmGestionSeances: TFrmGestionSeances
     object BtnAnuuler: TButton
       Left = 424
       Top = 136
-      Width = 161
+      Width = 177
       Height = 33
       Caption = 'Annuler les modifications'
       TabOrder = 1

@@ -83,8 +83,6 @@ begin
   if not(key in['0'..'9', Chr(VK_BACK)]) then
     key:= #0;
 end;
-  
-end;
 
 { ****************************************************************************
   *** Test de la valeur des champs text                                    ***

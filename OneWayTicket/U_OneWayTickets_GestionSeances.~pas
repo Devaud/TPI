@@ -40,6 +40,7 @@ type
     procedure BtnModifierClick(Sender: TObject);
     procedure BtnAnuulerClick(Sender: TObject);
     procedure BtnAjouterClick(Sender: TObject);
+    procedure changeEtat(active: boolean);
   private
     { Déclarations privées }
   public
@@ -191,6 +192,18 @@ Begin
 end;
 
 { ****************************************************************************
+  *** Change l'état des éléments                                           ***
+  *** @params Boolean active - true ou false                               ***
+  **************************************************************************** }
+procedure TFrmGestionSeances.changeEtat(active: boolean);
+Begin
+  LbxListeSeances.Enabled:= active;
+  BtnModifier.Enabled:= active;
+  BtnAjouter.Enabled:= active;
+  BtnSupprimer.Enabled:= active;
+end;
+
+{ ****************************************************************************
   *** Charge et affiche les seances depuis un fichier ini                  ***
   **************************************************************************** }
 procedure TFrmGestionSeances.chargeListeSeances();
@@ -203,6 +216,7 @@ var
 Begin
   //Initialisation
   SetLength(listeSeances, 250);
+  LbxListeSeances.Clear;
 
   // Lecture du fichier INI
   fichierIni:= TIniFile.Create(FICHIER_SEANCES);
@@ -330,13 +344,50 @@ Begin
   end;
 end;
 
-procedure TFrmGestionSeances.BtnModifierClick(Sender: TObject);
-begin
-  self.Height:= FRM_WIDTH_MAX;
+{ ****************************************************************************
+  *** Sélectionne le bon élément                                           ***
+  *** @params TCombobox cbs - Combobox où l'on cherche notre élément       ***
+  *** @params string item - nom de l'élément choisi                        ***
+  **************************************************************************** }
+procedure selectionneItemCombobox(cbx: TCombobox; item: string);
+var
+  i: integer;
+Begin
+  i:= 0;
+  
+  while cbx.Items[i] <> item do
+  Begin
+    inc(i);
+  end;
+
+  cbx.ItemIndex:= i;
 end;
 
+{ ****************************************************************************
+  *** Ouvre les paramètres de modifications                                ***
+  **************************************************************************** }
+procedure TFrmGestionSeances.BtnModifierClick(Sender: TObject);
+var
+  index: integer;
+begin
+  // Récupère l'index de l'élément sélectionner
+  index:= LbxListeSeances.ItemIndex;
+
+  donneDansComboBox(CbxFilm, FICHIER_FILMS);
+  selectionneItemCombobox(CbxFilm, listeSeances[index].film);
+  donneDansComboBox(CbxSalle, FICHIER_SALLES);
+  selectionneItemCombobox(CbxFilm, listeSeances[index].salle);
+
+  self.Height:= FRM_WIDTH_MAX;
+  changeEtat(false);
+end;
+
+{ ****************************************************************************
+  *** Annule les modification                                              ***
+  **************************************************************************** }
 procedure TFrmGestionSeances.BtnAnuulerClick(Sender: TObject);
 begin
+  changeEtat(true);
   self.Height:= FRM_WIDTH_MIN;
 end;
 
@@ -425,6 +476,8 @@ begin
       ShowMessage('Séance ajoutée avec succè !')
     else
       ShowMessage('Une erreur est survenue lors de la suppression !');
+
+    chargeListeSeances();
   end;
 end;
 
