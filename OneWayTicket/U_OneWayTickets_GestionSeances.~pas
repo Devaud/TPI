@@ -197,9 +197,9 @@ procedure TFrmGestionSeances.chargeListeSeances();
 var
   fichierIni : TIniFile;
   Sections, dataSection : TStringList;
-  ligneFormate: String;
-  jourDiff: String;
-  i: integer;
+  ligneFormate, jourDiff, horaires: String;
+  tmpJour : Integer;
+  i, j: integer;
 Begin
   //Initialisation
   SetLength(listeSeances, 250);
@@ -214,6 +214,8 @@ Begin
   for i:= 0 to Sections.Count - 1 do
   Begin
     fichierIni.ReadSection(Sections[i], dataSection);
+    jourDiff:= '';
+    horaires:= '';
 
     // Récupération des données du fichier ini
     ListeSeances[i].section:= Sections[i];
@@ -227,10 +229,61 @@ Begin
     ListeSeances[i].diffuser:= fichierIni.ReadString(Sections[i], dataSection[7], 'N/A');
 
     // Modification des jours (Affichage en tout lettre)
+    for j:= 0 to length(listeSeances[i].jourDiff) - 1 do
+    Begin
+      tmpJour:= StrToInt(listeSeances[i].jourDiff[j+1]);
+      case tmpJour of
+        1 : jourDiff:= jourDiff + 'Lundi';
+        2 : jourDiff:= jourDiff + 'Mardi';
+        3 : jourDiff:= jourDiff + 'Mercredi';
+        4 : jourDiff:= jourDiff + 'Jeudi';
+        5 : jourDiff:= jourDiff + 'Vendredi';
+        6 : jourDiff:= jourDiff + 'Samedi';
+        7 : jourDiff:= jourDiff + 'Dimanche';
+      end;
 
+      if j < length(listeSeances[i].jourDiff) - 1 then
+        jourDiff:= jourDiff + ',';
+    end;
 
-    ligneFormate:= AjusterText(ListeSeances[i].film, 15) + AjoutEspace(25);
-    ligneFormate:= ligneFormate + AjusterText(ListeSeances[i].salle, 10) + AjoutEspace(30);
+    // Assemble les heures
+    if ListeSeances[i].heure1 <> '' then
+    Begin
+      if Length(horaires) > 0 then
+        horaires:= horaires + ',';
+
+      horaires:= horaires + listeSeances[i].heure1;
+    end;
+
+    if ListeSeances[i].heure2 <> '' then
+    Begin
+      if Length(horaires) > 0 then
+        horaires:= horaires + ',';
+
+      horaires:= horaires + listeSeances[i].heure2;
+    end;
+
+    if ListeSeances[i].heure3 <> '' then
+    Begin
+      if Length(horaires) > 0 then
+        horaires:= horaires + ',';
+
+      horaires:= horaires + listeSeances[i].heure3;
+    end;
+
+    if ListeSeances[i].heure4 <> '' then
+    Begin
+      if Length(horaires) > 0 then
+        horaires:= horaires + ',';
+
+      horaires:= horaires + listeSeances[i].heure4;
+    end;
+
+    // Formate le text pour l'affichage
+    ligneFormate:= AjusterText(ListeSeances[i].film, 15) + AjoutEspace(15);
+    ligneFormate:= ligneFormate + AjusterText(ListeSeances[i].salle, 10) + AjoutEspace(10);
+    ligneFormate:= ligneFormate + AjusterText(jourDiff, 51) + AjoutEspace(10);
+    ligneFormate:= ligneFormate + AjusterText(horaires, 23);
 
 
     LbxListeSeances.Items.Add(ligneFormate);
