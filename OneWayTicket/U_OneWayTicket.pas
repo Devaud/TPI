@@ -297,6 +297,10 @@ Begin
   FrmReservation.lblPrixEnfants.Caption:= 'x ' + FloatToStr(prix[1]) + ' CHF';
   FrmReservation.lblPrixAdultes.Caption:= 'x ' + FloatToStr(prix[0]) + ' CHF';
   FrmReservation.lblPrixEAA.Caption:= 'x ' + FloatToStr(prix[2]) + ' CHF';
+  FrmReservation.PrixEnfant:= prix[1];
+  FrmReservation.PrixEAA:= prix[2];
+  FrmReservation.PrixAdulte:= prix[0];
+  FrmReservation.prixTotal:= 0;
     
   if FrmReservation.ShowModal = mrOk then
   Begin

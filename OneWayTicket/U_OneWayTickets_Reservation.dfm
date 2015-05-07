@@ -1,6 +1,6 @@
 object FrmReservation: TFrmReservation
-  Left = 663
-  Top = 130
+  Left = 200
+  Top = 126
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
   Caption = 'OneWay Tickets - Réservation'
@@ -183,7 +183,7 @@ object FrmReservation: TFrmReservation
       Font.Style = [fsBold]
       ParentFont = False
     end
-    object Label7: TLabel
+    object lblPrixTotal: TLabel
       Left = 136
       Top = 149
       Width = 66
@@ -220,6 +220,7 @@ object FrmReservation: TFrmReservation
     ReadOnly = True
     TabOrder = 2
     Text = '0'
+    OnChange = EdtNbBilletsEAAChange
   end
   object UDNBilletsEnfants: TUpDown
     Left = 393
@@ -241,6 +242,7 @@ object FrmReservation: TFrmReservation
     ReadOnly = True
     TabOrder = 4
     Text = '1'
+    OnChange = EdtNbBilletsEAAChange
   end
   object UDNBilletsAdultes: TUpDown
     Left = 393
@@ -262,6 +264,7 @@ object FrmReservation: TFrmReservation
     ReadOnly = True
     TabOrder = 6
     Text = '0'
+    OnChange = EdtNbBilletsEAAChange
   end
   object UDNBilletsEAA: TUpDown
     Left = 393

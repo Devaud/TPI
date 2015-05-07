@@ -1,3 +1,11 @@
+{ ****************************************************************************
+  *** Projet               : OneWayTickets                                 ***
+  *** Auteur               : Devaud Alan                                   ***
+  *** Fenêtre              : Reservation                                   ***
+  *** Description          : Permet d'effectuer une réservation            ***
+  *** Version              : 1.0                                           ***
+  *** Date de création     : 30.04.2015                                    ***
+  **************************************************************************** }
 unit U_OneWayTickets_Reservation;
 
 interface
@@ -28,7 +36,7 @@ type
     lblPrixEAA: TLabel;
     EdtNbBilletsEAA: TEdit;
     UDNBilletsEAA: TUpDown;
-    Label7: TLabel;
+    lblPrixTotal: TLabel;
     Label8: TLabel;
     GroupBox3: TGroupBox;
     Label9: TLabel;
@@ -39,17 +47,43 @@ type
     lblPlacesRestantes: TLabel;
     BtnAnnuler: TButton;
     BtnValiderReservation: TButton;
+    procedure EdtNbBilletsEAAChange(Sender: TObject);
+    procedure UDNBilletsEnfantsClick(Sender: TObject; Button: TUDBtnType);
   private
     { Déclarations privées }
   public
     { Déclarations publiques }
+    prixTotal : real;
+    prixEnfant, PrixAdulte, PrixEAA: real;
   end;
 
 var
   FrmReservation: TFrmReservation;
+  
 
 implementation
 
 {$R *.DFM}
+
+{ ****************************************************************************
+  *** Vérifie que les champs on une valeur supérieur à 0                   ***
+  **************************************************************************** }
+procedure TFrmReservation.EdtNbBilletsEAAChange(Sender: TObject);
+begin
+  if (StrToInt(EdtNbBilletsEnfants.Text) > 0) or (StrToInt(EdtNbBilletsAdultes.Text) > 0) or
+    (StrToInt(EdtNbBilletsEAA.Text) > 0) then
+    BtnValiderReservation.Enabled:= true
+  else
+    BtnValiderReservation.Enabled:= false;
+end;
+
+procedure TFrmReservation.UDNBilletsEnfantsClick(Sender: TObject;
+  Button: TUDBtnType);
+begin
+  if Button = (btnNext) then
+  Begin
+
+  end;
+end;
 
 end.
