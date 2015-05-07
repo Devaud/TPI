@@ -215,6 +215,7 @@ Begin
   // Test si le fichier existe
   if FileExists(FICHIER_FILMS) then
   Begin
+    OutPutList:= TStringList.Create;
     // Assigne le fichier
     AssignFile(f, FICHIER_FILMS);
     Reset(f);

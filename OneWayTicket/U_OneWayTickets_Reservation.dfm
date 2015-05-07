@@ -1,6 +1,6 @@
 object FrmReservation: TFrmReservation
-  Left = 836
-  Top = 128
+  Left = 663
+  Top = 130
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
   Caption = 'OneWay Tickets - Réservation'
@@ -93,6 +93,7 @@ object FrmReservation: TFrmReservation
         'ullamcorper quis vel diam. Mauris imperdiet, '
         'sem vitae blandit lobortis, est ipsum '
         'elementum magna, ')
+      MaxLength = 150
       ReadOnly = True
       TabOrder = 0
     end
@@ -350,6 +351,7 @@ object FrmReservation: TFrmReservation
     Width = 241
     Height = 41
     Caption = 'Annuler'
+    ModalResult = 2
     TabOrder = 9
   end
   object BtnValiderReservation: TButton
@@ -358,6 +360,7 @@ object FrmReservation: TFrmReservation
     Width = 241
     Height = 41
     Caption = 'Valider la réservation'
+    ModalResult = 1
     TabOrder = 10
   end
 end

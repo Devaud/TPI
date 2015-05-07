@@ -1,3 +1,18 @@
+{ ****************************************************************************
+  *** Projet               : OneWayTickets                                 ***
+  *** Fenêtre              : GestionSeances                                *** 
+  *** Auteur               : Devaud Alan                                   ***
+  *** Description          : Donne accès au fonctionnalité de la gestion   ***
+  ***                        des séances                                   ***
+  *** Version              : 1.0                                           ***
+  *** Date de création     : 05.05.2015                                    ***
+  ***         Modification :                                               ***
+  ***           06.05.2015 - AD - Ajout de l'ajout de séances              ***
+  ***                             Ajout de la modification de séances      ***
+  ***           07.05.2015 - AD - Modificatoin de la modification          ***
+  ***                             Ajout de la supression de séances        ***
+  ***                             Ajout d'éléments de sécurité             ***         
+  **************************************************************************** }
 unit U_OneWayTickets_GestionSeances;
 
 interface
@@ -42,6 +57,11 @@ type
     procedure BtnAjouterClick(Sender: TObject);
     procedure changeEtat(active: boolean);
     procedure BtnValiderModificationClick(Sender: TObject);
+    procedure BtnSupprimerClick(Sender: TObject);
+    procedure edtHeure1Change(Sender: TObject);
+    procedure edtHeure1KeyPress(Sender: TObject; var Key: Char);
+    procedure edtHeure1KeyUp(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
   private
     { Déclarations privées }
   public
@@ -349,6 +369,8 @@ Begin
 
     LbxListeSeances.Items.Add(ligneFormate);
   end;
+
+  fichierIni.Free;
 end;
 
 { ****************************************************************************
@@ -601,15 +623,125 @@ begin
   CleVal[7][1]:= '1';
 
   // Sauvegarde dans le fichier
-  if sauvegardeIni(FICHIER_SEANCES, IntToStr(index + 1), CleVal) then
+  if sauvegardeIni(FICHIER_SEANCES, listeSeances[index].section, CleVal) then
     ShowMessage('Séance modifiée avec succè !')
   else
     ShowMessage('Une erreur est survenue lors de la suppression !');
 
   chargeListeSeances();
+  LbxListeSeances.ItemIndex:= index;
   changeEtat(true);
   Self.Height:= FRM_WIDTH_MIN;
 
+end;
+
+{ ****************************************************************************
+  *** Procedure de la suppression                                          ***
+  **************************************************************************** }
+procedure TFrmGestionSeances.BtnSupprimerClick(Sender: TObject);
+var
+  index, i: integer;
+  CleVal: TCleVal;
+  f: TextFile;
+begin
+  // Initialisation des variables
+  index:= LbxListeSeances.ItemIndex;
+
+   // "Suppresion" de la séance
+  ListeSeances[index].film:= '';
+  ListeSeances[index].salle:= '';
+  ListeSeances[index].jourDiff:= '';
+  listeSeances[index].heure1:= '';
+  listeSeances[index].heure2:= '';
+  listeSeances[index].heure3:= '';
+  listeSeances[index].heure4:= '';
+  listeSeances[index].diffuser:= '';
+
+  // Efface le fichier
+  if FileExists(FICHIER_SEANCES) then
+  Begin
+    AssignFile(f, FICHIER_SEANCES);
+    Rewrite(f);
+    CloseFile(f);
+  end;
+
+  index:= 1;
+  // Nettoyage du tableau (Enlève l'élément vide)
+  for i:= 0 to length(listeSeances) - 1 do
+  Begin
+    if listeSeances[i].film <> '' then
+    Begin
+
+      // Initialisation des valeurs a sauvegarder dans le fichier INI
+      CleVal[0][0]:= 'Film';
+      CleVal[0][1]:= listeSeances[i].film;
+
+      CleVal[1][0]:= 'Salle';
+      CleVal[1][1]:= listeSeances[i].salle;
+
+      CleVal[2][0]:= 'JourDiff';
+      CleVal[2][1]:= listeSeances[i].jourDiff;
+
+      CleVal[3][0]:= 'Heure1';
+      CleVal[3][1]:= listeSeances[i].heure1;
+
+      CleVal[4][0]:= 'Heure2';
+      CleVal[4][1]:= listeSeances[i].heure2;
+
+      CleVal[5][0]:= 'Heure3';
+      CleVal[5][1]:= listeSeances[i].heure3;
+
+      CleVal[6][0]:= 'Heure4';
+      CleVal[6][1]:= listeSeances[i].heure4;
+
+      CleVal[7][0]:= 'Diffuser';
+      CleVal[7][1]:= listeSeances[i].diffuser;
+      
+      sauvegardeIni(FICHIER_SEANCES, IntToStr(index), CleVal);
+      inc(index);
+    end;
+  end;
+
+  ShowMessage('La séance a bien été supprimée !');
+  chargeListeSeances();
+end;
+
+{ ****************************************************************************
+  *** Test de la valeur des champs text                                    ***
+  **************************************************************************** }
+procedure TFrmGestionSeances.edtHeure1Change(Sender: TObject);
+begin
+  if ((length(edtHeure1.Text) > 0) or (length(edtHeure2.Text) > 0) or
+    (length(edtHeure3.Text) > 0) or (length(edtHeure4.Text) > 0)) and
+      (ChxLundi.Checked or ChxMardi.Checked or ChxMercredi.Checked or ChxJeudi.Checked
+        or ChxVendredi.Checked or ChxSamedi.Checked or ChxDimanche.Checked) then
+    BtnValiderModification.Enabled:= true
+  else
+    BtnValiderModification.Enabled:= false;
+end;
+
+{ ****************************************************************************
+  *** Filtre les caractères                                                ***   
+  **************************************************************************** }
+procedure TFrmGestionSeances.edtHeure1KeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if not(key in['0'..'9', Chr(VK_BACK)]) then
+    key:= #0;
+end;
+
+{ ****************************************************************************
+  *** Procedure au relachement d'une touche                                ***
+  **************************************************************************** }
+procedure TFrmGestionSeances.edtHeure1KeyUp(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  // Test si l'edit a 2 caractère et que la touche pressée n'est pas la touche VK_BACk
+  if (Length((Sender as TEdit).Text) = 2) and (not(key = ord(chr(VK_BACK)))) then
+  Begin
+    text:= (Sender as TEdit).Text;
+    (Sender as TEdit).Text:= text[1] + text[2] + ':';
+  end;
 end;
 
 end.

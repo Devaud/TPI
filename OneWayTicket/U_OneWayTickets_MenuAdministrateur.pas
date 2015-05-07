@@ -95,6 +95,7 @@ procedure TFrmMenuAdministrateur.Seance1Click(Sender: TObject);
 begin
   FrmGestionSeances.Height:= FRM_MODAL_HEIGHT; // Initialise la taille de la fenêtre
   FrmGestionSeances.chargeListeSeances();
+  FrmGestionSeances.LbxListeSeances.ItemIndex:= 0;
   FrmGestionSeances.showModal;
 end;
 

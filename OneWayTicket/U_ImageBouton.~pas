@@ -7,6 +7,7 @@
   *** Version              : 1.0                                           ***
   *** Date de création     : 30.04.2015                                    ***
   ***         Modification :                                               ***
+  ***         07.05.2015 - AD - Modification du constructeur (section)     ***
   **************************************************************************** }
 unit U_ImageBouton;
 
@@ -19,12 +20,16 @@ Type
   TImageBouton = Class(TImage)
   private
     lblNomFilm  : TLabel;
-    lblHoraire : TLabel;
+    lblHoraire  : TLabel;
+    section     : String;
+    salle       : string;
   public
-    constructor Create(AOwner: TComponent; nomFilm, horaire : String; x, y : integer); overload;
+    constructor Create(AOwner: TComponent; nomFilm, horaire, section, _salle : String; x, y : integer); overload;
     procedure changeCouleur(couleur: TColor);
     procedure setText(texte: string; objet: string);
-    procedure Click(Sender: TObject); 
+    procedure Click(Sender: TObject);
+    property pSection : string read section write section;
+    property pSalle : String read salle write salle;
   end;
 
 CONST
@@ -37,7 +42,7 @@ CONST
 implementation
 
 uses
-  U_OneWayTickets_Reservation;
+  U_OneWayTickets_Reservation, U_OneWayTicket;
 
 { ****************************************************************************
   *** Constructeur de ImageBouton                                          ***
@@ -46,7 +51,7 @@ uses
   *** @params String nomFilm - Nom du film à afficher                      ***
   *** @params String horaire - horaire du film à afficher                  ***
   **************************************************************************** }
-constructor TImageBouton.Create(AOwner : TComponent; nomFilm, horaire: String; x, y : integer);
+constructor TImageBouton.Create(AOwner : TComponent; nomFilm, horaire, _section, _salle: String; x, y : integer);
 Begin
   inherited Create(AOwner);
 
@@ -58,7 +63,10 @@ Begin
     Height:= HEIGHT_IMAGE;
     Top:= y;
     Left:= x;
+    pSection:= _section;
+    pSalle:= _salle;
   end;
+
 
   self.changeCouleur(clGreen);
 
@@ -147,8 +155,7 @@ end;
   **************************************************************************** }
 procedure TImageBouton.Click(Sender: TObject);
 Begin
-  FrmReservation.lblNomFilm.Caption:= self.lblNomFilm.Caption;
-  FrmReservation.ShowModal;
+  FrmOneWayTickets.Reservation(self.lblNomFilm.Caption, self.lblHoraire.caption, self.pSalle);
 end;
 
 end.

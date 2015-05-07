@@ -74,8 +74,8 @@ object FrmGestionSeances: TFrmGestionSeances
     Width = 193
     Height = 33
     Caption = 'Supprimer'
-    Enabled = False
     TabOrder = 2
+    OnClick = BtnSupprimerClick
   end
   object BtnAjouter: TButton
     Left = 424
@@ -185,6 +185,7 @@ object FrmGestionSeances: TFrmGestionSeances
         Font.Style = []
         ParentFont = False
         TabOrder = 0
+        OnClick = edtHeure1Change
       end
       object ChxSamedi: TCheckBox
         Left = 112
@@ -193,6 +194,7 @@ object FrmGestionSeances: TFrmGestionSeances
         Height = 17
         Caption = 'Samedi'
         TabOrder = 1
+        OnClick = edtHeure1Change
       end
       object ChxVendredi: TCheckBox
         Left = 112
@@ -201,6 +203,7 @@ object FrmGestionSeances: TFrmGestionSeances
         Height = 17
         Caption = 'Vendredi'
         TabOrder = 2
+        OnClick = edtHeure1Change
       end
       object ChxDimanche: TCheckBox
         Left = 112
@@ -209,6 +212,7 @@ object FrmGestionSeances: TFrmGestionSeances
         Height = 17
         Caption = 'Dimanche'
         TabOrder = 3
+        OnClick = edtHeure1Change
       end
       object ChxMardi: TCheckBox
         Left = 16
@@ -223,6 +227,7 @@ object FrmGestionSeances: TFrmGestionSeances
         Font.Style = []
         ParentFont = False
         TabOrder = 4
+        OnClick = edtHeure1Change
       end
       object ChxMercredi: TCheckBox
         Left = 16
@@ -237,6 +242,7 @@ object FrmGestionSeances: TFrmGestionSeances
         Font.Style = []
         ParentFont = False
         TabOrder = 5
+        OnClick = edtHeure1Change
       end
       object ChxJeudi: TCheckBox
         Left = 16
@@ -251,6 +257,7 @@ object FrmGestionSeances: TFrmGestionSeances
         Font.Style = []
         ParentFont = False
         TabOrder = 6
+        OnClick = edtHeure1Change
       end
     end
     object GroupBox3: TGroupBox
@@ -317,36 +324,48 @@ object FrmGestionSeances: TFrmGestionSeances
         Top = 20
         Width = 121
         Height = 22
-        MaxLength = 10
+        MaxLength = 5
         TabOrder = 0
         Text = '12:00'
+        OnChange = edtHeure1Change
+        OnKeyPress = edtHeure1KeyPress
+        OnKeyUp = edtHeure1KeyUp
       end
       object edtHeure2: TEdit
         Left = 64
         Top = 66
         Width = 121
         Height = 22
-        MaxLength = 10
+        MaxLength = 5
         TabOrder = 1
         Text = '12:00'
+        OnChange = edtHeure1Change
+        OnKeyPress = edtHeure1KeyPress
+        OnKeyUp = edtHeure1KeyUp
       end
       object edtHeure3: TEdit
         Left = 64
         Top = 110
         Width = 121
         Height = 22
-        MaxLength = 10
+        MaxLength = 5
         TabOrder = 2
         Text = '12:00'
+        OnChange = edtHeure1Change
+        OnKeyPress = edtHeure1KeyPress
+        OnKeyUp = edtHeure1KeyUp
       end
       object edtHeure4: TEdit
         Left = 64
         Top = 156
         Width = 121
         Height = 22
-        MaxLength = 10
+        MaxLength = 5
         TabOrder = 3
         Text = '12:00'
+        OnChange = edtHeure1Change
+        OnKeyPress = edtHeure1KeyPress
+        OnKeyUp = edtHeure1KeyUp
       end
     end
   end
