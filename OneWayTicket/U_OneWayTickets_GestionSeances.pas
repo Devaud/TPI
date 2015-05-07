@@ -21,13 +21,13 @@ type
     CbxFilm: TComboBox;
     CbxSalle: TComboBox;
     GroupBox2: TGroupBox;
-    CbxLundi: TCheckBox;
-    CbxSamedi: TCheckBox;
-    CbxVendredi: TCheckBox;
-    CbxDimanche: TCheckBox;
-    CbxMardi: TCheckBox;
-    CbxMercredi: TCheckBox;
-    CbxJeudi: TCheckBox;
+    ChxLundi: TCheckBox;
+    ChxSamedi: TCheckBox;
+    ChxVendredi: TCheckBox;
+    ChxDimanche: TCheckBox;
+    ChxMardi: TCheckBox;
+    ChxMercredi: TCheckBox;
+    ChxJeudi: TCheckBox;
     GroupBox3: TGroupBox;
     Label4: TLabel;
     edtHeure1: TEdit;
@@ -41,6 +41,7 @@ type
     procedure BtnAnuulerClick(Sender: TObject);
     procedure BtnAjouterClick(Sender: TObject);
     procedure changeEtat(active: boolean);
+    procedure BtnValiderModificationClick(Sender: TObject);
   private
     { Déclarations privées }
   public
@@ -192,6 +193,68 @@ Begin
 end;
 
 { ****************************************************************************
+  *** Traduit les jours de diffusion (1 -> Lundi, etc.)                    ***
+  *** @params String jour - Suite de nombre qui compose les jours          ***
+  *** @params String caracSeparation - Caracère qui sépare les jours       ***
+  *** @Result string - Chaine comportant les jours                         ***
+  **************************************************************************** }
+function assembleJour(jour, caracSeparation : String): String;
+var
+  j, tmpJour: integer;
+  jourDiff: string;
+Begin
+  jourDiff:= '';
+  
+  // Boucle qui parcoure tous les jours
+  for j:= 1 to length(jour) do
+  Begin
+    tmpJour:= StrToInt(jour[j]); // Récupère la valeur au point j et le traduit en integer
+    case tmpJour of
+      1 : jourDiff:= jourDiff + 'Lundi';
+      2 : jourDiff:= jourDiff + 'Mardi';
+      3 : jourDiff:= jourDiff + 'Mercredi';
+      4 : jourDiff:= jourDiff + 'Jeudi';
+      5 : jourDiff:= jourDiff + 'Vendredi';
+      6 : jourDiff:= jourDiff + 'Samedi';
+      7 : jourDiff:= jourDiff + 'Dimanche';
+    end;
+
+    if j < length(jour) then
+      jourDiff:= jourDiff + caracSeparation;
+  end;
+
+  Result:= jourDiff;
+end;
+
+{ ****************************************************************************
+  *** Passe les jours en valeur numérique                                  ***
+  *** @params TList chxList - Listes des checkbox                          ***
+  *** @Result string - Chaine comportant les jours                         ***
+  **************************************************************************** }
+function jourEnNombre(chxList: TList): string;
+var
+  chx: TCheckBox;
+  i: integer;
+  valeurs: string;
+Begin
+  // Initialisation
+  valeurs:= '';
+
+  // Parcoure la liste des checkbox
+  for i:= 1 to chxList.Count do
+  Begin
+    chx:= chxList[i-1];
+
+    // Test si le checkbock est checked
+    if chx.Checked then
+      valeurs:= valeurs + IntToStr(i);
+  end;
+
+
+  Result:= valeurs;
+end;
+
+{ ****************************************************************************
   *** Change l'état des éléments                                           ***
   *** @params Boolean active - true ou false                               ***
   **************************************************************************** }
@@ -211,8 +274,7 @@ var
   fichierIni : TIniFile;
   Sections, dataSection : TStringList;
   ligneFormate, jourDiff, horaires: String;
-  tmpJour : Integer;
-  i, j: integer;
+  i: integer;
 Begin
   //Initialisation
   SetLength(listeSeances, 250);
@@ -243,22 +305,7 @@ Begin
     ListeSeances[i].diffuser:= fichierIni.ReadString(Sections[i], dataSection[7], 'N/A');
 
     // Modification des jours (Affichage en tout lettre)
-    for j:= 0 to length(listeSeances[i].jourDiff) - 1 do
-    Begin
-      tmpJour:= StrToInt(listeSeances[i].jourDiff[j+1]);
-      case tmpJour of
-        1 : jourDiff:= jourDiff + 'Lundi';
-        2 : jourDiff:= jourDiff + 'Mardi';
-        3 : jourDiff:= jourDiff + 'Mercredi';
-        4 : jourDiff:= jourDiff + 'Jeudi';
-        5 : jourDiff:= jourDiff + 'Vendredi';
-        6 : jourDiff:= jourDiff + 'Samedi';
-        7 : jourDiff:= jourDiff + 'Dimanche';
-      end;
-
-      if j < length(listeSeances[i].jourDiff) - 1 then
-        jourDiff:= jourDiff + ',';
-    end;
+    jourDiff:= assembleJour(listeSeances[i].jourDiff, ',');
 
     // Assemble les heures
     if ListeSeances[i].heure1 <> '' then
@@ -318,6 +365,7 @@ var
 Begin
   premiereLigne:= true;
   cbx.Clear;
+  OutPutList:= TStringList.Create;
 
   // Test si le fichier existe
   if FileExists(fichier) then
@@ -368,15 +416,49 @@ end;
   **************************************************************************** }
 procedure TFrmGestionSeances.BtnModifierClick(Sender: TObject);
 var
-  index: integer;
+  index, i: integer;
+  tmpJour : integer;
 begin
+
   // Récupère l'index de l'élément sélectionner
   index:= LbxListeSeances.ItemIndex;
 
+  // Charge les éléments des checkbox et sélectionne les bons éléments
   donneDansComboBox(CbxFilm, FICHIER_FILMS);
   selectionneItemCombobox(CbxFilm, listeSeances[index].film);
   donneDansComboBox(CbxSalle, FICHIER_SALLES);
-  selectionneItemCombobox(CbxFilm, listeSeances[index].salle);
+  selectionneItemCombobox(CbxSalle, listeSeances[index].salle);
+
+  // Initialise les champs des horaires
+  edtHeure1.Text:= listeSeances[index].heure1;
+  edtHeure2.Text:= listeSeances[index].heure2;
+  edtHeure3.Text:= listeSeances[index].heure3;
+  edtHeure4.Text:= listeSeances[index].heure4;
+
+  // Initialise tous les checkbox a zéro
+  ChxLundi.Checked:= false;
+  ChxMardi.Checked:= false;
+  ChxMercredi.Checked:= false;
+  ChxJeudi.Checked:= false;
+  ChxVendredi.Checked:= false;
+  ChxSamedi.Checked:= false;
+  ChxDimanche.Checked:= false;
+
+  // Récupère les jours de diffusion
+  for i:= 1 to length(listeSeances[index].jourDiff) do
+  Begin
+    tmpJour:= StrToInt(listeSeances[index].jourDiff[i]);
+    case tmpJour of
+      1 : ChxLundi.Checked:= true;
+      2 : ChxMardi.Checked:= true;
+      3 : ChxMercredi.Checked:= true;
+      4 : ChxJeudi.Checked:= true;
+      5 : ChxVendredi.Checked:= true;
+      6 : ChxSamedi.Checked:= true;
+      7 : ChxDimanche.Checked:= true;
+    end;
+  end;
+
 
   self.Height:= FRM_WIDTH_MAX;
   changeEtat(false);
@@ -398,6 +480,7 @@ procedure TFrmGestionSeances.BtnAjouterClick(Sender: TObject);
 var
   CleVal: TCleVal;
   NomSection: String;
+  chxList: TList;
 begin
   // Initialise les données de la fenêtre
   donneDansComboBox(FrmAjouterSeance.CbxFilms, FICHIER_FILMS);
@@ -432,27 +515,16 @@ begin
     CleVal[2][0]:= 'JourDiff';
     CleVal[2][1]:= '';
 
-    // Test les checkbox qui sont cochées
-    if FrmAjouterSeance.ChxLundi.Checked then
-      CleVal[2][1]:= CleVal[2][1] + '1';
-
-    if FrmAjouterSeance.ChxMardi.Checked then
-      CleVal[2][1]:= CleVal[2][1] + '2';
-
-    if FrmAjouterSeance.ChxMercredi.Checked then
-      CleVal[2][1]:= CleVal[2][1] + '3';
-
-    if FrmAjouterSeance.ChxJeudi.Checked then
-      CleVal[2][1]:= CleVal[2][1] + '4';
-
-    if FrmAjouterSeance.ChxVendredi.Checked then
-      CleVal[2][1]:= CleVal[2][1] + '5';
-
-    if FrmAjouterSeance.ChxSamedi.Checked then
-      CleVal[2][1]:= CleVal[2][1] + '6';
-
-    if FrmAjouterSeance.ChxDimanche.Checked then
-      CleVal[2][1]:= CleVal[2][1] + '7';
+    chxList:= TList.Create;
+    chxList.Add(FrmAjouterSeance.ChxLundi);
+    chxList.Add(FrmAjouterSeance.ChxMardi);
+    chxList.Add(FrmAjouterSeance.ChxMercredi);
+    chxList.Add(FrmAjouterSeance.ChxJeudi);
+    chxList.Add(FrmAjouterSeance.ChxVendredi);
+    chxList.Add(FrmAjouterSeance.ChxSamedi);
+    chxList.Add(FrmAjouterSeance.ChxDimanche);
+    CleVal[2][1]:= jourEnNombre(chxList);
+    chxList.Free;
 
     CleVal[3][0]:= 'Heure1';
     CleVal[3][1]:= FrmAjouterSeance.edtHeure1.Text;
@@ -479,6 +551,66 @@ begin
 
     chargeListeSeances();
   end;
+end;
+
+
+{ ****************************************************************************
+  *** Procedure de la validation de la modification                        ***
+  **************************************************************************** }
+procedure TFrmGestionSeances.BtnValiderModificationClick(Sender: TObject);
+var
+  index: integer;
+  chxList: TList;
+  CleVal: TCleVal;
+begin
+  // Initialisation
+  index:= LbxListeSeances.ItemIndex;
+
+  // Initialisation des valeurs a sauvegarder dans le fichier INI
+  CleVal[0][0]:= 'Film';
+  CleVal[0][1]:= CbxFilm.Items[CbxFilm.ItemIndex];
+
+  CleVal[1][0]:= 'Salle';
+  CleVal[1][1]:= CbxSalle.Items[CbxSalle.ItemIndex];
+
+  CleVal[2][0]:= 'JourDiff';
+  chxList:= TList.Create;
+  chxList.Add(ChxLundi);
+  chxList.Add(ChxMardi);
+  chxList.Add(ChxMercredi);
+  chxList.Add(ChxJeudi);
+  chxList.Add(ChxVendredi);
+  chxList.Add(ChxSamedi);
+  chxList.Add(ChxDimanche);
+  CleVal[2][1]:= jourEnNombre(chxList);
+  chxList.Free;
+
+  CleVal[3][0]:= 'Heure1';
+  CleVal[3][1]:= edtHeure1.Text;
+
+  CleVal[4][0]:= 'Heure2';
+  CleVal[4][1]:= edtHeure2.Text;
+
+  CleVal[5][0]:= 'Heure3';
+  CleVal[5][1]:= edtHeure3.Text;
+
+  CleVal[6][0]:= 'Heure4';
+  CleVal[6][1]:= edtHeure4.Text;
+
+  CleVal[7][0]:= 'Diffuser';
+  CleVal[7][1]:= '1';
+
+  // Sauvegarde dans le fichier
+  if sauvegardeIni(FICHIER_SEANCES, IntToStr(index + 1), CleVal) then
+    ShowMessage('Séance modifiée avec succè !')
+  else
+    ShowMessage('Une erreur est survenue lors de la suppression !');
+
+  chargeListeSeances();
+  LbxListeSeances.ItemIndex:= index;
+  changeEtat(true);
+  Self.Height:= FRM_WIDTH_MIN;
+
 end;
 
 end.

@@ -1,6 +1,6 @@
 object FrmGestionSeances: TFrmGestionSeances
-  Left = 681
-  Top = 126
+  Left = 190
+  Top = 124
   BorderStyle = bsSingle
   Caption = 'OneWay Tickets - Gestion des séances'
   ClientHeight = 552
@@ -126,6 +126,7 @@ object FrmGestionSeances: TFrmGestionSeances
       Height = 33
       Caption = 'Valider les modifications'
       TabOrder = 0
+      OnClick = BtnValiderModificationClick
     end
     object BtnAnuuler: TButton
       Left = 424
@@ -171,7 +172,7 @@ object FrmGestionSeances: TFrmGestionSeances
       Font.Style = []
       ParentFont = False
       TabOrder = 4
-      object CbxLundi: TCheckBox
+      object ChxLundi: TCheckBox
         Left = 16
         Top = 24
         Width = 73
@@ -185,7 +186,7 @@ object FrmGestionSeances: TFrmGestionSeances
         ParentFont = False
         TabOrder = 0
       end
-      object CbxSamedi: TCheckBox
+      object ChxSamedi: TCheckBox
         Left = 112
         Top = 48
         Width = 73
@@ -193,7 +194,7 @@ object FrmGestionSeances: TFrmGestionSeances
         Caption = 'Samedi'
         TabOrder = 1
       end
-      object CbxVendredi: TCheckBox
+      object ChxVendredi: TCheckBox
         Left = 112
         Top = 24
         Width = 73
@@ -201,7 +202,7 @@ object FrmGestionSeances: TFrmGestionSeances
         Caption = 'Vendredi'
         TabOrder = 2
       end
-      object CbxDimanche: TCheckBox
+      object ChxDimanche: TCheckBox
         Left = 112
         Top = 72
         Width = 73
@@ -209,7 +210,7 @@ object FrmGestionSeances: TFrmGestionSeances
         Caption = 'Dimanche'
         TabOrder = 3
       end
-      object CbxMardi: TCheckBox
+      object ChxMardi: TCheckBox
         Left = 16
         Top = 48
         Width = 73
@@ -223,7 +224,7 @@ object FrmGestionSeances: TFrmGestionSeances
         ParentFont = False
         TabOrder = 4
       end
-      object CbxMercredi: TCheckBox
+      object ChxMercredi: TCheckBox
         Left = 16
         Top = 72
         Width = 73
@@ -237,7 +238,7 @@ object FrmGestionSeances: TFrmGestionSeances
         ParentFont = False
         TabOrder = 5
       end
-      object CbxJeudi: TCheckBox
+      object ChxJeudi: TCheckBox
         Left = 16
         Top = 96
         Width = 73
