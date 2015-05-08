@@ -1,0 +1,274 @@
+unit U_FP;
+
+interface
+  uses
+    classes, SysUtils, StdCtrls;
+
+type
+  TValeurs = array of array of string;
+  TValeur  =  array of String;
+  
+  function Split(chaine: String; delimiteur: string): TStringList;
+  function assembleJour(jour, caracSeparation : String): String;
+  function AjoutEspace(tailleEspace: integer): string;
+  function AjusterText(text: string; taille: integer): string;
+  function ecritDansFichier(elements: TValeurs; fichier: string):Boolean;
+  function ajoutUneLigne(elements: array of String; fichier: string): boolean;
+  function lireFichier(fichier: String): TValeur;
+
+// Information sur les séances
+Type
+  TSeance = record
+    section  : String;
+    film     : String;
+    salle    : String;
+    jourDiff : String;
+    heure1   : String;
+    heure2   : String;
+    heure3   : String;
+    heure4   : String;
+    diffuser : String;
+  end;
+
+// Information sur un film
+Type
+  TFilm = record
+    NomFilm  : String;
+    Duree    : String;
+    Prix     : String;
+    Synopsis : String;
+  end;
+
+  // Information sur une salle
+Type
+  TSalle = Record
+    NomSalle : String;
+    Places   : String;
+  end;
+
+const
+  FICHIER_STATS   : String  = './Res/statistiques.csv';
+  FICHIER_SEANCES : String = './Res/seances.ini';
+  FICHIER_FILMS   : String = './Res/films.csv';
+  FICHIER_SALLES  : String = './Res/salles.csv';
+  FICHIER_PRIX    : String = './Res/prixBillets.csv';
+  FICHIER_RESERV  : String = './Res/reservations.csv';
+
+
+
+implementation
+
+{ ****************************************************************************
+  *** Split une chaine de caractère                                        ***
+  *** Code trouvé sur le web, utilisateur qui donne le code : Aos          ***
+  *** http://www.developpez.net/forums/d639683/environnements-developpement***
+  *** /delphi/debutant/fonction-split-delphi/                              ***
+  *** @params String chaine - Chaine a splitée                             ***
+  *** @params String delimiteur - Délimiteur pour le split                 ***
+  *** @Result TStringList - List des éléments splité                       ***
+  **************************************************************************** }
+function Split(chaine: String; delimiteur: string): TStringList;
+var
+  L : TStringList;
+Begin
+  L:= TStringList.Create;
+  L.Text:= StringReplace(chaine, delimiteur, #13#10, [rfReplaceAll]);
+  Split:= L;
+end;
+
+{ ****************************************************************************
+  *** Traduit les jours de diffusion (1 -> Lundi, etc.)                    ***
+  *** @params String jour - Suite de nombre qui compose les jours          ***
+  *** @params String caracSeparation - Caracère qui sépare les jours       ***
+  *** @Result string - Chaine comportant les jours                         ***
+  **************************************************************************** }
+function assembleJour(jour, caracSeparation : String): String;
+var
+  j, tmpJour: integer;
+  jourDiff: string;
+Begin
+  jourDiff:= '';
+  
+  // Boucle qui parcoure tous les jours
+  for j:= 1 to length(jour) do
+  Begin
+    tmpJour:= StrToInt(jour[j]); // Récupère la valeur au point j et le traduit en integer
+    case tmpJour of
+      1 : jourDiff:= jourDiff + 'lundi';
+      2 : jourDiff:= jourDiff + 'mardi';
+      3 : jourDiff:= jourDiff + 'mercredi';
+      4 : jourDiff:= jourDiff + 'jeudi';
+      5 : jourDiff:= jourDiff + 'vendredi';
+      6 : jourDiff:= jourDiff + 'samedi';
+      7 : jourDiff:= jourDiff + 'dimanche';
+    end;
+
+    if j < length(jour) then
+      jourDiff:= jourDiff + caracSeparation;
+  end;
+
+  Result:= jourDiff;
+end;
+
+{ ****************************************************************************
+  *** Ajout un nombre d'espace avant ou après le text                      ***
+  *** @params String text - Text qui va prendre des espaces                ***
+  *** @params Boolean avant - La modification doit être placée avant ou    ***
+  ***                         apres                                        ***
+  *** @params Integer tailleEspace - Nombre d'espace souhaité              ***
+  *** @Result string - Retourne le text modifié                            ***
+  **************************************************************************** }
+function AjoutEspace(tailleEspace: integer): string;
+var
+  i : integer;
+  text: string;
+Begin
+  text:= '';
+  // Ajoute ce qu'il faut
+  for i:= 0 to tailleEspace do
+  Begin
+    text:= text + ' ';
+  end;
+
+  Result:= text; // Retourne le text modifier
+end;
+
+{ ****************************************************************************
+  *** Ajuste la taille du text                                             ***
+  *** @params String text - Text qui va être ajusté                        ***
+  *** @params Integer taille - Taille final souhaitée                      ***
+  *** @Result string - Retourne le text modifié                            ***
+  **************************************************************************** }
+function AjusterText(text: string; taille: integer): string;
+var
+  difference: integer;
+Begin
+  
+  if length(text) > taille then
+  Begin
+    text:= copy(text, 1, taille - 3);
+    text:= text + '...';
+  end;
+
+  if length(text) < taille then
+  Begin
+    difference:= taille - length(text);
+    text:= text + AjoutEspace(difference);
+  end;
+
+  Result:= text;
+end;
+
+{ ****************************************************************************
+  *** Ecrit dans le fichier text                                           ***
+  *** @params TValeurs elements - Liste des valeurs qui seront écrit       ***
+  *** @params string fichier - Chemin du fichier                           ***
+  *** @Result Boolean - Retourne vrai si l'écriture c'est bien passée      ***
+  **************************************************************************** }
+function ecritDansFichier(elements: TValeurs; fichier: string):Boolean;
+var
+  f: TextFile;
+  element: string;
+  index, i: integer;
+  success: boolean;
+Begin
+  success:= false;
+  element:= '';
+  
+  if FileExists(fichier) then
+  Begin
+    AssignFile(f, fichier);
+    rewrite(f);
+    index:= 0;
+
+    // Parcoure le tableau et écrit les éléments dans le fichier
+    while (elements[index][0] <> '') and (index < length(elements) - 1) do
+    Begin
+      element:= '';
+      for i:= 0 to length(elements[index]) - 1 do
+      Begin
+        element:= element + elements[index][i];
+
+        if i < length(elements[index]) - 1 then
+          element:= element + ';';
+      end;
+      writeln(f, element);
+      inc(index);
+    end;
+
+    CloseFile(f);
+
+    success:= true;
+  end;
+
+  Result:= success;
+end;
+
+{ ****************************************************************************
+  *** ajoute une ligne dans le fichier text                                ***
+  *** @params array of string elements - Liste des éléments qui sont écrit ***
+  *** @params string fichier - Chemin du fichier                           ***
+  *** @Result Boolean - Retourne vrai si l'écriture c'est bien passée      ***
+  **************************************************************************** }
+function ajoutUneLigne(elements: array of string; fichier: string): boolean;
+var
+  f: TextFile;
+  element: String;
+  i: integer;
+  success: boolean;
+begin
+  success:= false;
+  // Initialise la ligne qui sera enregistrée dans le fichier
+  for i:= 0 to length(elements) - 1 do
+  Begin
+    element:= element + elements[i];
+
+    if i < length(elements) - 1 then
+      element:= element + ';';
+  end;
+
+  // Test si le fichier existe
+  if FileExists(fichier) then
+  Begin
+    AssignFile(f, fichier);
+    Append(f);
+    Writeln(f, element);
+    CloseFile(f);
+    success:= true;
+  end;
+
+  Result:= success;
+end;
+
+{ ****************************************************************************
+  *** Lit un fichier text                                                  ***
+  *** @params string fichier - Chemin du fichier                           ***
+  *** @Result Boolean - Retourne les valeurs chargées depuis le fichier      ***
+  **************************************************************************** }
+function lireFichier(fichier: String): TValeur;
+var
+  f: TextFile;
+  i: integer;
+  valeur: TValeur;
+Begin
+  SetLength(valeur, 250);
+  // Test si le fichier existe
+  if FileExists(fichier) then
+  Begin
+    // Assigne le fichier
+    AssignFile(f, fichier);
+    Reset(f);
+    i:= 0;
+
+    repeat
+      Readln(f, valeur[i]);
+      inc(i);
+    until eof(f);
+
+    CloseFile(f);
+  end;
+
+  Result:= valeur;
+end;
+
+end.

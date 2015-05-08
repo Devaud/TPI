@@ -1,1 +1,7 @@
-NumeroSeance;BilletsEnfant;billetsAdultes;billetsEAA;PixTotal
+Date;horaire;NumeroSeance;BilletsEnfant;billetsAdultes;billetsEAA;PixTotal;places
+08.04.2015;20:00;6;0;1;1;39;2
+08.04.2015;20:00;6;0;1;1;39;2
+08.05.2015;17:00;9;0;1;4;84;5
+08.05.2015;23:00;7;0;1;1;39;2
+08.05.2015;16:35;3;0;1;0;24;1
+08.05.2015;20:30;5;0;6;0;144;6

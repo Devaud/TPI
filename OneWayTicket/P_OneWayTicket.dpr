@@ -13,7 +13,8 @@ uses
   U_OneWayTickets_GestionSalles in 'U_OneWayTickets_GestionSalles.pas' {FrmGestionSalles},
   U_OneWayTickets_AjouterSalle in 'U_OneWayTickets_AjouterSalle.pas' {FrmAjouterSalle},
   U_OneWayTickets_GestionSeances in 'U_OneWayTickets_GestionSeances.pas' {FrmGestionSeances},
-  U_OneWayTickets_AjouterSeance in 'U_OneWayTickets_AjouterSeance.pas' {FrmAjouterSeance};
+  U_OneWayTickets_AjouterSeance in 'U_OneWayTickets_AjouterSeance.pas' {FrmAjouterSeance},
+  U_FP in 'U_FP.pas';
 
 {$R *.RES}
 

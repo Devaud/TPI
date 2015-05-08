@@ -55,7 +55,6 @@ var
 
 const
   FRM_MODAL_HEIGHT : integer = 359; // Hauteur d'une fenêtre modal
-  FICHIER_FILMS    : String  = './Res/films.csv';
 
 implementation
 
@@ -105,6 +104,7 @@ end;
   **************************************************************************** }
 procedure TFrmMenuAdministrateur.BtnDeconnexionClick(Sender: TObject);
 begin
+  FrmOneWayTickets.Initialisation();
   FrmMenuAdministrateur.Visible:= false;
   FrmOneWayTickets.Visible:= true;
 end;

@@ -16,7 +16,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
-  StdCtrls, Grids, ComCtrls;
+  StdCtrls, Grids, ComCtrls, U_FP;
 
 type
   TFrmGestionFilms = class(TForm)
@@ -59,15 +59,6 @@ type
     procedure chargeListeFilm(); // Est disponible depuis l'extérieur
   end;
 
-// Information sur un film
-Type
-  TFilm = record
-    NomFilm  : String;
-    Duree    : String;
-    Prix     : String;
-    Synopsis : String;
-  end;
-
 var
   FrmGestionFilms      : TFrmGestionFilms;
   listeFilms           : array of TFilm; // Enregistre tous les films pour une modification future
@@ -75,63 +66,12 @@ var
 const
   FRM_HEIGHT_MAX : integer = 584;
   FRM_HEIGHT_MIN : integer = 358;
-  FICHIER_FILMS  : String  = './Res/films.csv';
 
 implementation
 
 uses U_OneWayTickets_AjouterFilm, U_OneWayTicket;
 
 {$R *.DFM}
-
-
-{ ****************************************************************************
-  *** Ajout un nombre d'espace avant ou après le text                      ***
-  *** @params String text - Text qui va prendre des espaces                ***
-  *** @params Boolean avant - La modification doit être placée avant ou    ***
-  ***                         apres                                        ***
-  *** @params Integer tailleEspace - Nombre d'espace souhaité              ***
-  *** @Result string - Retourne le text modifié                            ***
-  **************************************************************************** }
-function AjoutEspace(tailleEspace: integer): string;
-var
-  i : integer;
-  text: string;
-Begin
-  text:= '';
-  // Ajoute ce qu'il faut
-  for i:= 0 to tailleEspace do
-  Begin
-    text:= text + ' ';
-  end;
-
-  Result:= text; // Retourne le text modifier
-end;
-
-{ ****************************************************************************
-  *** Ajuste la taille du text                                             ***
-  *** @params String text - Text qui va être ajusté                        ***
-  *** @params Integer taille - Taille final souhaitée                      ***
-  *** @Result string - Retourne le text modifié                            ***
-  **************************************************************************** }
-function AjusterText(text: string; taille: integer): string;
-var
-  difference: integer;
-Begin
-  
-  if length(text) > taille then
-  Begin
-    text:= copy(text, 1, taille - 3);
-    text:= text + '...';
-  end;
-
-  if length(text) < taille then
-  Begin
-    difference:= taille - length(text);
-    text:= text + AjoutEspace(difference);
-  end;
-
-  Result:= text;
-end;
 
 { ****************************************************************************
   *** Change l'état des éléments                                           ***
@@ -143,45 +83,6 @@ Begin
   BtnModifier.Enabled:= active;
   BtnAjouter.Enabled:= active;
   BtnSupprimer.Enabled:= active;
-end;
-
-{ ****************************************************************************
-  *** Ecrit dans le fichier text                                           ***
-  *** @params array of TFilm films - Liste des films qui seront écrit      ***
-  *** @params string fichier - Chemin du fichier                           ***
-  *** @Result Boolean - Retourne vrai si l'écriture c'est bien passée      ***
-  **************************************************************************** }
-function ecritDansFichier(films: array of TFilm; fichier: string):Boolean;
-var
-  f: TextFile;
-  film: string;
-  index: integer;
-  success: boolean;
-Begin
-  success:= false;
-  
-  if FileExists(fichier) then
-  Begin
-    AssignFile(f, fichier);
-    rewrite(f);
-    writeln(f, 'NomFilm;Duree;Synopsis;Prix'); // Ecrit la première ligne
-    index:= 0;
-
-    // Parcoure le tableau et écrit les films dane le fichier
-    while (films[index].NomFilm <> '') and (index < length(films)) do
-    Begin
-      film:= films[index].NomFilm + ';' + films[index].Duree + ';' +
-        films[index].Synopsis + ';' + films[index].Prix;
-      writeln(f, film);
-      inc(index);
-    end;
-
-    CloseFile(f);
-
-    success:= true;
-  end;
-
-  Result:= success;
 end;
 
 { ****************************************************************************
@@ -205,6 +106,7 @@ var
   ligne, ligneFormate : String;
   OutPutList : TStringList;
   premiereLigne : boolean;
+  valeur: TValeur;
   i: integer;
 Begin
   premiereLigne:= true;
@@ -212,43 +114,29 @@ Begin
   SetLength(listeFilms, 250);
   i:= 0;
   
-  // Test si le fichier existe
-  if FileExists(FICHIER_FILMS) then
+  // Charge les valeurs du ficheir salles
+  valeur:= lireFichier(FICHIER_FILMS);
+  for i:= 1 to length(valeur) do
   Begin
-    OutPutList:= TStringList.Create;
-    // Assigne le fichier
-    AssignFile(f, FICHIER_FILMS);
-    Reset(f);
-    repeat
-      Readln(f, ligne);
+    // Test s'il y a une valeur
+    if valeur[i] = '' then
+      break;
 
-      if premiereLigne then
-        premiereLigne:= false
-      else
-      Begin
-        OutPutList:= FrmOneWayTickets.Split(ligne, ';');
+    // Split la ligne
+    OutPutList:= Split(valeur[i], ';');
 
-        // Formate le text
-        ligneFormate:= ajusterText(OutPutList[0], 15) + AjoutEspace(5);
-        ligneFormate:= ligneFormate + AjoutEspace(10) + OutPutList[1] + AjoutEspace(10);
-        ligneFormate:= ligneFormate + AjoutEspace(10) + ajusterText(OutPutList[2], 32) + AjoutEspace(10);
-        ligneFormate:= ligneFormate + AjoutEspace(10) + OutPutList[3];
+    // Formate le text pour l'affichage
+    ligneFormate:= ajusterText(OutPutList[0], 15) + AjoutEspace(5);
+    ligneFormate:= ligneFormate + AjoutEspace(10) + OutPutList[1] + AjoutEspace(10);
+    ligneFormate:= ligneFormate + AjoutEspace(10) + ajusterText(OutPutList[2], 32) + AjoutEspace(10);
+    ligneFormate:= ligneFormate + AjoutEspace(10) + OutPutList[3];
+    LbxListeFilms.Items.Add(ligneFormate);
 
-        // Assigne les films a la liste
-        listeFilms[i].NomFilm:= OutPutList[0];
-        listeFilms[i].Duree:= OutPutList[1];
-        listeFilms[i].Synopsis:= OutPutList[2];
-        listeFilms[i].Prix:= OutPutList[3];
-
-        LbxListeFilms.Items.Add(ligneFormate);
-        inc(i);
-      end;
-        
-    until eof(f);
-
-    OutPutList.free;
-
-    CloseFile(f);
+    //Met les données dans la liste
+    listeFilms[i - 1].NomFilm:= OutPutList[0];
+    listeFilms[i - 1].Duree:= OutPutList[1];
+    listeFilms[i - 1].Synopsis:= OutPutList[2];
+    listeFilms[i - 1].Prix:= OutPutList[3];
   end;
 end;
 
@@ -286,8 +174,7 @@ end;
   **************************************************************************** }
 procedure TFrmGestionFilms.BtnAjouterClick(Sender: TObject);
 var
-  film: String; // Contient tous les éléments prêt pour être mis dans un fichier text
-  f: TextFile;
+  valeurs: array [0..3] of String;
 begin
   // Initialisation des composants
   with FrmAjouterFilm do
@@ -300,19 +187,17 @@ begin
   
   if FrmAjouterFilm.showModal = mrOk then
   Begin
-    // Initialise la ligne qui sera enregistrée dans le fichier
-    film:= FrmAjouterFilm.edtNomFilm.Text + ';' + FrmAjouterFilm.edtDureeFilm.Text + ';' +
-      FrmAjouterFilm.MmoSynopsis.Text + ';' + FrmAjouterFilm.edtPrixFilm.Text;
 
-    // Test si le fichier existe
-    if FileExists(FICHIER_FILMS) then
-    Begin
-      AssignFile(f, FICHIER_FILMS);
-      Append(f);
-      Writeln(f, film);
-      CloseFile(f);
-      ShowMessage('Film ajouté avec succès !');
-    end;
+    // Initialise les valeurs
+    valeurs[0]:= FrmAjouterFilm.edtNomFilm.Text;
+    valeurs[1]:= FrmAjouterFilm.edtDureeFilm.Text;
+    valeurs[2]:= FrmAjouterFilm.MmoSynopsis.Text;
+    valeurs[3]:= FrmAjouterFilm.edtPrixFilm.Text;
+
+    if ajoutUneLigne(valeurs, FICHIER_FILMS) then
+      ShowMessage('Film ajouté avec succès !')
+    else
+      ShowMessage('Une erreur est survenue lors de la suppression !');
 
     chargeListeFilm();
   end;
@@ -353,9 +238,11 @@ end;
   **************************************************************************** }
 procedure TFrmGestionFilms.BtnValiderModificationClick(Sender: TObject);
 var
-  index: integer;
+  index, i: integer;
+  valeurs: TValeurs;
 begin
   index:= LbxListeFilms.ItemIndex;
+  setLength(valeurs, length(listeFilms) + 1, 4);
 
   // Récupère les informations du film modifier et les mets dans le tableau
   listeFilms[index].NomFilm:= edtNomFilm.Text;
@@ -363,8 +250,22 @@ begin
   listeFilms[index].Prix:= edtPrixFilm.Text;
   listeFilms[index].Synopsis:= MmoSynopsis.Text;
 
+  // Initialise le tableau pour écrire dans le fichier
+  valeurs[0][0]:= 'NomFilm';
+  valeurs[0][1]:= 'Duree';
+  valeurs[0][2]:= 'Synopsis';
+  valeurs[0][3]:= 'Prix';
+  
+  for i:= 0 to length(listeFilms) - 1 do
+  Begin
+    valeurs[i + 1][0]:= listeFilms[i].NomFilm;
+    valeurs[i + 1][1]:= listeFilms[i].Duree;
+    valeurs[i + 1][2]:= listeFilms[i].Synopsis;
+    valeurs[i + 1][3]:= listeFilms[i].Prix;
+  end;
 
-  if ecritDansFichier(listeFilms, FICHIER_FILMS) then
+
+  if ecritDansFichier(valeurs, FICHIER_FILMS) then
     ShowMessage('Modification effectuée avec succès !')
   else
     ShowMessage('Une erreur est survenue lors de la suppression !');
@@ -383,10 +284,10 @@ end;
 procedure TFrmGestionFilms.BtnSupprimerClick(Sender: TObject);
 var
   index, i: integer;
-  tabPropre: array of TFilm;
+  valeurs: TValeurs;
 begin
   // Initialisation des variables
-  SetLength(tabPropre, length(listeFilms));
+  setLength(valeurs, length(listeFilms) + 1, 4);
   index:= LbxListeFilms.ItemIndex;
 
   // "Suppresion" du film
@@ -396,24 +297,27 @@ begin
   listeFilms[index].Synopsis:= '';
 
   index:= 0;
+  valeurs[0][0]:= 'NomSalle';
+  valeurs[0][1]:= 'Places';
+
   // Nettoyage du tableau (Enlève l'élément vide)
   for i:= 0 to length(listeFilms) - 1 do
   Begin
     if listeFilms[i].NomFilm <> '' then
     Begin
-      tabPropre[index].NomFilm:= listeFilms[i].NomFilm;
-      tabPropre[index].Duree:= listeFilms[i].Duree;
-      tabPropre[index].Prix:= listeFilms[i].Prix;
-      tabPropre[index].Synopsis:= listeFilms[i].Synopsis;
+      valeurs[index + 1][0]:= listeFilms[i].NomFilm;
+      valeurs[index + 1][1]:= listeFilms[i].Duree;
+      valeurs[index + 1][2]:= listeFilms[i].Synopsis;
+      valeurs[index + 1][3]:= listeFilms[i].Prix;
       inc(index);
     end;
   end;
 
-  if ecritDansFichier(tabPropre, FICHIER_FILMS) then
+  if ecritDansFichier(valeurs, FICHIER_FILMS) then
     ShowMessage('Le film a bien été supprimé !')
   else
     ShowMessage('Une erreur est survenue lors de la suppression !');
-
+    
   chargeListeFilm();
 end;
 

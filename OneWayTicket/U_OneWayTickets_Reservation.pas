@@ -48,12 +48,14 @@ type
     BtnAnnuler: TButton;
     BtnValiderReservation: TButton;
     procedure EdtNbBilletsEAAChange(Sender: TObject);
+    procedure UDNBilletsAdultesClick(Sender: TObject; Button: TUDBtnType);
   private
     { Déclarations privées }
   public
     { Déclarations publiques }
     prixTotal : real;
     prixEnfant, PrixAdulte, PrixEAA: real;
+    procedure calculTotal();
   end;
 
 var
@@ -64,16 +66,40 @@ implementation
 
 {$R *.DFM}
 
+procedure TFrmReservation.calculTotal();
+Begin
+  prixTotal:= StrToFloat(EdtNbBilletsEnfants.Text) * prixEnfant;
+  prixTotal:= prixTotal + StrToFloat(EdtNbBilletsAdultes.Text) * PrixAdulte;
+  prixTotal:= prixTotal + StrToFloat(EdtNbBilletsEAA.Text) * PrixEAA;
+
+  lblPrixTotal.Caption:= FloatToStr(prixTotal) + ' CHF';
+end;
+
 { ****************************************************************************
   *** Vérifie que les champs on une valeur supérieur à 0                   ***
   **************************************************************************** }
 procedure TFrmReservation.EdtNbBilletsEAAChange(Sender: TObject);
+var
+  places : integer;
 begin
-  if (StrToInt(EdtNbBilletsEnfants.Text) > 0) or (StrToInt(EdtNbBilletsAdultes.Text) > 0) or
-    (StrToInt(EdtNbBilletsEAA.Text) > 0) then
+  places:= StrToInt(EdtNbBilletsEnfants.Text) + StrToInt(EdtNbBilletsAdultes.Text) + StrToInt(EdtNbBilletsEAA.Text);
+ 
+  if ((StrToInt(EdtNbBilletsEnfants.Text) > 0) or (StrToInt(EdtNbBilletsAdultes.Text) > 0) or
+    (StrToInt(EdtNbBilletsEAA.Text) > 0)) and (places <= StrToInt(lblPlacesRestantes.Caption) ) then
     BtnValiderReservation.Enabled:= true
   else
     BtnValiderReservation.Enabled:= false;
+
+
+end;
+
+{ ****************************************************************************
+  *** Procedure d'un bouton UpDown (Calcul le prix total)                  ***
+  **************************************************************************** }
+procedure TFrmReservation.UDNBilletsAdultesClick(Sender: TObject;
+  Button: TUDBtnType);
+begin
+  calculTotal();
 end;
 
 end.

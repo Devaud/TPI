@@ -19,7 +19,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
-  StdCtrls, IniFiles;
+  StdCtrls, IniFiles, U_FP;
 
 type
   TFrmGestionSeances = class(TForm)
@@ -67,19 +67,6 @@ type
   public
     { Déclarations publiques }
     procedure chargeListeSeances();
-  end;
-
-Type
-  TSeance = record
-    section  : String;
-    film     : String;
-    salle    : String;
-    jourDiff : String;
-    heure1   : String;
-    heure2   : String;
-    heure3   : String;
-    heure4   : String;
-    diffuser : String;
   end;
 
 // Tableau pour les clés et les valeurs des champs pour le fichier INI
@@ -161,89 +148,6 @@ Begin
   end;
   
   Result:= NbSection;
-end;
-
-{ ****************************************************************************
-  *** Ajout un nombre d'espace avant ou après le text                      ***
-  *** @params String text - Text qui va prendre des espaces                ***
-  *** @params Boolean avant - La modification doit être placée avant ou    ***
-  ***                         apres                                        ***
-  *** @params Integer tailleEspace - Nombre d'espace souhaité              ***
-  *** @Result string - Retourne le text modifié                            ***
-  **************************************************************************** }
-function AjoutEspace(tailleEspace: integer): string;
-var
-  i : integer;
-  text: string;
-Begin
-  text:= '';
-  // Ajoute ce qu'il faut
-  for i:= 0 to tailleEspace do
-  Begin
-    text:= text + ' ';
-  end;
-
-  Result:= text; // Retourne le text modifier
-end;
-
-{ ****************************************************************************
-  *** Ajuste la taille du text                                             ***
-  *** @params String text - Text qui va être ajusté                        ***
-  *** @params Integer taille - Taille final souhaitée                      ***
-  *** @Result string - Retourne le text modifié                            ***
-  **************************************************************************** }
-function AjusterText(text: string; taille: integer): string;
-var
-  difference: integer;
-Begin
-  
-  if length(text) > taille then
-  Begin
-    text:= copy(text, 1, taille - 3);
-    text:= text + '...';
-  end;
-
-  if length(text) < taille then
-  Begin
-    difference:= taille - length(text);
-    text:= text + AjoutEspace(difference);
-  end;
-
-  Result:= text;
-end;
-
-{ ****************************************************************************
-  *** Traduit les jours de diffusion (1 -> Lundi, etc.)                    ***
-  *** @params String jour - Suite de nombre qui compose les jours          ***
-  *** @params String caracSeparation - Caracère qui sépare les jours       ***
-  *** @Result string - Chaine comportant les jours                         ***
-  **************************************************************************** }
-function assembleJour(jour, caracSeparation : String): String;
-var
-  j, tmpJour: integer;
-  jourDiff: string;
-Begin
-  jourDiff:= '';
-  
-  // Boucle qui parcoure tous les jours
-  for j:= 1 to length(jour) do
-  Begin
-    tmpJour:= StrToInt(jour[j]); // Récupère la valeur au point j et le traduit en integer
-    case tmpJour of
-      1 : jourDiff:= jourDiff + 'Lundi';
-      2 : jourDiff:= jourDiff + 'Mardi';
-      3 : jourDiff:= jourDiff + 'Mercredi';
-      4 : jourDiff:= jourDiff + 'Jeudi';
-      5 : jourDiff:= jourDiff + 'Vendredi';
-      6 : jourDiff:= jourDiff + 'Samedi';
-      7 : jourDiff:= jourDiff + 'Dimanche';
-    end;
-
-    if j < length(jour) then
-      jourDiff:= jourDiff + caracSeparation;
-  end;
-
-  Result:= jourDiff;
 end;
 
 { ****************************************************************************
@@ -402,7 +306,7 @@ Begin
         premiereLigne:= false
       else
       Begin
-        OutPutList:= FrmOneWayTickets.Split(ligne, ';');
+        OutPutList:= Split(ligne, ';');
         cbx.Items.Add(OutPutList[0]); // Met les données dans la combobox
       end;
 

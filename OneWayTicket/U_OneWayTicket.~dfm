@@ -1,6 +1,6 @@
 object FrmOneWayTickets: TFrmOneWayTickets
-  Left = 191
-  Top = 490
+  Left = 557
+  Top = 202
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
   Caption = 'OneWay Tickets'
@@ -46,6 +46,7 @@ object FrmOneWayTickets: TFrmOneWayTickets
     Caption = 'Afficher les séances précédentes'
     Enabled = False
     TabOrder = 0
+    OnClick = BtnSeancePrecedenteClick
   end
   object BtnSeanceSuivante: TButton
     Left = 432
@@ -53,8 +54,8 @@ object FrmOneWayTickets: TFrmOneWayTickets
     Width = 177
     Height = 41
     Caption = 'Afficher les séances suivantes'
-    Enabled = False
     TabOrder = 1
+    OnClick = BtnSeanceSuivanteClick
   end
   object BtnReserverAvance: TButton
     Left = 16

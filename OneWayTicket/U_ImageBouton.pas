@@ -8,6 +8,7 @@
   *** Date de création     : 30.04.2015                                    ***
   ***         Modification :                                               ***
   ***         07.05.2015 - AD - Modification du constructeur (section)     ***
+  ***         08.05.2015 - AD - Ajout de l'etat complet                    ***
   **************************************************************************** }
 unit U_ImageBouton;
 
@@ -19,17 +20,21 @@ uses
 Type
   TImageBouton = Class(TImage)
   private
-    lblNomFilm  : TLabel;
-    lblHoraire  : TLabel;
-    section     : String;
-    salle       : string;
+    lblNomFilm   : TLabel;
+    lblHoraire   : TLabel;
+    section      : String;
+    salle        : string;
+    complet_     : boolean;
+    places       : integer;
   public
     constructor Create(AOwner: TComponent; nomFilm, horaire, _section, _salle : String; x, y : integer); overload;
     procedure changeCouleur(couleur: TColor);
     procedure setText(texte: string; objet: string);
     procedure Click(Sender: TObject);
+    procedure Complet();
     property pSection : string read section write section;
     property pSalle : String read salle write salle;
+    property pPlaces : Integer read places write places;
   end;
 
 CONST
@@ -65,6 +70,7 @@ Begin
     Left:= x;
     pSection:= _section;
     pSalle:= _salle;
+    complet_:= false;
   end;
 
 
@@ -115,11 +121,24 @@ Begin
 
   // Ajout d'évènement
   OnClick:= Click;
+  lblNomFilm.OnClick:= Click;
+  lblHoraire.OnClick:= Click;
+end;
+
+{ ****************************************************************************
+  *** Procedure si la séance est complet                                   ***
+  **************************************************************************** }
+procedure TImageBouton.Complet();
+Begin
+  self.changeCouleur(clRed);
+  self.complet_:= true;
+  self.Enabled:= false;
+  self.lblNomFilm.Enabled:= false;
+  self.lblHoraire.Enabled:= false;
 end;
 
 { ****************************************************************************
   *** Change la couleur du bouton                                          ***
-  *** Crée et initialise le boutonImage                                    ***
   *** @params TColor couleur - Couleur du bouton                           ***
   **************************************************************************** }
 procedure TImageBouton.changeCouleur(couleur: TColor);
@@ -155,7 +174,8 @@ end;
   **************************************************************************** }
 procedure TImageBouton.Click(Sender: TObject);
 Begin
-  FrmOneWayTickets.Reservation(self.lblNomFilm.Caption, self.lblHoraire.caption, self.pSalle);
+  if not(self.complet_) then
+    FrmOneWayTickets.Reservation(self.lblNomFilm.Caption, self.lblHoraire.caption, self.pSalle, self.pSection, self.pPlaces);
 end;
 
 end.

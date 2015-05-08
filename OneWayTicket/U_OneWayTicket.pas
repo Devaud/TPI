@@ -15,7 +15,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
-  Menus, StdCtrls, ExtCtrls, U_ImageBouton, IniFiles;
+  Menus, StdCtrls, ExtCtrls, U_ImageBouton, IniFiles, U_FP;
 
 type
   TFrmOneWayTickets = class(TForm)
@@ -35,41 +35,32 @@ type
     procedure Quitter1Click(Sender: TObject);
     procedure Timer1Timer(Sender: TObject);
     procedure FormCreate(Sender: TObject);
-    procedure Initialisation();
     procedure BtnReserverAvanceClick(Sender: TObject);
     procedure Connexion1Click(Sender: TObject);
     procedure chargeToutesLesSeances();
+    procedure changeSecances(incremente: integer);
+    procedure BtnSeanceSuivanteClick(Sender: TObject);
+    procedure BtnSeancePrecedenteClick(Sender: TObject);
   private
     { Déclarations privées }
   public
     { Déclarations publiques }
-    function Split(chaine: String; delimiteur: string): TStringList;
-    procedure Reservation(film, horaire, salle : string);
-  end;
-
-Type
-  TSeance = record
-    section  : String;
-    film     : String;
-    salle    : String;
-    jourDiff : String;
-    heure1   : String;
-    heure2   : String;
-    heure3   : String;
-    heure4   : String;
-    diffuser : String;
+    procedure Reservation(film, horaire, salle, section : string; placesRestant: integer);
+    procedure Initialisation();
   end;
 
 Type
   TListSeance = array [0..250] of array [0..3] of String;
 
 var
-  FrmOneWayTickets: TFrmOneWayTickets;
-  listImageBouton : TList; // Liste qui contient tous les bouton
-  listSeances : array of TSeance;
-  nbImageBouton : integer = 11;
-  jourActuelle : String;
-  prix         : array [0..2] of real;
+  FrmOneWayTickets : TFrmOneWayTickets;
+  listImageBouton  : TList; // Liste qui contient tous les bouton
+  listSeances      : array of TSeance;
+  nbImageBouton    : integer = 11;
+  jourActuelle     : String;
+  prix             : array [0..2] of real;
+  temp             : integer;
+  secance          : integer = 0; // La sécances des séances a afficher
 
 CONST
   START           : integer = 10;
@@ -78,11 +69,7 @@ CONST
   TAILLE_WIDTH    : integer = 193;
   TAILLE_HEIGHT   : integer = 57;
   MDP_ADMIN       : String  = 'Neko1';
-  FICHIER_STATS   : String  = './Res/statistiques.csv';
-  FICHIER_SEANCES : String = './Res/seances.ini';
-  FIHCIER_FILMS   : String = './Res/films.csv';
-  FICHIER_SALLES  : String = './Res/salles.csv';
-  FICHIER_PRIX    : String = './Res/prixBillets.csv';
+
 
 implementation
 
@@ -90,59 +77,6 @@ uses U_OneWayTickets_Reservation, U_OneWayTickets_ReservationAvance,
   U_OneWayTickets_Login, U_OneWayTickets_MenuAdministrateur;
 
 {$R *.DFM}
-
-
-{ ****************************************************************************
-  *** Split une chaine de caractère                                        ***
-  *** Code trouvé sur le web, utilisateur qui donne le code : Aos          ***
-  *** http://www.developpez.net/forums/d639683/environnements-developpement***
-  *** /delphi/debutant/fonction-split-delphi/                              ***
-  *** @params String chaine - Chaine a splitée                             ***
-  *** @params String delimiteur - Délimiteur pour le split                 ***
-  *** @Result TStringList - List des éléments splité                       ***
-  **************************************************************************** }
-function TFrmOneWayTickets.Split(chaine: String; delimiteur: string): TStringList;
-var
-  L : TStringList;
-Begin
-  L:= TStringList.Create;
-  L.Text:= StringReplace(chaine, delimiteur, #13#10, [rfReplaceAll]);
-  Split:= L;
-end;
-
-{ ****************************************************************************
-  *** Traduit les jours de diffusion (1 -> Lundi, etc.)                    ***
-  *** @params String jour - Suite de nombre qui compose les jours          ***
-  *** @params String caracSeparation - Caracère qui sépare les jours       ***
-  *** @Result string - Chaine comportant les jours                         ***
-  **************************************************************************** }
-function assembleJour(jour, caracSeparation : String): String;
-var
-  j, tmpJour: integer;
-  jourDiff: string;
-Begin
-  jourDiff:= '';
-  
-  // Boucle qui parcoure tous les jours
-  for j:= 1 to length(jour) do
-  Begin
-    tmpJour:= StrToInt(jour[j]); // Récupère la valeur au point j et le traduit en integer
-    case tmpJour of
-      1 : jourDiff:= jourDiff + 'lundi';
-      2 : jourDiff:= jourDiff + 'mardi';
-      3 : jourDiff:= jourDiff + 'mercredi';
-      4 : jourDiff:= jourDiff + 'jeudi';
-      5 : jourDiff:= jourDiff + 'vendredi';
-      6 : jourDiff:= jourDiff + 'samedi';
-      7 : jourDiff:= jourDiff + 'dimanche';
-    end;
-
-    if j < length(jour) then
-      jourDiff:= jourDiff + caracSeparation;
-  end;
-
-  Result:= jourDiff;
-end;
 
 { ****************************************************************************
   *** Transforme le texte en heure                                         ***
@@ -234,63 +168,111 @@ Begin
 end;
 
 { ****************************************************************************
+  *** Met à jour les statistique                                           ***
+  **************************************************************************** }
+procedure statistique();
+var
+  valeur: TValeur;
+  valeurs : TValeurs;
+  nbBilletTotal, i: integer;
+  OutPutList : TStringList;
+begin
+  // Initialise les variables
+  nbBilletTotal:= 0;
+  SetLength(valeurs, 6, 2);
+
+  //Récupère les informations du fichier de réservation
+  valeur:= lireFichier(FICHIER_RESERV);
+  
+  // Calcul le nombre de billet vendu au total
+  for i:= 1 to length(valeur) do
+  Begin
+    if valeur[i] = '' then
+      Break;
+
+    OutPutList:= Split(valeur[i], ';');
+    nbBilletTotal:= nbBilletTotal + StrToInt(OutPutList[7]);
+
+  end;
+
+  valeurs[0][0]:= 'BilletTotal';
+  valeurs[0][1]:= IntToStr(nbBilletTotal);
+  nbBilletTotal:= 0;
+
+  // Calcul le nombre de billet vendu se mois
+  for i:= 1 to length(valeur) do
+  Begin
+    if valeur[i] = '' then
+      Break;
+
+     OutPutList:= Split(valeur[i], ';');
+
+     if FormatDateTime('mmmm', StrToDate(OutPutList[0])) = FormatDateTime('mmmm', now) then
+       nbBilletTotal:= nbBilletTotal + StrToInt(OutPutList[7]);
+  end;
+
+  valeurs[1][0]:= 'BilletTotalMois';
+  valeurs[1][1]:= IntToStr(nbBilletTotal);
+
+  //Calcul le nombre de billet vendu par enfant
+  {for i:= 1 to length(valeur) do
+  Begin
+    if valeur[i] = '' then
+      Break;
+
+    OutPutList(valeur[i], ';');
+    
+  end; }
+
+  ecritDansFichier(valeurs, FICHIER_STATS);
+end;
+
+procedure TFrmOneWayTickets.changeSecances(incremente: integer);
+Begin
+  secance:= secance + incremente;
+  Initialisation();
+end;
+
+{ ****************************************************************************
   *** Ouvre la fenêtre de réservation                                      ***
   **************************************************************************** }
-procedure TFrmOneWayTickets.Reservation(film, horaire, salle : string);
+procedure TFrmOneWayTickets.Reservation(film, horaire, salle, section : string; placesRestant: integer);
 var
-  ligne : string;
-  f: TextFile;
   OutPutList: TStringList;
+  NbBilletsEnfants, NbBilletsEAA, NbBilletsAdultes, PrixTotal, Date: String;
+  places: string;
+  valeur: TValeur;
+  i: integer;
+  reservations: array [0..7] of String;
 Begin
 
   // Charge les informations du film
-  if FileExists(FICHIER_FILMS) then
+  valeur:= lireFichier(FICHIER_FILMS);
+  for i:= 0 to length(valeur) - 1 do
   Begin
-    OutPutList:= TStringList.Create;
-    AssignFile(f, FICHIER_FILMS);
-    Reset(f);
-    
-    repeat
-      Readln(f, ligne);
-      OutPutList:= Split(ligne, ';');
-
-      if OutPutList[0] = film then
-      Begin
-        FrmReservation.lblNomFilm.Caption:= film;
-        FrmReservation.lblDuree.Caption:= OutPutList[1];
-        FrmReservation.mmoSynopsis.Clear;
-        FrmReservation.mmoSynopsis.Text:= OutPutList[2];
-        Break;
-      end;
-
-    until eof(f);
-
-    OutPutList.Free;
-    closeFile(f);
+    OutPutList:= Split(valeur[i], ';');
+    if OutPutList[0] = film then
+    Begin
+      FrmReservation.lblNomFilm.Caption:= film;
+      FrmReservation.lblDuree.Caption:= OutPutList[1];
+      FrmReservation.mmoSynopsis.Clear;
+      FrmReservation.mmoSynopsis.Text:= OutPutList[2];
+      Break;
+    end;
   end;
 
   // Charge les informations de la séacne
-  if FileExists(FICHIER_SALLES) then
+  valeur:= lireFichier(FICHIER_SALLES);
+  for i:= 0 to length(valeur) - 1 do
   Begin
-    OutPutList:= TStringList.Create;
-    AssignFile(f, FICHIER_SALLES);
-    Reset(f);
-
-    repeat
-      Readln(f, ligne);
-      OutPutList:= Split(ligne, ';');
-
-      if OutPutList[0] = salle then
-      Begin
-        FrmReservation.lblSalle.Caption:= salle;
-        FrmReservation.lblHoraire.Caption:= horaire;
-        FrmReservation.lblPlacesRestantes.Caption:= '0';
-        Break;
-      end;
-    until eof(f);
-
-    OutPutList.Free;
-    CloseFile(f);
+    OutPutList:= Split(valeur[i], ';');
+    if OutPutList[0] = salle then
+    Begin
+      FrmReservation.lblSalle.Caption:= salle;
+      FrmReservation.lblHoraire.Caption:= horaire;
+      FrmReservation.lblPlacesRestantes.Caption:= '0';
+      Break;
+    end;
   end;
 
   // Charge les prix
@@ -300,12 +282,47 @@ Begin
   FrmReservation.PrixEnfant:= prix[1];
   FrmReservation.PrixEAA:= prix[2];
   FrmReservation.PrixAdulte:= prix[0];
-  FrmReservation.prixTotal:= 0;
-    
+  FrmReservation.prixTotal:= prix[0];
+  FrmReservation.calculTotal();
+
+  // Initialisation des champs
+  FrmReservation.EdtNbBilletsEnfants.Text:= '0';
+  FrmReservation.EdtNbBilletsAdultes.Text:= '1';
+  FrmReservation.EdtNbBilletsEAA.Text:= '0';
+  FrmReservation.lblPlacesRestantes.Caption:= IntToStr(placesRestant);
+
   if FrmReservation.ShowModal = mrOk then
   Begin
+    // Récupération des éléments
+    NbBilletsEnfants:= FrmReservation.EdtNbBilletsEnfants.Text;
+    NbBilletsAdultes:= FrmReservation.EdtNbBilletsAdultes.Text;
+    NbBilletsEAA:= FrmReservation.EdtNbBilletsEAA.Text;
+    PrixTotal:= FloatToStr(FrmReservation.prixTotal);
+    Date:= DateToStr(now);
+    places:= IntToStr(StrToInt(NbBilletsEnfants) + StrToInt(NbBilletsAdultes)
+      + StrToInt(NbBilletsEAA));
+
+    // Initialise le tableau de valeur
+    reservations[0]:= Date;
+    reservations[1]:= horaire;
+    reservations[2]:= section;
+    reservations[3]:= NbBilletsEnfants;
+    reservations[4]:= NbBilletsAdultes;
+    reservations[5]:= NbBilletsEAA;
+    reservations[6]:= PrixTotal;
+    reservations[7]:= places;
+
+    if ajoutUneLigne(reservations, FICHIER_RESERV)then
+      ShowMessage('Reservation effectuée avec succès !')
+    else
+      ShowMessage('Une erreur est survenue lors de la suppression !');
+
+    // Met a jour les statistiques
+    statistique();
 
   end;
+
+  Initialisation();
 end;
 
 
@@ -365,13 +382,16 @@ end;
   **************************************************************************** }
 procedure TFrmOneWayTickets.Initialisation();
 var
-  i, x, y: integer;
+  i, x, y, index, j: integer;
   Seances: TListSeance;
-  f: TextFile;
-  ligne: string;
   OutPutList: TStringList;
+  nbPlacesTotal, nbPlacesVendu, nbPlacesRestant: Integer;
+  bouton: TImageBouton;
+  valeur: TValeur;
 Begin
   jourActuelle:= FormatDateTime('dddd', now());
+  temp:= 0; // Recommence le compte
+  nbPlacesTotal:= 0;
   
   // Initialisation des seances
   SetLength(listSeances, 250);
@@ -382,12 +402,55 @@ Begin
   //Initialisation des boutons
   x:= START; // Position X de départ du bouton
   y:= START; // Position Y de départ du bouton
+  index:= secance;
 
   // Crée la liste des bouton
   listImageBouton:= TList.Create();
   for i:= 0 to nbImageBouton do
   Begin
-    listImageBouton.add(TImageBouton.Create(FrmOneWayTickets, seances[i][0], seances[i][1], seances[i][2], seances[i][3], x, y));
+    bouton:= TImageBouton.Create(FrmOneWayTickets, seances[index][0], seances[index][1], seances[index][2], seances[index][3], x, y);
+
+    // Ouvre le fichier des salles pour récupèrer le nombre de place
+    valeur:= lireFichier(FICHIER_SALLES);
+    for j:= 0 to length(valeur) - 1 do
+    Begin
+      if valeur[j] = '' then
+        Break;
+      OutPutList:= Split(valeur[j], ';');
+      if OutPutList[0] = seances[index][3] then
+      Begin
+        nbPlacesTotal:= StrToInt(OutPutList[1]);
+        Break;
+      end;
+    end;
+
+    // Ouvre le fichier des reservation pour récupèrer le nombre de place vendu
+    nbPlacesVendu:= 0;
+    valeur:= lireFichier(FICHIER_RESERV);
+    for j:= 1 to length(valeur) do
+    Begin
+      if valeur[j] = '' then
+        Break;
+
+      OutPutList:= Split(valeur[j], ';');
+      if (OutPutList[0] = DateToStr(now)) and (OutPutList[1] = seances[index][1])
+        and (OutPutList[2] = seances[index][2]) then
+      Begin
+        nbPlacesVendu:= StrToInt(OutPutList[7]) + nbPlacesVendu;
+      end;
+    end;
+
+    // Calcule le nombre de place restante
+    nbPlacesRestant:= nbPlacesTotal - nbPlacesVendu;
+    bouton.pPlaces:= nbPlacesRestant;
+
+    if nbPlacesRestant <= 0 then
+    begin
+      bouton.Complet();
+    end;
+
+    listImageBouton.add(bouton);
+    
 
     x := x + TAILLE_WIDTH + ECART_X; // Déplace le prochain bouton sur la droite
 
@@ -397,32 +460,24 @@ Begin
       y:= y + TAILLE_HEIGHT + ECART_X; // Déplace les prochain bouton sur la seconde ligne
       x:= START; // Redémare la ligne au début
     end;
+
+    inc(index);
   end;
 
   // Récupère les prix
-  if FileExists(FICHIER_PRIX) then
+  valeur:= lireFichier(FICHIER_PRIX);
+  OutPutList:= TStringList.Create;
+  for i:= 0 to length(valeur) - 1 do
   Begin
-    OutPutList:= TStringList.Create;
-    AssignFile(f, FICHIER_PRIX);
-    Reset(f);
+    if valeur[i] = '' then
+        Break;
 
-    i:= 0;
-
-    repeat
-      Readln(f, ligne);
-
-      OutPutList:= Split(ligne, ';');
-
-      prix[i]:= StrToInt(OutPutList[1]);
-      prix[i]:= StrToInt(OutPutList[1]);
-      prix[i]:= StrToInt(OutPutList[1]);
-
-      inc(i);
-    until eof(f);
-
-    OutPutList.Free;
-    CloseFile(f);
+    OutPutList:= Split(valeur[i], ';');
+    prix[i]:= StrToInt(OutPutList[1]);
+    prix[i]:= StrToInt(OutPutList[1]);
+    prix[i]:= StrToInt(OutPutList[1]);
   end;
+  OutPutList.Free;
 end;
 
 { ****************************************************************************
@@ -439,6 +494,11 @@ end;
 procedure TFrmOneWayTickets.Timer1Timer(Sender: TObject);
 begin
   lblHeureCourante.Caption:= TimeToStr(now());
+
+  if temp = 100 then
+    Initialisation()
+  else
+    inc(temp);
 end;
 
 { ****************************************************************************
@@ -464,13 +524,15 @@ end;
   **************************************************************************** }
 procedure TFrmOneWayTickets.Connexion1Click(Sender: TObject);
 var
-  mdp, ligne : string;
+  mdp : string;
   OutPutList : TStringList;
-  f: TextFile;
+  valeur : TValeur;
+  i: integer;
 begin
   // Vide le champ text du mot de passe
   FrmLogin.edtMdpAdmin.Text:= '';
-
+  valeur:= nil;
+  
   // Traitement de la fenêtre à la validation de la connexion
   if FrmLogin.showModal = mrOk then
   Begin
@@ -479,48 +541,35 @@ begin
     // Test si le mot de passe est valide
     if mdp = MDP_ADMIN then
     Begin
-    
-      // Test si le fichier existe
-      if FileExists(FICHIER_STATS) then
+      valeur:= lireFichier(FICHIER_STATS);
+      OutPutList:= TStringList.create;
+      for i:= 0 to length(valeur) do
       Begin
-        OutPutList:= TStringList.Create; // Crée la liste pour le split
+        if valeur[i] = '' then
+          break;
 
-        // Assigne le fichier a lire
-        AssignFile(f, FICHIER_STATS);
-        Reset(f);
-        repeat
-          Readln(f, ligne);
-          OutPutList:= Split(ligne, ';');
+        OutPutList:= Split(valeur[i], ';');
+        // Initialisation des labels du menu administrateur
+        // Test quel label il faut mettre à jour
+        if OutPutList[0] = 'BilletTotal' then
+          FrmMenuAdministrateur.lblBilletTotalVendu.Caption:= OutPutList[1];
 
-          // Initialisation des labels du menu administrateur
-          // Test quel label il faut mettre à jour
-          if OutPutList[0] = 'BilletTotal' then
-            FrmMenuAdministrateur.lblBilletTotalVendu.Caption:= OutPutList[1];
+        if OutPutList[0] = 'BilletEnfants' then
+          FrmMenuAdministrateur.lblBilletEnfantsVendu.Caption:= OutPutList[1];
 
-          if OutPutList[0] = 'BilletEnfants' then
-            FrmMenuAdministrateur.lblBilletEnfantsVendu.Caption:= OutPutList[1];
+        if OutPutList[0] = 'BilletAdults' then
+          FrmMenuAdministrateur.lblBilletAdultesVendu.Caption:= OutPutList[1];
 
-          if OutPutList[0] = 'BilletAdults' then
-            FrmMenuAdministrateur.lblBilletAdultesVendu.Caption:= OutPutList[1];
+        if OutPutList[0] = 'BilletEtudiants' then
+          FrmMenuAdministrateur.lblBilletEtudiantsVendu.Caption:= OutPutList[1];
 
-          if OutPutList[0] = 'BilletEtudiants' then
-            FrmMenuAdministrateur.lblBilletEtudiantsVendu.Caption:= OutPutList[1];
+        if OutPutList[0] = 'BilletTotalMois' then
+          FrmMenuAdministrateur.lblBilletVenduMoisCourrant.Caption:= OutPutList[1];
 
-          if OutPutList[0] = 'BilletParMois' then
-            FrmMenuAdministrateur.lblBilletVenduMoisCourrant.Caption:= OutPutList[1];
-
-          if OutPutList[0] = 'FilmPlusVu' then
-            FrmMenuAdministrateur.lblFilmPlusVu.Caption:= OutPutList[1];
-            
-        until eof(f);
-
-        OutPutList.free; // Libère la liste
-        CloseFile(f); // Ferme le flux entre le fichier et le programe
-      end
-      else
-      Begin
-        ShowMessage('Fichier des statistiques manquantes');
+        if OutPutList[0] = 'FilmPlusVu' then
+          FrmMenuAdministrateur.lblFilmPlusVu.Caption:= OutPutList[1];
       end;
+      OutPutList.Free;
 
       FrmOneWayTickets.Visible:= false;
       FrmMenuAdministrateur.Visible:= true; // Affiche la fenêtre administrateur
@@ -532,6 +581,28 @@ begin
       ShowMessage('Connexion refusée ! Mot de passe administrateur refusé !');
     end;
   end;
+end;
+
+{ ****************************************************************************
+  *** Procedure pour voir les séances futur                                ***
+  **************************************************************************** }
+procedure TFrmOneWayTickets.BtnSeanceSuivanteClick(Sender: TObject);
+begin
+  changeSecances(nbImageBouton);
+
+  if secance > 0 then
+    BtnSeancePrecedente.Enabled:= true
+end;
+
+{ ****************************************************************************
+  *** Procedure pour afficher les séances précédente                       ***
+  **************************************************************************** }
+procedure TFrmOneWayTickets.BtnSeancePrecedenteClick(Sender: TObject);
+begin
+  changeSecances(nbImageBouton * (-1));
+  
+  if secance <= 0 then
+    BtnSeancePrecedente.Enabled:= false;
 end;
 
 end.

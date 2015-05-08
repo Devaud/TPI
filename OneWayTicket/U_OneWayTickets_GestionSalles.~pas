@@ -18,7 +18,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
-  StdCtrls, ComCtrls;
+  StdCtrls, ComCtrls, U_FP;
 
 type
   TFrmGestionSalles = class(TForm)
@@ -53,12 +53,9 @@ type
     procedure chargeListeSalles();
   end;
 
-// Information sur une salle
-Type
-  TSalle = Record
-    NomSalle : String;
-    Places   : String;
-  end;
+
+
+
 
 var
   FrmGestionSalles : TFrmGestionSalles;
@@ -75,92 +72,6 @@ uses U_OneWayTickets_AjouterSalle, U_OneWayTicket;
 
 {$R *.DFM}
 
-{ ****************************************************************************
-  *** Ajout un nombre d'espace avant ou après le text                      ***
-  *** @params String text - Text qui va prendre des espaces                ***
-  *** @params Boolean avant - La modification doit être placée avant ou    ***
-  ***                         apres                                        ***
-  *** @params Integer tailleEspace - Nombre d'espace souhaité              ***
-  *** @Result string - Retourne le text modifié                            ***
-  **************************************************************************** }
-function AjoutEspace(tailleEspace: integer): string;
-var
-  i : integer;
-  text: string;
-Begin
-  text:= '';
-  // Ajoute ce qu'il faut
-  for i:= 0 to tailleEspace do
-  Begin
-    text:= text + ' ';
-  end;
-
-  Result:= text; // Retourne le text modifier
-end;
-
-{ ****************************************************************************
-  *** Ajuste la taille du text                                             ***
-  *** @params String text - Text qui va être ajusté                        ***
-  *** @params Integer taille - Taille final souhaitée                      ***
-  *** @Result string - Retourne le text modifié                            ***
-  **************************************************************************** }
-function AjusterText(text: string; taille: integer): string;
-var
-  difference: integer;
-Begin
-  
-  if length(text) > taille then
-  Begin
-    text:= copy(text, 1, taille - 3);
-    text:= text + '...';
-  end;
-
-  if length(text) < taille then
-  Begin
-    difference:= taille - length(text);
-    text:= text + AjoutEspace(difference);
-  end;
-
-  Result:= text;
-end;
-
-{ ****************************************************************************
-  *** Ecrit dans le fichier text                                           ***
-  *** @params array of TFilm films - Liste des films qui seront écrit      ***
-  *** @params string fichier - Chemin du fichier                           ***
-  *** @Result Boolean - Retourne vrai si l'écriture c'est bien passée      ***
-  **************************************************************************** }
-function ecritDansFichier(salles: array of TSalle; fichier: string):Boolean;
-var
-  f: TextFile;
-  salle: string;
-  index: integer;
-  success: boolean;
-Begin
-  success:= false;
-  
-  if FileExists(fichier) then
-  Begin
-    AssignFile(f, fichier);
-    rewrite(f);
-    writeln(f, 'NomSalle;Places'); // Ecrit la première ligne
-    index:= 0;
-
-    // Parcoure le tableau et écrit les films dane le fichier
-    while (salles[index].NomSalle <> '') and (index < length(salles)) do
-    Begin
-      salle:= salles[index].NomSalle + ';' + salles[index].Places;
-      writeln(f, salle);
-      inc(index);
-    end;
-
-    CloseFile(f);
-
-    success:= true;
-  end;
-
-  Result:= success;
-end;
 
 { ****************************************************************************
   *** Change l'état des éléments                                           ***
@@ -170,6 +81,7 @@ procedure TFrmGestionSalles.changeEtat(active: boolean);
 Begin
   LbxListeSalles.Enabled:= active;
   BtnModifier.Enabled:= active;
+  BtnAjouter.Enabled:= active;
   BtnSupprimer.Enabled:= active;
 end;
 
@@ -189,50 +101,35 @@ end;
   **************************************************************************** }
 procedure TFrmGestionSalles.chargeListeSalles();
 var
-  f: TextFile;
-  ligne, ligneFormate : String;
+  ligneFormate : String;
   OutPutList : TStringList;
-  premiereLigne : boolean;
+  valeur: TValeur;
   i: integer;
 Begin
-  premiereLigne:= true;
   LbxListeSalles.Clear;
   SetLength(listeSalles, 250);
-  i:= 0;
-  
-  // Test si le fichier existe
-  if FileExists(FICHIER_SALLES) then
+
+  // Charge les valeurs du ficheir salles
+  valeur:= lireFichier(FICHIER_SALLES);
+  for i:= 1 to length(valeur) do
   Begin
-    // Assigne le fichier
-    AssignFile(f, FICHIER_SALLES);
-    Reset(f);
-    repeat
-      Readln(f, ligne);
+    // Test s'il y a une valeur
+    if valeur[i] = '' then
+      break;
 
-      if premiereLigne then
-        premiereLigne:= false
-      else
-      Begin
-        OutPutList:= FrmOneWayTickets.Split(ligne, ';');
+    // Split la ligne
+    OutPutList:= Split(valeur[i], ';');
 
-        // Formate le text
-        ligneFormate:= ajusterText(OutPutList[0], 20) + AjoutEspace(28);
-        ligneFormate:= ligneFormate + AjoutEspace(38) + OutPutList[1];
+    // Formate le text pour l'affichage
+    ligneFormate:= ajusterText(OutPutList[0], 20) + AjoutEspace(28);
+    ligneFormate:= ligneFormate + AjoutEspace(38) + OutPutList[1];
+    LbxListeSalles.Items.Add(ligneFormate);
 
-        // Assigne les films a la liste
-        listeSalles[i].NomSalle:= OutPutList[0];
-        listeSalles[i].Places:= OutPutList[1];
-
-        LbxListeSalles.Items.Add(ligneFormate);
-        inc(i);
-      end;
-        
-    until eof(f);
-
-    OutPutList.free;
-
-    CloseFile(f);
+    //Met les données dans la liste
+    listeSalles[i - 1].NomSalle:= OutPutList[0];
+    listeSalles[i - 1].Places:= OutPutList[1];
   end;
+
 end;
 
 { ****************************************************************************
@@ -267,8 +164,7 @@ end;
   **************************************************************************** }
 procedure TFrmGestionSalles.BtnAjouterClick(Sender: TObject);
 var
-  salle : string;
-  f: TextFile;
+  valeurs: array [0..1] of string;
 begin
   with FrmAjouterSalle do
   Begin
@@ -278,18 +174,14 @@ begin
   
   if FrmAjouterSalle.showModal = mrOk then
   Begin
-    // Initialise la ligne qui sera enregistrée dans le fichier
-    salle:= FrmAjouterSalle.edtNomSalle.Text + ';' + FrmAjouterSalle.edtPlacesMax.Text;
+    // Initialise les valeurs
+    valeurs[0]:= FrmAjouterSalle.edtNomSalle.Text;
+    valeurs[1]:= FrmAjouterSalle.edtPlacesMax.Text;
 
-    // Test si le fichier existe
-    if FileExists(FICHIER_SALLES) then
-    Begin
-      AssignFile(f, FICHIER_SALLES);
-      Append(f);
-      Writeln(f, salle);
-      CloseFile(f);
-      ShowMessage('Salle ajoutée avec succès !');
-    end;
+    if ajoutUneLigne(valeurs, FICHIER_SALLES) then
+      ShowMessage('Salle ajoutée avec succès !')
+    else
+      ShowMessage('Une erreur est survenue lors de la suppression !');
 
     chargeListeSalles();
   end;
@@ -322,15 +214,26 @@ end;
   **************************************************************************** }
 procedure TFrmGestionSalles.BtnValiderModificationClick(Sender: TObject);
 var
-  index: integer;
+  index, i: integer;
+  valeurs: TValeurs;
 begin
   index:= LbxListeSalles.ItemIndex;
+  setLength(valeurs, length(listeSalles) + 1, 2);
 
   // Récupère les informations du film modifier et les mets dans le tableau
   listeSalles[index].NomSalle:= edtNomSalle.Text;
   listeSalles[index].Places:= edtPlacesMax.Text;
 
-  if ecritDansFichier(listeSalles, FICHIER_SALLES) then
+  // Initialise le tableau pour écrire dans le fichier
+  valeurs[0][0]:= 'NomSalle';
+  valeurs[0][1]:= 'Places';
+  for i:= 0 to length(listeSalles) - 1 do
+  Begin
+    valeurs[i + 1][0]:= listeSalles[i].NomSalle;
+    valeurs[i + 1][1]:= listeSalles[i].Places;
+  end;
+
+  if ecritDansFichier(valeurs, FICHIER_SALLES) then
     ShowMessage('Modification effectuée avec succès !')
   else
     ShowMessage('Une erreur est survenue lors de la suppression !');
@@ -348,10 +251,10 @@ end;
 procedure TFrmGestionSalles.BtnSupprimerClick(Sender: TObject);
 var
   index, i: integer;
-  tabPropre: array of TSalle;
+  valeurs: TValeurs;
 begin
   // Initialisation des variables
-  SetLength(tabPropre, length(listeSalles));
+  setLength(valeurs, length(listeSalles) + 1, 2);
   index:= LbxListeSalles.ItemIndex;
 
   // "Suppresion" du film
@@ -359,18 +262,21 @@ begin
   listeSalles[index].Places:= '';
 
   index:= 0;
+  valeurs[0][0]:= 'NomSalle';
+  valeurs[0][1]:= 'Places';
+
   // Nettoyage du tableau (Enlève l'élément vide)
   for i:= 0 to length(listeSalles) - 1 do
   Begin
     if listeSalles[i].NomSalle <> '' then
     Begin
-      tabPropre[index].NomSalle:= listeSalles[i].NomSalle;
-      tabPropre[index].Places:= listeSalles[i].Places;
+      valeurs[index + 1][0]:= listeSalles[i].NomSalle;
+      valeurs[index + 1][1]:= listeSalles[i].Places;
       inc(index);
     end;
   end;
 
-  if ecritDansFichier(tabPropre, FICHIER_SALLES) then
+  if ecritDansFichier(valeurs, FICHIER_SALLES) then
     ShowMessage('La salle a bien étée supprimée !')
   else
     ShowMessage('Une erreur est survenue lors de la suppression !');
