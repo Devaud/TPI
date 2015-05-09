@@ -453,7 +453,8 @@ Begin
   // Crée la liste des bouton
   listImageBouton:= TList.Create();
   nbImageBouton:= length(Seances);
-  for i:= 0 to nbImageBouton - 1 do
+  //for i:= 0 to nbImageBouton - 1 do
+  for i:= secance to MAX_IMAGE_BOUTON do
   Begin
     if seances[index][0] = '' then
     Begin
@@ -512,9 +513,6 @@ Begin
       y:= y + TAILLE_HEIGHT + ECART_X; // Déplace les prochain bouton sur la seconde ligne
       x:= START; // Redémare la ligne au début
     end;
-
-    if (index mod 11 = 0) and (index > 0) then
-      Break;
       
     inc(index);
   end;

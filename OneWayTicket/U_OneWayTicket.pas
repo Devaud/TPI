@@ -453,7 +453,8 @@ Begin
   // Crée la liste des bouton
   listImageBouton:= TList.Create();
   nbImageBouton:= length(Seances);
-  for i:= 0 to nbImageBouton - 1 do
+  //for i:= 0 to nbImageBouton - 1 do
+  for i:= 0 to MAX_IMAGE_BOUTON do
   Begin
     if seances[index][0] = '' then
     Begin
