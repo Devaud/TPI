@@ -102,21 +102,18 @@ end;
   **************************************************************************** }
 procedure TFrmGestionFilms.chargeListeFilm();
 var
-  f: TextFile;
-  ligne, ligneFormate : String;
+  ligneFormate : String;
   OutPutList : TStringList;
-  premiereLigne : boolean;
   valeur: TValeur;
-  i: integer;
+  i, nbLigne: integer;
 Begin
-  premiereLigne:= true;
   LbxListeFilms.Clear;
-  SetLength(listeFilms, 250);
-  i:= 0;
+  nbLigne:= nbLignesFichier(FICHIER_FILMS);
+  SetLength(listeFilms, nbLigne);
   
   // Charge les valeurs du ficheir salles
   valeur:= lireFichier(FICHIER_FILMS);
-  for i:= 1 to length(valeur) do
+  for i:= 1 to length(valeur) - 1 do
   Begin
     // Test s'il y a une valeur
     if valeur[i] = '' then
@@ -197,7 +194,7 @@ begin
     if ajoutUneLigne(valeurs, FICHIER_FILMS) then
       ShowMessage('Film ajouté avec succès !')
     else
-      ShowMessage('Une erreur est survenue lors de la suppression !');
+      ShowMessage('Une erreur est survenue lors de l''ajout !');
 
     chargeListeFilm();
   end;
@@ -268,7 +265,7 @@ begin
   if ecritDansFichier(valeurs, FICHIER_FILMS) then
     ShowMessage('Modification effectuée avec succès !')
   else
-    ShowMessage('Une erreur est survenue lors de la suppression !');
+    ShowMessage('Une erreur est survenue lors de la modification !');
 
   chargeListeFilm(); // Charge la nouvelle liste
   

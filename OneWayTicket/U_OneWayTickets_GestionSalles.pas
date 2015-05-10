@@ -103,14 +103,16 @@ var
   ligneFormate : String;
   OutPutList : TStringList;
   valeur: TValeur;
+  nbLigne: integer;
   i: integer;
 Begin
   LbxListeSalles.Clear;
-  SetLength(listeSalles, 250);
+  nbLigne:= nbLignesFichier(FICHIER_SALLES);
+  SetLength(listeSalles, nbLigne);
 
   // Charge les valeurs du ficheir salles
   valeur:= lireFichier(FICHIER_SALLES);
-  for i:= 1 to length(valeur) do
+  for i:= 1 to length(valeur) - 1 do
   Begin
     // Test s'il y a une valeur
     if valeur[i] = '' then

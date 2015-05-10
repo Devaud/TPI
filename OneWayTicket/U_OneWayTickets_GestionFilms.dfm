@@ -1,6 +1,6 @@
 object FrmGestionFilms: TFrmGestionFilms
-  Left = 192
-  Top = 126
+  Left = 259
+  Top = 135
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
   Caption = 'OneWay Tickets - Gestion des films'

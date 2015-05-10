@@ -15,6 +15,7 @@ type
   function ecritDansFichier(elements: TValeurs; fichier: string):Boolean;
   function ajoutUneLigne(elements: array of String; fichier: string): boolean;
   function lireFichier(fichier: String): TValeur;
+  function nbLignesFichier(fichier: string): integer;
 
 // Information sur les séances
 Type
@@ -248,10 +249,11 @@ end;
 function lireFichier(fichier: String): TValeur;
 var
   f: TextFile;
-  i: integer;
+  i, nbLigne: integer;
   valeur: TValeur;
 Begin
-  SetLength(valeur, 250);
+  nbLigne:= nbLignesFichier(fichier);
+  SetLength(valeur, nbLigne);
   // Test si le fichier existe
   if FileExists(fichier) then
   Begin
@@ -269,6 +271,21 @@ Begin
   end;
 
   Result:= valeur;
+end;
+
+{ ****************************************************************************
+  *** Compte le nombre de ligne dans un fichier                            ***
+  *** @params String fichier - Chemin du fichier                           ***
+  *** @Result integer - renvoi le nombre de ligne d'un fichier             ***
+  **************************************************************************** }
+function nbLignesFichier(fichier: string): integer;
+var
+  SL: TStringList;
+Begin
+  SL:= TStringList.Create;
+  SL.LoadFromFile(fichier);
+  Result:= SL.Count;
+  FreeAndNil(SL);
 end;
 
 end.

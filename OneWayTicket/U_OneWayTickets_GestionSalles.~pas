@@ -64,7 +64,6 @@ var
 const
   FRM_HEIGHT_MAX : integer = 487;
   FRM_HEIGHT_MIN : integer = 358;
-  FICHIER_SALLES : String  = './Res/salles.csv';
 
 implementation
 
@@ -104,10 +103,12 @@ var
   ligneFormate : String;
   OutPutList : TStringList;
   valeur: TValeur;
+  nbLigne: integer;
   i: integer;
 Begin
   LbxListeSalles.Clear;
-  SetLength(listeSalles, 250);
+  nbLigne:= nbLignesFichier(FICHIER_SALLES);
+  SetLength(listeSalles, nbLigne);
 
   // Charge les valeurs du ficheir salles
   valeur:= lireFichier(FICHIER_SALLES);

@@ -50,7 +50,7 @@ type
   end;
 
 Type
-  TListSeance = array [0..250] of array [0..3] of String;
+  TListSeance = array of array [0..3] of String;
 
 var
   FrmOneWayTickets : TFrmOneWayTickets;
@@ -63,12 +63,13 @@ var
   secance          : integer = 0; // La sécances des séances a afficher
 
 CONST
-  START           : integer = 10;
-  ECART_X         : integer = 10;
-  ECART_Y         : integer = 10;
-  TAILLE_WIDTH    : integer = 193;
-  TAILLE_HEIGHT   : integer = 57;
-  MDP_ADMIN       : String  = 'Neko1';
+  START            : integer = 10;
+  ECART_X          : integer = 10;
+  ECART_Y          : integer = 10;
+  TAILLE_WIDTH     : integer = 193;
+  TAILLE_HEIGHT    : integer = 57;
+  MDP_ADMIN        : String  = 'Neko1';
+  MAX_IMAGE_BOUTON : integer = 11;
 
 
 implementation
@@ -99,17 +100,21 @@ end;
   **************************************************************************** }
 function chargeListDifferentHoraire(list: array of TSeance): TListSeance;
 var
-  x, i: integer;
+  x, i, compteHoraire: integer;
   ajout: boolean;
   seances: TListSeance;
 Begin
   // Charge la liste des séances avec leurs heures différentes
   x:= 0;
-  for i:= 0 to length(listSeances) do
+
+  SetLength(seances, 1);
+  for i:= 0 to length(listSeances) - 1 do
   Begin
     if listSeances[i].film = '' then
       break;
-      
+
+    compteHoraire:= 0;
+    
     ajout:= true;
     while ajout do
     Begin
@@ -122,6 +127,8 @@ Begin
         Seances[x][0]:= listSeances[i].film;
         Seances[x][3]:= listSeances[i].salle;
         inc(x);
+        inc(compteHoraire);
+        SetLength(seances, x + 1);
       end
       else
         ajout:= false;
@@ -133,6 +140,8 @@ Begin
         Seances[x][0]:= listSeances[i].film;
         Seances[x][3]:= listSeances[i].salle;
         inc(x);
+        inc(compteHoraire);
+        SetLength(seances, x + 1);
       end
       else
         ajout:= false;
@@ -144,6 +153,8 @@ Begin
         Seances[x][0]:= listSeances[i].film;
         Seances[x][3]:= listSeances[i].salle;
         inc(x);
+        inc(compteHoraire);
+        SetLength(seances, x + 1);
       end
       else
         ajout:= false;
@@ -155,11 +166,13 @@ Begin
         Seances[x][0]:= listSeances[i].film;
         Seances[x][3]:= listSeances[i].salle;
         inc(x);
+        inc(compteHoraire);
+        SetLength(seances, x + 1);
       end
       else
         ajout:= false;
 
-      if x mod 4 = 0 then
+      if compteHoraire mod 4 = 0 then
         ajout:= false;
     end;
   end;
@@ -185,7 +198,7 @@ begin
   valeur:= lireFichier(FICHIER_RESERV);
   
   // Calcul le nombre de billet vendu au total
-  for i:= 1 to length(valeur) do
+  for i:= 1 to length(valeur) - 1 do
   Begin
     if valeur[i] = '' then
       Break;
@@ -200,7 +213,7 @@ begin
   nbBilletTotal:= 0;
 
   // Calcul le nombre de billet vendu se mois
-  for i:= 1 to length(valeur) do
+  for i:= 1 to length(valeur) - 1 do
   Begin
     if valeur[i] = '' then
       Break;
@@ -213,17 +226,49 @@ begin
 
   valeurs[1][0]:= 'BilletTotalMois';
   valeurs[1][1]:= IntToStr(nbBilletTotal);
+  nbBilletTotal:= 0;
 
   //Calcul le nombre de billet vendu par enfant
-  for i:= 1 to length(valeur) do
+  for i:= 1 to length(valeur) - 1 do
   Begin
     if valeur[i] = '' then
       Break;
 
-    OutPutList(valeur[i], ';');
-    
+    OutPutList:= Split(valeur[i], ';');
+    nbBilletTotal:= nbBilletTotal + StrToInt(OutPutList[3]);
   end;
 
+  valeurs[2][0]:= 'BilletEnfants';
+  valeurs[2][1]:= IntToStr(nbBilletTotal);
+  nbBilletTotal:= 0;
+
+  // Calcul le nombre de billet vendu par adultes
+  for i:= 1 to length(valeur) - 1 do
+  Begin
+    if valeur[i] = '' then
+      Break;
+
+    OutPutList:= Split(valeur[i], ';');
+    nbBilletTotal:= nbBilletTotal + StrToInt(OutPutList[4]);
+  end;
+
+  valeurs[3][0]:= 'BilletAdults';
+  valeurs[3][1]:= IntToStr(nbBilletTotal);
+  nbBilletTotal:= 0;
+
+  // Calcul le nombre de billet vendu par EAA
+  for i:= 1 to length(valeur) - 1 do
+  Begin
+    if valeur[i] = '' then
+      Break;
+
+    OutPutList:= Split(valeur[i], ';');
+    nbBilletTotal:= nbBilletTotal + StrToInt(OutPutList[5]);
+  end;
+
+  valeurs[4][0]:= 'BilletEtudiants';
+  valeurs[4][1]:= IntToStr(nbBilletTotal);
+  
   ecritDansFichier(valeurs, FICHIER_STATS);
 end;
 
@@ -331,7 +376,7 @@ end;
   **************************************************************************** }
 procedure TFrmOneWayTickets.chargeToutesLesSeances();
 var
-  i, x, index: integer;
+  i, x, index, nbSeances: integer;
   fichierIni: TIniFile;
   Sections, dataSections : TStringList;
   listjour : TStringList;
@@ -374,6 +419,7 @@ Begin
     end;
   end;
 
+  setLength(listSeances, index);
   fichierIni.free;
 end;
 
@@ -385,16 +431,16 @@ var
   i, x, y, index, j: integer;
   Seances: TListSeance;
   OutPutList: TStringList;
-  nbPlacesTotal, nbPlacesVendu, nbPlacesRestant: Integer;
+  nbPlacesTotal, nbPlacesVendu, nbPlacesRestant, nbLigne: Integer;
   bouton: TImageBouton;
   valeur: TValeur;
 Begin
   jourActuelle:= FormatDateTime('dddd', now());
   temp:= 0; // Recommence le compte
   nbPlacesTotal:= 0;
-  
+  nbLigne:= nbLignesFichier(FICHIER_SEANCES) div 9; // Charge le nombre de séances (nombre de ligne diviser par le nombre de données dans les sections)
   // Initialisation des seances
-  SetLength(listSeances, 250);
+  SetLength(listSeances, nbLigne);
   chargeToutesLesSeances();
   // Charge la liste des séances avec leurs heures différentes
   Seances:= chargeListDifferentHoraire(listSeances);
@@ -406,8 +452,14 @@ Begin
 
   // Crée la liste des bouton
   listImageBouton:= TList.Create();
-  for i:= 0 to nbImageBouton do
+  nbImageBouton:= length(Seances);
+  for i:= 0 to nbImageBouton - 1 do
   Begin
+    if seances[index][0] = '' then
+    Begin
+      break;
+    end;
+    
     bouton:= TImageBouton.Create(FrmOneWayTickets, seances[index][0], seances[index][1], seances[index][2], seances[index][3], x, y);
 
     // Ouvre le fichier des salles pour récupèrer le nombre de place
@@ -427,7 +479,7 @@ Begin
     // Ouvre le fichier des reservation pour récupèrer le nombre de place vendu
     nbPlacesVendu:= 0;
     valeur:= lireFichier(FICHIER_RESERV);
-    for j:= 1 to length(valeur) do
+    for j:= 0 to length(valeur) - 1 do
     Begin
       if valeur[j] = '' then
         Break;
@@ -461,8 +513,16 @@ Begin
       x:= START; // Redémare la ligne au début
     end;
 
+    if (index mod 11 = 0) and (index > 0) then
+      Break;
+      
     inc(index);
   end;
+
+  // Test le nombre de bouton qu'il y a pour activé le bouton des séances
+  // suivantes
+  if index < MAX_IMAGE_BOUTON then
+    BtnSeanceSuivante.Enabled:= false;
 
   // Récupère les prix
   valeur:= lireFichier(FICHIER_PRIX);
@@ -478,6 +538,8 @@ Begin
     prix[i]:= StrToInt(OutPutList[1]);
   end;
   OutPutList.Free;
+
+  statistique();
 end;
 
 { ****************************************************************************
@@ -543,7 +605,7 @@ begin
     Begin
       valeur:= lireFichier(FICHIER_STATS);
       OutPutList:= TStringList.create;
-      for i:= 0 to length(valeur) do
+      for i:= 0 to length(valeur) - 1 do
       Begin
         if valeur[i] = '' then
           break;
@@ -588,7 +650,7 @@ end;
   **************************************************************************** }
 procedure TFrmOneWayTickets.BtnSeanceSuivanteClick(Sender: TObject);
 begin
-  changeSecances(nbImageBouton);
+  changeSecances(MAX_IMAGE_BOUTON);
 
   if secance > 0 then
     BtnSeancePrecedente.Enabled:= true
@@ -599,7 +661,7 @@ end;
   **************************************************************************** }
 procedure TFrmOneWayTickets.BtnSeancePrecedenteClick(Sender: TObject);
 begin
-  changeSecances(nbImageBouton * (-1));
+  changeSecances(MAX_IMAGE_BOUTON * (-1));
   
   if secance <= 0 then
     BtnSeancePrecedente.Enabled:= false;
