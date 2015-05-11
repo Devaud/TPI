@@ -69,7 +69,7 @@ CONST
   TAILLE_WIDTH     : integer = 193;
   TAILLE_HEIGHT    : integer = 57;
   MDP_ADMIN        : String  = 'Neko1';
-  MAX_IMAGE_BOUTON : integer = 11;
+  MAX_IMAGE_BOUTON : integer = 12;
 
 
 implementation
@@ -274,6 +274,8 @@ end;
 
 procedure TFrmOneWayTickets.changeSecances(incremente: integer);
 Begin
+  //FreeAndNil(listImageBouton);
+  listImageBouton.Destroy;
   secance:= secance + incremente;
   Initialisation();
 end;
@@ -454,13 +456,13 @@ Begin
   listImageBouton:= TList.Create();
   nbImageBouton:= length(Seances);
   //for i:= 0 to nbImageBouton - 1 do
-  for i:= 0 to MAX_IMAGE_BOUTON do
+  for i:= 0 to MAX_IMAGE_BOUTON - 1 do
   Begin
     if seances[index][0] = '' then
     Begin
       break;
     end;
-    
+
     bouton:= TImageBouton.Create(FrmOneWayTickets, seances[index][0], seances[index][1], seances[index][2], seances[index][3], x, y);
 
     // Ouvre le fichier des salles pour récupèrer le nombre de place
@@ -519,7 +521,7 @@ Begin
 
   // Test le nombre de bouton qu'il y a pour activé le bouton des séances
   // suivantes
-  if index < MAX_IMAGE_BOUTON then
+  if index < MAX_IMAGE_BOUTON - 1 then
     BtnSeanceSuivante.Enabled:= false;
 
   // Récupère les prix
