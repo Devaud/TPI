@@ -455,13 +455,9 @@ Begin
   // Crée la liste des bouton
   listImageBouton:= TList.Create();
   nbImageBouton:= length(Seances);
-  //for i:= 0 to nbImageBouton - 1 do
+  
   for i:= 0 to MAX_IMAGE_BOUTON - 1 do
   Begin
-    if seances[index][0] = '' then
-    Begin
-      break;
-    end;
 
     bouton:= TImageBouton.Create(FrmOneWayTickets, seances[index][0], seances[index][1], seances[index][2], seances[index][3], x, y);
 
