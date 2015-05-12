@@ -1,3 +1,11 @@
+{ ****************************************************************************
+  *** Projet               : OneWayTickets                                 ***
+  *** Auteur               : Devaud Alan                                   ***
+  *** Fenêtre              : OneWayTickets_Impression                      ***
+  *** Description          : Permet d'informé que l'impression est en corus***
+  *** Version              : 1.0                                           ***
+  *** Date de création     : 12.05.2015
+  **************************************************************************** }
 unit U_OneWayTickets_Impression;
 
 interface
@@ -26,14 +34,18 @@ implementation
 
 {$R *.DFM}
 
+{ ****************************************************************************
+  *** Procedure du timer                                                   ***
+  **************************************************************************** }
 procedure TFrmImpressionEnCours.Timer1Timer(Sender: TObject);
 begin
-    //
   if second = maxSecond then
   Begin
     Timer1.Enabled:= false;
     self.Visible:= false;
   end;
+  inc(second);
+  
 end;
 
 end.

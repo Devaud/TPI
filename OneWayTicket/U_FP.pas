@@ -1,3 +1,11 @@
+{ ****************************************************************************
+  *** Projet            : OneWayTickets                                    ***
+  *** Unité             : U_FP                                             ***
+  *** Auteur            : Devaud Alan                                      ***
+  *** Description       : Regroupe toutes les fonctions utilisable         ***
+  *** Version           : 1.0                                              ***
+  *** Date de création  : 05.05.2015                                       ***
+  **************************************************************************** }
 unit U_FP;
 
 interface
@@ -114,9 +122,6 @@ end;
 
 { ****************************************************************************
   *** Ajout un nombre d'espace avant ou après le text                      ***
-  *** @params String text - Text qui va prendre des espaces                ***
-  *** @params Boolean avant - La modification doit être placée avant ou    ***
-  ***                         apres                                        ***
   *** @params Integer tailleEspace - Nombre d'espace souhaité              ***
   *** @Result string - Retourne le text modifié                            ***
   **************************************************************************** }

@@ -5,8 +5,6 @@
   *** Description          : Permet d'ajouter une séances                  ***
   *** Version              : 1.0                                           ***
   *** Date de création     : 05.05.2015                                    ***
-  ***         Modification :                                               ***
-  ***           06.05.2015 - AD -                                          ***
   **************************************************************************** }
 unit U_OneWayTickets_AjouterSeance;
 
