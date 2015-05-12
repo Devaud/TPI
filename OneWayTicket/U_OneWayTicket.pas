@@ -75,6 +75,8 @@ CONST
   CARAC_LIGNE_TICKET  : integer = 59;
   TEMPS_ACTUALISATION : integer = 100;
   MAX_BOUTON_LIGNE    : integer = 3;
+  NOMBRE_STATISTIQUE  : integer = 6;
+  
 
 
 implementation
@@ -198,7 +200,7 @@ var
 begin
   // Initialise les variables
   nbBilletTotal:= 0;
-  SetLength(valeurs, 6, 2);
+  SetLength(valeurs, NOMBRE_STATISTIQUE, 2);
 
   //Récupère les informations du fichier de réservation
   valeur:= lireFichier(FICHIER_RESERV);
@@ -209,7 +211,7 @@ begin
     if valeur[i] = '' then
       Break;
 
-    OutPutList:= Split(valeur[i], ';');
+    OutPutList:= Split(valeur[i], CARAC_SEPARATION);
     nbBilletTotal:= nbBilletTotal + StrToInt(OutPutList[7]);
 
   end;
@@ -224,9 +226,9 @@ begin
     if valeur[i] = '' then
       Break;
 
-     OutPutList:= Split(valeur[i], ';');
+     OutPutList:= Split(valeur[i], CARAC_SEPARATION);
 
-     if FormatDateTime('mmmm', StrToDate(OutPutList[0])) = FormatDateTime('mmmm', now) then
+     if FormatDateTime(FORMAT_DATE, StrToDate(OutPutList[0])) = FormatDateTime(FORMAT_DATE, now) then
        nbBilletTotal:= nbBilletTotal + StrToInt(OutPutList[7]);
   end;
 
@@ -240,7 +242,7 @@ begin
     if valeur[i] = '' then
       Break;
 
-    OutPutList:= Split(valeur[i], ';');
+    OutPutList:= Split(valeur[i], CARAC_SEPARATION);
     nbBilletTotal:= nbBilletTotal + StrToInt(OutPutList[3]);
   end;
 
@@ -254,7 +256,7 @@ begin
     if valeur[i] = '' then
       Break;
 
-    OutPutList:= Split(valeur[i], ';');
+    OutPutList:= Split(valeur[i], CARAC_SEPARATION);
     nbBilletTotal:= nbBilletTotal + StrToInt(OutPutList[4]);
   end;
 
@@ -268,7 +270,7 @@ begin
     if valeur[i] = '' then
       Break;
 
-    OutPutList:= Split(valeur[i], ';');
+    OutPutList:= Split(valeur[i], CARAC_SEPARATION);
     nbBilletTotal:= nbBilletTotal + StrToInt(OutPutList[5]);
   end;
 

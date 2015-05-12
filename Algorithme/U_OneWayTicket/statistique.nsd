@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root xmlns:nsd="http://structorizer.fisch.lu/" text="&#34;procedure statistique();&#34;" comment="&#34;&#34;" color="ffffff" type="program" style="nice">
+	<children>
+		<instruction text="&#34;nbBillet &#60;- 0&#34;" comment="&#34;&#34;" color="ffffff" rotated="0"></instruction>
+		<instruction text="&#34;SetLength(valeurs, NOMBRE_STATISTIQUE, 2)&#34;" comment="&#34;&#34;" color="ffffff" rotated="0"></instruction>
+		<instruction text="&#34;valeur &#60;- lireFichier(FICHIER_RESERV)&#34;" comment="&#34;&#34;" color="ffffff" rotated="0"></instruction>
+		<for text="&#34;pour i &#60;- 1 à length(valeur) - 1&#34;" comment="&#34;&#34;" color="ffffff">
+			<qFor>
+				<alternative text="&#34;valeur[i] = ''&#34;" comment="&#34;&#34;" color="ffffff">
+					<qTrue>
+						<instruction text="&#34;Break&#34;" comment="&#34;&#34;" color="ffffff" rotated="0"></instruction>
+					</qTrue>
+					<qFalse>
+					</qFalse>
+				</alternative>
+				<instruction text="&#34;OutPutList &#60;- Split(valeur[i], CARAC_SEPARATION)&#34;,&#34;nbBilletTotal &#60;- nbBilletTotal + StrToInt(OutPutList[7])&#34;" comment="&#34;&#34;" color="ffffff" rotated="0"></instruction>
+			</qFor>
+		</for>
+		<instruction text="&#34;valeurs[0][0] &#60;- 'BilletTotal'&#34;,&#34;valeurs[0][1] &#60;- IntToStr(nbBilletTotal)&#34;,&#34;nbBilletTotal &#60;- 0&#34;" comment="&#34;&#34;" color="ffffff" rotated="0"></instruction>
+		<for text="&#34;pour i &#60;- 0 à length(valeur) - 1&#34;" comment="&#34;&#34;" color="ffffff">
+			<qFor>
+				<alternative text="&#34;valeur[i] = ''&#34;" comment="&#34;&#34;" color="ffffff">
+					<qTrue>
+						<instruction text="&#34;Break&#34;" comment="&#34;&#34;" color="ffffff" rotated="0"></instruction>
+					</qTrue>
+					<qFalse>
+					</qFalse>
+				</alternative>
+				<instruction text="&#34;OutPutList &#60;- Split(valeur[i], CARAC_SEPARATION)&#34;" comment="&#34;&#34;" color="ffffff" rotated="0"></instruction>
+				<alternative text="&#34;FormatDateTime(FORMAT_DATE, StrToDate(OutPutList[0])) = FormatDateTime(FORMAT_DATE, now)&#34;" comment="&#34;&#34;" color="ffffff">
+					<qTrue>
+						<instruction text="&#34;nbBilletTotal &#60;- nbBilletTotal + StrToInt(OutPutList[7])&#34;" comment="&#34;&#34;" color="ffffff" rotated="0"></instruction>
+					</qTrue>
+					<qFalse>
+					</qFalse>
+				</alternative>
+			</qFor>
+		</for>
+		<instruction text="&#34;valeurs[1][0] &#60;- 'BilletTotalMois'&#34;,&#34;valeurs[1][1] &#60;- IntToStr(nbBilletTotal)&#34;,&#34;nbBilletTotal &#60;- 0&#34;" comment="&#34;&#34;" color="ffffff" rotated="0"></instruction>
+		<for text="&#34;pour i &#60;- 1 à length(valeur) - 1&#34;" comment="&#34;&#34;" color="ffffff">
+			<qFor>
+				<alternative text="&#34;valeur[i] = ''&#34;" comment="&#34;&#34;" color="ffffff">
+					<qTrue>
+						<instruction text="&#34;Break&#34;" comment="&#34;&#34;" color="ffffff" rotated="0"></instruction>
+					</qTrue>
+					<qFalse>
+					</qFalse>
+				</alternative>
+				<instruction text="&#34;OutPutList &#60;- Split(valeur[i], CARAC_SEPARATION)&#34;,&#34;nbBilletTotal &#60;- nbBilletTotal + StrToInt(OutPutList[4])&#34;" comment="&#34;&#34;" color="ffffff" rotated="0"></instruction>
+			</qFor>
+		</for>
+		<instruction text="&#34;valeurs[3][0] &#60;- 'BilletAdults'&#34;,&#34;valeurs[3][1] &#60;- IntToStr(nbBilletTotal)&#34;,&#34;nbBilletTotal &#60;- 0&#34;" comment="&#34;&#34;" color="ffffff" rotated="0"></instruction>
+		<for text="&#34;pour i &#60;- 1 à length(valeur) - 1&#34;" comment="&#34;&#34;" color="ffffff">
+			<qFor>
+				<alternative text="&#34;valeur[i] = ''&#34;" comment="&#34;&#34;" color="ffffff">
+					<qTrue>
+						<instruction text="&#34;Break&#34;" comment="&#34;&#34;" color="ffffff" rotated="0"></instruction>
+					</qTrue>
+					<qFalse>
+					</qFalse>
+				</alternative>
+				<instruction text="&#34;OutPutList &#60;- Split(valeur[i], CARAC_SEPARATION)&#34;,&#34;nbBilletTotal &#60;- nbBilletTotal + StrToInt(OutPutList[5])&#34;" comment="&#34;&#34;" color="ffffff" rotated="0"></instruction>
+			</qFor>
+		</for>
+		<instruction text="&#34;valeurs[4][0] &#60;- 'BilletEtudiants'&#34;,&#34;valeurs[4][1] &#60;- IntToStr(nbBilletTotal)&#34;" comment="&#34;&#34;" color="ffffff" rotated="0"></instruction>
+		<instruction text="&#34;ecritDansFichier(valeurs, FICHIER_STATS)&#34;" comment="&#34;&#34;" color="ffffff" rotated="0"></instruction>
+	</children>
+</root>
