@@ -15,7 +15,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
-  Menus, StdCtrls, ExtCtrls, U_ImageBouton, IniFiles, U_FP;
+  Menus, StdCtrls, ExtCtrls, U_ImageBouton, IniFiles, U_FP, ShellAPI;
 
 type
   TFrmOneWayTickets = class(TForm)
@@ -32,6 +32,7 @@ type
     Timer1: TTimer;
     lblHeureCourante: TLabel;
     Label2: TLabel;
+    PrintDialog1: TPrintDialog;
     procedure Quitter1Click(Sender: TObject);
     procedure Timer1Timer(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -70,12 +71,14 @@ CONST
   TAILLE_HEIGHT    : integer = 57;
   MDP_ADMIN        : String  = 'Neko1';
   MAX_IMAGE_BOUTON : integer = 12;
+  MAX_TICKETS_PAGE : integer = 6;
 
 
 implementation
 
 uses U_OneWayTickets_Reservation, U_OneWayTickets_ReservationAvance,
-  U_OneWayTickets_Login, U_OneWayTickets_MenuAdministrateur;
+  U_OneWayTickets_Login, U_OneWayTickets_MenuAdministrateur,
+  U_OneWayTickets_Impression;
 
 {$R *.DFM}
 
@@ -272,12 +275,99 @@ begin
   ecritDansFichier(valeurs, FICHIER_STATS);
 end;
 
+
+{ ****************************************************************************
+  *** Change la secance de l'affichage des séances                         ***
+  **************************************************************************** }
 procedure TFrmOneWayTickets.changeSecances(incremente: integer);
 Begin
   //FreeAndNil(listImageBouton);
   listImageBouton.Destroy;
   secance:= secance + incremente;
   Initialisation();
+end;
+
+function ticketAscii(billet: string; reservation: array of String; prix: real; film, salle: string): String;
+var
+  ticket: string;
+Begin
+  ticket:= #13#10 + #13#10 + '*************************************************************' + #13#10
+             +  ajusterText('* Billet '+ billet, 59) + '*' + #13#10 + ajusterText('* Films  : '+ film, 59) + '*' + #13#10
+               + ajusterText('* Séance : ' + reservation[1] + ' - ' + reservation[0], 59) + '*' + #13#10
+                 + ajusterText('* Salle  : ' + salle, 59) + '*' + #13#10
+                   + ajusterText('* Prix   : ' + FloatToStr(prix) + ' CHF', 59) + '*' + #13#10
+                     + '*************************************************************';
+
+  Result:= ticket;
+end;
+
+{ ****************************************************************************
+  *** Génère les tickets                                                   ***
+  **************************************************************************** }
+procedure generationTickets(reservation: array of String; film, salle: string; prix: array of real);
+var
+  i, nbBilletEnfant, nbBilletAdulte, nbBilletEAA,nbBilletExistant: integer;
+  tickets: TValeurs;
+Begin
+  // Initialisation des paramètres
+  SetLength(tickets, StrToInt(reservation[3]) + StrToInt(reservation[4]) + StrToInt(reservation [5]) + 1, 1);
+  nbBilletEnfant:= 0 ;
+  nbBilletAdulte:= 0;
+  nbBilletEAA:= 0;
+  nbBilletExistant:= 0;
+
+  // Génération des billets enfants
+  while nbBilletEnfant < StrToInt(reservation[3]) do
+  Begin
+    tickets[nbBilletEnfant + nbBilletExistant][0]:= ticketAscii('enfant', reservation, prix[1], film, salle);
+
+    // Test s'il y a 8 billet
+    if ((nbBilletExistant + nbBilletEnfant) mod MAX_TICKETS_PAGE = 0) and (nbBilletEnfant > 0) then
+      tickets[nbBilletEnfant + nbBilletExistant][0]:= tickets[nbBilletEnfant + nbBilletExistant][0] + #13#10 + #13#10 + #13#10;
+      
+    inc(nbBilletEnfant);
+  end;
+
+  nbBilletExistant:= nbBilletEnfant + nbBilletExistant;
+
+  // Génération des billets adultes
+  while nbBilletAdulte < StrToInt(reservation[4]) do
+  Begin
+    tickets[nbBilletAdulte + nbBilletExistant][0]:= ticketAscii('adulte', reservation, prix[0], film, salle);
+
+    // Test s'il y a 8 billet
+    if ((nbBilletExistant + nbBilletAdulte) mod MAX_TICKETS_PAGE = 0) and (nbBilletAdulte > 0) then
+      tickets[nbBilletAdulte + nbBilletExistant][0]:= tickets[nbBilletAdulte + nbBilletExistant][0] + #13#10 + #13#10 + #13#10;
+      
+    inc(nbBilletAdulte);
+  end;
+
+  nbBilletExistant:= nbBilletAdulte + nbBilletExistant;
+
+  // Génération des billets etudiant, a.v.s et a.v.i
+  while nbBilletEAA < StrToInt(reservation[5]) do
+  Begin
+    tickets[nbBilletEAA + nbBilletExistant][0]:= ticketAscii('Etudiant / A.V.S / A.V.I', reservation, prix[2], film, salle);
+
+    // Test s'il y a 8 billet
+    if ((nbBilletExistant + nbBilletEAA) mod MAX_TICKETS_PAGE = 0) and (nbBilletEAA > 0) then
+      tickets[nbBilletEAA + nbBilletExistant][0]:= tickets[nbBilletEAA + nbBilletExistant][0] + #13#10 + #13#10 + #13#10;
+      
+    inc(nbBilletEAA);
+  end;
+
+  // Ecrit dans le fichier
+  if ecritDansFichier(tickets, FICHIER_TICKETS) then
+  Begin
+    // Imprime le billet
+    ShellExecute(FrmOneWayTickets.Handle, 'Open',Pchar('NotePad'), PChar('/p ' + '"' + FICHIER_TICKETS + '"'), nil, SW_HIDE);
+
+    // Affiche "Impression en cours" et initilalise la valeur du timer
+    FrmImpressionEnCours.visible:= true;
+    FrmImpressionEnCours.maxSecond:= 20;
+    FrmImpressionEnCours.second:= 0;
+    FrmImpressionEnCours.Timer1.Enabled:= true;
+  end;
 end;
 
 { ****************************************************************************
@@ -363,6 +453,8 @@ Begin
       ShowMessage('Reservation effectuée avec succès !')
     else
       ShowMessage('Une erreur est survenue lors de la suppression !');
+
+    generationTickets(reservations, FrmReservation.lblNomFilm.Caption, FrmReservation.lblSalle.Caption, prix);
 
     // Met a jour les statistiques
     statistique();
@@ -458,10 +550,6 @@ Begin
   
   for i:= 0 to MAX_IMAGE_BOUTON - 1 do
   Begin
-    {if seances[index][0] = '' then
-    Begin
-      break;
-    end;    }
 
     bouton:= TImageBouton.Create(FrmOneWayTickets, seances[index][0], seances[index][1], seances[index][2], seances[index][3], x, y);
 

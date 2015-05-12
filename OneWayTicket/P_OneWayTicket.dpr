@@ -14,7 +14,8 @@ uses
   U_OneWayTickets_AjouterSalle in 'U_OneWayTickets_AjouterSalle.pas' {FrmAjouterSalle},
   U_OneWayTickets_GestionSeances in 'U_OneWayTickets_GestionSeances.pas' {FrmGestionSeances},
   U_OneWayTickets_AjouterSeance in 'U_OneWayTickets_AjouterSeance.pas' {FrmAjouterSeance},
-  U_FP in 'U_FP.pas';
+  U_FP in 'U_FP.pas',
+  U_OneWayTickets_Impression in 'U_OneWayTickets_Impression.pas' {FrmImpressionEnCours};
 
 {$R *.RES}
 
@@ -31,5 +32,6 @@ begin
   Application.CreateForm(TFrmAjouterSalle, FrmAjouterSalle);
   Application.CreateForm(TFrmGestionSeances, FrmGestionSeances);
   Application.CreateForm(TFrmAjouterSeance, FrmAjouterSeance);
+  Application.CreateForm(TFrmImpressionEnCours, FrmImpressionEnCours);
   Application.Run;
 end.

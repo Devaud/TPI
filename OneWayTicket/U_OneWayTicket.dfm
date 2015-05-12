@@ -1,6 +1,6 @@
 object FrmOneWayTickets: TFrmOneWayTickets
-  Left = 776
-  Top = 180
+  Left = 663
+  Top = 182
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
   Caption = 'OneWay Tickets'
@@ -295,6 +295,10 @@ object FrmOneWayTickets: TFrmOneWayTickets
     Interval = 500
     OnTimer = Timer1Timer
     Left = 8
+    Top = 8
+  end
+  object PrintDialog1: TPrintDialog
+    Left = 80
     Top = 8
   end
 end

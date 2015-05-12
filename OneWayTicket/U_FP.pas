@@ -54,6 +54,7 @@ const
   FICHIER_SALLES  : String = './Res/salles.csv';
   FICHIER_PRIX    : String = './Res/prixBillets.csv';
   FICHIER_RESERV  : String = './Res/reservations.csv';
+  FICHIER_TICKETS : String = './Res/tickets.txt';
 
 
 
