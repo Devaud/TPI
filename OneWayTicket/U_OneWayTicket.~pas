@@ -287,6 +287,15 @@ Begin
   Initialisation();
 end;
 
+{ ****************************************************************************
+  *** Génère les tickets                                                   ***
+  *** @params String billet - Nom du type de billet (Enfant, adultes, etc.)***
+  *** @params Array of string resevatoin - Information sur la réservartoin ***
+  *** @params String salle - nom de la salle                               ***
+  *** @params array of real prix - Tableau des prix                        ***
+  *** @params String film - Nom du film                                    ***
+  *** @Result String - Ticket sous forme ascii                             ***
+  **************************************************************************** }
 function ticketAscii(billet: string; reservation: array of String; prix: real; film, salle: string): String;
 var
   ticket: string;
@@ -303,10 +312,14 @@ end;
 
 { ****************************************************************************
   *** Génère les tickets                                                   ***
+  *** @params Array of string resevatoin - Information sur la réservartoin ***
+  *** @params String film - Nom du film                                    ***
+  *** @params String salle - nom de la salle                               ***
+  *** @params array of real prix - Tableau des prix                        ***
   **************************************************************************** }
 procedure generationTickets(reservation: array of String; film, salle: string; prix: array of real);
 var
-  i, nbBilletEnfant, nbBilletAdulte, nbBilletEAA,nbBilletExistant: integer;
+  nbBilletEnfant, nbBilletAdulte, nbBilletEAA,nbBilletExistant: integer;
   tickets: TValeurs;
 Begin
   // Initialisation des paramètres
@@ -320,11 +333,6 @@ Begin
   while nbBilletEnfant < StrToInt(reservation[3]) do
   Begin
     tickets[nbBilletEnfant + nbBilletExistant][0]:= ticketAscii('enfant', reservation, prix[1], film, salle);
-
-    // Test s'il y a 8 billet
-    if ((nbBilletExistant + nbBilletEnfant) mod MAX_TICKETS_PAGE = 0) and (nbBilletEnfant > 0) then
-      tickets[nbBilletEnfant + nbBilletExistant][0]:= tickets[nbBilletEnfant + nbBilletExistant][0] + #13#10 + #13#10 + #13#10;
-      
     inc(nbBilletEnfant);
   end;
 
@@ -334,11 +342,6 @@ Begin
   while nbBilletAdulte < StrToInt(reservation[4]) do
   Begin
     tickets[nbBilletAdulte + nbBilletExistant][0]:= ticketAscii('adulte', reservation, prix[0], film, salle);
-
-    // Test s'il y a 8 billet
-    if ((nbBilletExistant + nbBilletAdulte) mod MAX_TICKETS_PAGE = 0) and (nbBilletAdulte > 0) then
-      tickets[nbBilletAdulte + nbBilletExistant][0]:= tickets[nbBilletAdulte + nbBilletExistant][0] + #13#10 + #13#10 + #13#10;
-      
     inc(nbBilletAdulte);
   end;
 
@@ -348,11 +351,6 @@ Begin
   while nbBilletEAA < StrToInt(reservation[5]) do
   Begin
     tickets[nbBilletEAA + nbBilletExistant][0]:= ticketAscii('Etudiant / A.V.S / A.V.I', reservation, prix[2], film, salle);
-
-    // Test s'il y a 8 billet
-    if ((nbBilletExistant + nbBilletEAA) mod MAX_TICKETS_PAGE = 0) and (nbBilletEAA > 0) then
-      tickets[nbBilletEAA + nbBilletExistant][0]:= tickets[nbBilletEAA + nbBilletExistant][0] + #13#10 + #13#10 + #13#10;
-      
     inc(nbBilletEAA);
   end;
 
@@ -362,7 +360,7 @@ Begin
     // Imprime le billet
     ShellExecute(FrmOneWayTickets.Handle, 'Open',Pchar('NotePad'), PChar('/p ' + '"' + FICHIER_TICKETS + '"'), nil, SW_HIDE);
 
-    // Affiche "Impression en cours" et initilalise la valeur du timer
+    // Affiche "Impression en cours" et initilalise les valeurs du timer
     FrmImpressionEnCours.visible:= true;
     FrmImpressionEnCours.maxSecond:= 20;
     FrmImpressionEnCours.second:= 0;
@@ -470,7 +468,7 @@ end;
   **************************************************************************** }
 procedure TFrmOneWayTickets.chargeToutesLesSeances();
 var
-  i, x, index, nbSeances: integer;
+  i, x, index: integer;
   fichierIni: TIniFile;
   Sections, dataSections : TStringList;
   listjour : TStringList;

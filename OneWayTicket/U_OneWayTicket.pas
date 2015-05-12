@@ -287,6 +287,15 @@ Begin
   Initialisation();
 end;
 
+{ ****************************************************************************
+  *** Génère les tickets                                                   ***
+  *** @params String billet - Nom du type de billet (Enfant, adultes, etc.)***
+  *** @params Array of string resevatoin - Information sur la réservartoin ***
+  *** @params String salle - nom de la salle                               ***
+  *** @params array of real prix - Tableau des prix                        ***
+  *** @params String film - Nom du film                                    ***
+  *** @Result String - Ticket sous forme ascii                             ***
+  **************************************************************************** }
 function ticketAscii(billet: string; reservation: array of String; prix: real; film, salle: string): String;
 var
   ticket: string;
@@ -303,10 +312,14 @@ end;
 
 { ****************************************************************************
   *** Génère les tickets                                                   ***
+  *** @params Array of string resevatoin - Information sur la réservartoin ***
+  *** @params String film - Nom du film                                    ***
+  *** @params String salle - nom de la salle                               ***
+  *** @params array of real prix - Tableau des prix                        ***
   **************************************************************************** }
 procedure generationTickets(reservation: array of String; film, salle: string; prix: array of real);
 var
-  i, nbBilletEnfant, nbBilletAdulte, nbBilletEAA,nbBilletExistant: integer;
+  nbBilletEnfant, nbBilletAdulte, nbBilletEAA,nbBilletExistant: integer;
   tickets: TValeurs;
 Begin
   // Initialisation des paramètres
@@ -347,7 +360,7 @@ Begin
     // Imprime le billet
     ShellExecute(FrmOneWayTickets.Handle, 'Open',Pchar('NotePad'), PChar('/p ' + '"' + FICHIER_TICKETS + '"'), nil, SW_HIDE);
 
-    // Affiche "Impression en cours" et initilalise la valeur du timer
+    // Affiche "Impression en cours" et initilalise les valeurs du timer
     FrmImpressionEnCours.visible:= true;
     FrmImpressionEnCours.maxSecond:= 20;
     FrmImpressionEnCours.second:= 0;
@@ -455,7 +468,7 @@ end;
   **************************************************************************** }
 procedure TFrmOneWayTickets.chargeToutesLesSeances();
 var
-  i, x, index, nbSeances: integer;
+  i, x, index: integer;
   fichierIni: TIniFile;
   Sections, dataSections : TStringList;
   listjour : TStringList;
