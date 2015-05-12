@@ -57,12 +57,14 @@ Type
 
 const
   FICHIER_STATS   : String  = './Res/statistiques.csv';
-  FICHIER_SEANCES : String = './Res/seances.ini';
-  FICHIER_FILMS   : String = './Res/films.csv';
-  FICHIER_SALLES  : String = './Res/salles.csv';
-  FICHIER_PRIX    : String = './Res/prixBillets.csv';
-  FICHIER_RESERV  : String = './Res/reservations.csv';
-  FICHIER_TICKETS : String = './Res/tickets.txt';
+  FICHIER_SEANCES : String  = './Res/seances.ini';
+  FICHIER_FILMS   : String  = './Res/films.csv';
+  FICHIER_SALLES  : String  = './Res/salles.csv';
+  FICHIER_PRIX    : String  = './Res/prixBillets.csv';
+  FICHIER_RESERV  : String  = './Res/reservations.csv';
+  FICHIER_TICKETS : String  = './Res/tickets.txt';
+  DEVISE          : String  = 'CHF';
+  NOMBRE_SECTIONS : Integer = 9;
 
 
 

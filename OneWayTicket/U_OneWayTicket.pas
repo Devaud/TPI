@@ -64,14 +64,17 @@ var
   secance          : integer = 0; // La sécances des séances a afficher
 
 CONST
-  START            : integer = 10;
-  ECART_X          : integer = 10;
-  ECART_Y          : integer = 10;
-  TAILLE_WIDTH     : integer = 193;
-  TAILLE_HEIGHT    : integer = 57;
-  MDP_ADMIN        : String  = 'Neko1';
-  MAX_IMAGE_BOUTON : integer = 12;
-  MAX_TICKETS_PAGE : integer = 6;
+  START               : integer = 10;
+  ECART_X             : integer = 10;
+  ECART_Y             : integer = 10;
+  TAILLE_WIDTH        : integer = 193;
+  TAILLE_HEIGHT       : integer = 57;
+  MDP_ADMIN           : String  = 'Neko1';
+  MAX_IMAGE_BOUTON    : integer = 12;
+  MAX_TICKETS_PAGE    : integer = 6;
+  CARAC_LIGNE_TICKET  : integer = 59;
+  TEMPS_ACTUALISATION : integer = 100;
+  MAX_BOUTON_LIGNE    : integer = 3;
 
 
 implementation
@@ -281,7 +284,6 @@ end;
   **************************************************************************** }
 procedure TFrmOneWayTickets.changeSecances(incremente: integer);
 Begin
-  //FreeAndNil(listImageBouton);
   listImageBouton.Destroy;
   secance:= secance + incremente;
   Initialisation();
@@ -301,10 +303,10 @@ var
   ticket: string;
 Begin
   ticket:= #13#10 + #13#10 + '*************************************************************' + #13#10
-             +  ajusterText('* Billet '+ billet, 59) + '*' + #13#10 + ajusterText('* Films  : '+ film, 59) + '*' + #13#10
-               + ajusterText('* Séance : ' + reservation[1] + ' - ' + reservation[0], 59) + '*' + #13#10
-                 + ajusterText('* Salle  : ' + salle, 59) + '*' + #13#10
-                   + ajusterText('* Prix   : ' + FloatToStr(prix) + ' CHF', 59) + '*' + #13#10
+             +  ajusterText('* Billet '+ billet, CARAC_LIGNE_TICKET) + '*' + #13#10 + ajusterText('* Films  : '+ film, CARAC_LIGNE_TICKET) + '*' + #13#10
+               + ajusterText('* Séance : ' + reservation[1] + ' - ' + reservation[0], CARAC_LIGNE_TICKET) + '*' + #13#10
+                 + ajusterText('* Salle  : ' + salle, CARAC_LIGNE_TICKET) + '*' + #13#10
+                   + ajusterText('* Prix   : ' + FloatToStr(prix) + ' ' + DEVISE, CARAC_LIGNE_TICKET) + '*' + #13#10
                      + '*************************************************************';
 
   Result:= ticket;
@@ -411,9 +413,9 @@ Begin
   end;
 
   // Charge les prix
-  FrmReservation.lblPrixEnfants.Caption:= 'x ' + FloatToStr(prix[1]) + ' CHF';
-  FrmReservation.lblPrixAdultes.Caption:= 'x ' + FloatToStr(prix[0]) + ' CHF';
-  FrmReservation.lblPrixEAA.Caption:= 'x ' + FloatToStr(prix[2]) + ' CHF';
+  FrmReservation.lblPrixEnfants.Caption:= 'x ' + FloatToStr(prix[1]) + ' ' + DEVISE;
+  FrmReservation.lblPrixAdultes.Caption:= 'x ' + FloatToStr(prix[0]) + ' ' + DEVISE;
+  FrmReservation.lblPrixEAA.Caption:= 'x ' + FloatToStr(prix[2]) + ' ' + DEVISE;
   FrmReservation.PrixEnfant:= prix[1];
   FrmReservation.PrixEAA:= prix[2];
   FrmReservation.PrixAdulte:= prix[0];
@@ -530,7 +532,7 @@ Begin
   jourActuelle:= FormatDateTime('dddd', now());
   temp:= 0; // Recommence le compte
   nbPlacesTotal:= 0;
-  nbLigne:= nbLignesFichier(FICHIER_SEANCES) div 9; // Charge le nombre de séances (nombre de ligne diviser par le nombre de données dans les sections)
+  nbLigne:= nbLignesFichier(FICHIER_SEANCES) div NOMBRE_SECTIONS; // Charge le nombre de séances (nombre de ligne diviser par le nombre de données dans les sections)
   // Initialisation des seances
   SetLength(listSeances, nbLigne);
   chargeToutesLesSeances();
@@ -596,7 +598,7 @@ Begin
     x := x + TAILLE_WIDTH + ECART_X; // Déplace le prochain bouton sur la droite
 
     // Regare s'il y a déjà trois bouton sur une ligne
-    if listImageBouton.Count mod 3 = 0 then
+    if listImageBouton.Count mod MAX_BOUTON_LIGNE = 0 then
     Begin
       y:= y + TAILLE_HEIGHT + ECART_X; // Déplace les prochain bouton sur la seconde ligne
       x:= START; // Redémare la ligne au début
@@ -643,7 +645,7 @@ procedure TFrmOneWayTickets.Timer1Timer(Sender: TObject);
 begin
   lblHeureCourante.Caption:= TimeToStr(now());
 
-  if temp = 100 then
+  if temp = TEMPS_ACTUALISATION then
     Initialisation()
   else
     inc(temp);
