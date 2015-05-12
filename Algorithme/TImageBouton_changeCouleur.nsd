@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root text="&#34;procedure TImageBouton.changeCouleur(couleur: TColor);&#34;" comment="&#34;&#34;" color="ffffff" type="program" style="nice">
+	<children>
+		<instruction text="&#34;self.Picture.Canvas.Brush.Color &#60;- couleur&#34;,&#34;self.Picture.Canvas.Rectangle(0, 0, self.Width, self.Height)&#34;" comment="&#34;&#34;" color="ffffff" rotated="0"></instruction>
+	</children>
+</root>
