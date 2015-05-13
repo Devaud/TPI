@@ -42,6 +42,7 @@ type
     procedure BtnSeanceSuivanteClick(Sender: TObject);
     procedure BtnSeancePrecedenteClick(Sender: TObject);
     procedure destruction();
+    procedure FormActivate(Sender: TObject);
   private
     { Déclarations privées }
   public
@@ -485,8 +486,8 @@ Begin
 
   end;
 
-  destruction();
-  Initialisation();
+  //destruction();
+  //Initialisation();
 end;
 
 
@@ -681,7 +682,10 @@ begin
   lblHeureCourante.Caption:= TimeToStr(now());
 
   if temp = TEMPS_ACTUALISATION then
-    Initialisation()
+  Begin
+    destruction();
+    Initialisation();
+  end
   else
     inc(temp);
 end;
@@ -773,7 +777,7 @@ end;
   **************************************************************************** }
 procedure TFrmOneWayTickets.BtnSeanceSuivanteClick(Sender: TObject);
 begin
-  changeSecances(MAX_IMAGE_BOUTON);
+  changeSecances(MAX_IMAGE_BOUTON + 1);
 
   if secance > 0 then
     BtnSeancePrecedente.Enabled:= true
@@ -784,10 +788,19 @@ end;
   **************************************************************************** }
 procedure TFrmOneWayTickets.BtnSeancePrecedenteClick(Sender: TObject);
 begin
-  changeSecances(MAX_IMAGE_BOUTON * (-1));
+  changeSecances((MAX_IMAGE_BOUTON + 1) * (-1));
   
   if secance = 0 then
     BtnSeancePrecedente.Enabled:= false;
+end;
+
+{ ****************************************************************************
+  *** Procedure lors de l'activation de la fenêtre                         ***
+  **************************************************************************** }
+procedure TFrmOneWayTickets.FormActivate(Sender: TObject);
+begin
+  destruction();
+  Initialisation();
 end;
 
 end.

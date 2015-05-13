@@ -15,6 +15,7 @@ object FrmOneWayTickets: TFrmOneWayTickets
   Menu = MainMenu1
   OldCreateOrder = False
   Position = poScreenCenter
+  OnActivate = FormActivate
   OnCreate = FormCreate
   PixelsPerInch = 96
   TextHeight = 14
