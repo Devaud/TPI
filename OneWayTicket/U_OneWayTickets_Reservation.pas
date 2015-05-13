@@ -49,6 +49,7 @@ type
     BtnValiderReservation: TButton;
     procedure EdtNbBilletsEAAChange(Sender: TObject);
     procedure UDNBilletsAdultesClick(Sender: TObject; Button: TUDBtnType);
+    procedure BtnAnnulerClick(Sender: TObject);
   private
     { Déclarations privées }
   public
@@ -100,6 +101,19 @@ procedure TFrmReservation.UDNBilletsAdultesClick(Sender: TObject;
   Button: TUDBtnType);
 begin
   calculTotal();
+end;
+
+{ ****************************************************************************
+  *** Procedure d'annulation                                               ***
+  **************************************************************************** }
+procedure TFrmReservation.BtnAnnulerClick(Sender: TObject);
+var
+  reponse: word;
+Begin
+  reponse:= MessageDlg('Etes vous sûr de vouloir annuler la réservation ?', mtConfirmation, [mbYes, mbNo, mbCancel], 0);
+
+  if reponse = mrYes then
+    ModalResult:= mrCancel;
 end;
 
 end.

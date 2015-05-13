@@ -106,8 +106,8 @@ object FrmAjouterFilm: TFrmAjouterFilm
     Width = 153
     Height = 33
     Caption = 'Annuler'
-    ModalResult = 2
     TabOrder = 3
+    OnClick = BtnAnnulerClick
   end
   object BtnAjouter: TButton
     Left = 168

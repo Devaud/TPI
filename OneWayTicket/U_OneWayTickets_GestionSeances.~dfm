@@ -1,6 +1,6 @@
 object FrmGestionSeances: TFrmGestionSeances
-  Left = 224
-  Top = 128
+  Left = 207
+  Top = 187
   BorderStyle = bsSingle
   Caption = 'OneWay Tickets - Gestion des séances'
   ClientHeight = 552

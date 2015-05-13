@@ -70,6 +70,7 @@ object FrmAjouterSalle: TFrmAjouterSalle
     Caption = 'Annuler'
     ModalResult = 2
     TabOrder = 2
+    OnClick = BtnAnnulerClick
   end
   object BtnAjouter: TButton
     Left = 176

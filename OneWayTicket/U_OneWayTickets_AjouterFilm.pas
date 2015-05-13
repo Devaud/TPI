@@ -24,6 +24,7 @@ type
     procedure edtDureeFilmKeyPress(Sender: TObject; var Key: Char);
     procedure testEdit();
     procedure MmoSynopsisChange(Sender: TObject);
+    procedure BtnAnnulerClick(Sender: TObject);
   private
     { Déclarations privées }
   public
@@ -78,6 +79,19 @@ end;
 procedure TFrmAjouterFilm.MmoSynopsisChange(Sender: TObject);
 begin
   testEdit();
+end;
+
+{ ****************************************************************************
+  *** Procedure d'annulation                                               ***
+  **************************************************************************** }
+procedure TFrmAjouterFilm.BtnAnnulerClick(Sender: TObject);
+var
+  reponse : word;
+begin
+  reponse:= MessageDlg('Etes vous sûr de vouloir annuler l''ajout ?', mtConfirmation, [mbYes, mbNo, mbCancel], 0);
+
+  if reponse = mrYes then
+    ModalResult:= mrCancel;
 end;
 
 end.

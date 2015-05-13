@@ -43,6 +43,7 @@ type
       Shift: TShiftState);
     procedure edtHeure1KeyPress(Sender: TObject; var Key: Char);
     procedure edtHeure1Change(Sender: TObject);
+    procedure BtnAnnulerClick(Sender: TObject);
   private
     { Déclarations privées }
   public
@@ -94,6 +95,19 @@ begin
     BtnValider.Enabled:= true
   else
     BtnValider.Enabled:= false;
+end;
+
+{ ****************************************************************************
+  *** Procedure d'annulation                                               ***
+  **************************************************************************** }
+procedure TFrmAjouterSeance.BtnAnnulerClick(Sender: TObject);
+var
+  reponse : word;
+begin
+  reponse:= MessageDlg('Etes vous sûr de vouloir annuler l''ajout ?', mtConfirmation, [mbYes, mbNo, mbCancel], 0);
+
+  if reponse = mrYes then
+    ModalResult:= mrCancel;
 end;
 
 end.

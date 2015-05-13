@@ -77,6 +77,8 @@ CONST
   MAX_BOUTON_LIGNE    : integer = 3;
   NOMBRE_STATISTIQUE  : integer = 6;
   NOMBRE_HORAIRE_MAX  : integer = 4;
+  CARAC_SEPAR_JOUR    : String = ',';
+  SECONDE_IMPRESSION  : integer = 20;
   
 
 
@@ -386,7 +388,7 @@ Begin
 
     // Affiche "Impression en cours" et initilalise les valeurs du timer
     FrmImpressionEnCours.visible:= true;
-    FrmImpressionEnCours.maxSecond:= 20;
+    FrmImpressionEnCours.maxSecond:= SECONDE_IMPRESSION;
     FrmImpressionEnCours.second:= 0;
     FrmImpressionEnCours.Timer1.Enabled:= true;
   end;
@@ -483,7 +485,7 @@ Begin
 
   end;
 
- // destruction();
+  destruction();
   Initialisation();
 end;
 
@@ -493,7 +495,7 @@ end;
   **************************************************************************** }
 procedure TFrmOneWayTickets.chargeToutesLesSeances();
 var
-  i, x, index: integer;
+  i, j, index: integer;
   fichierIni: TIniFile;
   Sections, dataSections : TStringList;
   listjour : TStringList;
@@ -502,9 +504,9 @@ Begin
   fichierIni:= TIniFile.Create(FICHIER_SEANCES);
   Sections:= TStringList.Create;
   dataSections:= TStringList.Create;
+  index:= 0;
 
   fichierIni.ReadSections(Sections);
-  index:= 0;
 
   // Parcoure toutes les sections
   for i:= 0 to Sections.Count - 1 do
@@ -513,13 +515,13 @@ Begin
     fichierIni.ReadSection(Sections[i], dataSections);
     jourDiff:= fichierIni.ReadString(Sections[i], dataSections[2], 'N/A');
 
-    jourDiff:= assembleJour(jourDiff, ',');
-    listJour:= Split(jourDiff, ',');
+    jourDiff:= assembleJour(jourDiff, CARAC_SEPAR_JOUR);
+    listJour:= Split(jourDiff, CARAC_SEPAR_JOUR);
 
-    for x:= 0 to listjour.count - 1 do
+    for j:= 0 to listjour.count - 1 do
     Begin
       // Test si le jour correspond et ajoute la séance dans la liste des séances
-      if listJour[x] = jourActuelle then
+      if listJour[j] = jourActuelle then
       Begin
         listSeances[index].section:= Sections[i];
         listSeances[index].film:= fichierIni.ReadString(Sections[i], dataSections[0], 'N/A');

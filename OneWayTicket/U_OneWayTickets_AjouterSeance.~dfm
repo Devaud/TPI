@@ -279,8 +279,8 @@ object FrmAjouterSeance: TFrmAjouterSeance
     Width = 193
     Height = 41
     Caption = 'Annuler'
-    ModalResult = 2
     TabOrder = 4
+    OnClick = BtnAnnulerClick
   end
   object BtnValider: TButton
     Left = 208

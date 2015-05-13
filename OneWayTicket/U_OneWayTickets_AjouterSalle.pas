@@ -18,6 +18,7 @@ type
     procedure edtNomSalleChange(Sender: TObject);
     procedure edtPlacesMaxKeyPress(Sender: TObject; var Key: Char);
     procedure testEdit();
+    procedure BtnAnnulerClick(Sender: TObject);
   private
     { Déclarations privées }
   public
@@ -62,6 +63,19 @@ procedure TFrmAjouterSalle.edtPlacesMaxKeyPress(Sender: TObject;
 begin
   if not(key in['0'..'9']) then
     key:= #0;
+end;
+
+{ ****************************************************************************
+  *** Procedure d'annulation                                               ***
+  **************************************************************************** }
+procedure TFrmAjouterSalle.BtnAnnulerClick(Sender: TObject);
+var
+  reponse : word;
+begin
+  reponse:= MessageDlg('Etes vous sûr de vouloir annuler l''ajout ?', mtConfirmation, [mbYes, mbNo, mbCancel], 0);
+
+  if reponse = mrYes then
+    ModalResult:= mrCancel;
 end;
 
 end.

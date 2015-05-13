@@ -81,6 +81,9 @@ const
   FRM_WIDTH_MAX             : integer = 580;
   FRM_WIDTH_MIN             : integer = 359;
   MAX_TABLEAU_CLEVAL_INDICE : integer = 7;  // Taille maximum de la première dimension du tableau
+  HEURE_SEPARATEUR          : String  = ':';
+  MAX_HEURES                : integer = 23;
+  MAX_MINUTES               : integer = 59;
 
 implementation
 
@@ -173,6 +176,28 @@ Begin
 
 
   Result:= valeurs;
+end;
+
+{ ****************************************************************************
+  *** Vérifie le format des dates                                          ***
+  *** @params String heure - Heure à vérifier                              ***
+  *** @Result boolean - Renvoi vrai si le format est bon                   ***
+  **************************************************************************** }
+function verifiFormatHeure(heure: string): boolean;
+var
+  OutPutString: TStringList;
+  bon: boolean;
+Begin
+  bon:= false;
+  
+  OutPutString:= TStringList.Create;
+  OutPutString:= Split(heure, HEURE_SEPARATEUR);
+
+  if (StrToInt(OutPutString[0]) < MAX_HEURES) and
+    (StrToInt(OutPutString[1]) < MAX_MINUTES) then
+    bon:= true;
+
+  Result:= bon;
 end;
 
 { ****************************************************************************
@@ -391,9 +416,18 @@ end;
   *** Annule les modification                                              ***
   **************************************************************************** }
 procedure TFrmGestionSeances.BtnAnuulerClick(Sender: TObject);
+var
+  reponse : word;
 begin
-  changeEtat(true);
-  self.Height:= FRM_WIDTH_MIN;
+  // Récupère la réponse
+  reponse:= MessageDlg('Etes-vous sûr de vouloir annuler les modifications ?', mtConfirmation, [mbYes, mbNo, mbCancel], 0);
+
+  // Test si la réponse est oui
+  if reponse = mrYes then
+  Begin
+    changeEtat(true);
+    self.Height:= FRM_WIDTH_MIN;
+  end;
 end;
 
 { ****************************************************************************
@@ -527,7 +561,7 @@ begin
   if sauvegardeIni(FICHIER_SEANCES, listeSeances[index].section, CleVal) then
     MessageDlg('Modification effectuée avec succès !', mtInformation, [mbOk, mbCancel], 0)
   else
-    ShowMessage('Une erreur est survenue lors de la suppression !');
+    MessageDlg('Une erreur est survenue lors de la suppression !', mtError, [mbOk, mbCancel], 0);
 
   chargeListeSeances();
   LbxListeSeances.ItemIndex:= index;
@@ -650,7 +684,7 @@ begin
   if (Length((Sender as TEdit).Text) = 2) and (not(key = ord(chr(VK_BACK)))) then
   Begin
     text:= (Sender as TEdit).Text;
-    (Sender as TEdit).Text:= text[1] + text[2] + ':';
+    (Sender as TEdit).Text:= text[1] + text[2] + HEURE_SEPARATEUR;
   end;
 end;
 

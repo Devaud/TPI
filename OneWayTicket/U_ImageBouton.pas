@@ -184,8 +184,11 @@ end;
   **************************************************************************** }
 procedure TImageBouton.Click(Sender: TObject);
 Begin
+  if not(self = nil) then
+  Begin
   if not(self.complet_) or (self.Enabled = false)then
     FrmOneWayTickets.Reservation(self.lblNomFilm.Caption, self.lblHoraire.caption, self.pSalle, self.pSection, self.pPlaces);
+  end;
 end;
 
 end.
