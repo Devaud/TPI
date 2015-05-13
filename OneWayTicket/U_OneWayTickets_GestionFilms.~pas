@@ -161,9 +161,19 @@ end;
   *** Annule les modification                                              ***
   **************************************************************************** }
 procedure TFrmGestionFilms.BtnAnuulerClick(Sender: TObject);
+var
+  reponse : word;
 begin
-  changeEtat(true);
-  self.Height:= FRM_HEIGHT_MIN;
+  // Récupère la réponse
+  reponse:= MessageDlg('Etes-vous sûr de vouloir annuler les modifications ?', mtConfirmation, [mbYes, mbNo, mbCancel], 0);
+
+  // Test si la réponse est oui
+  if reponse = mrYes then
+  Begin
+    changeEtat(true);
+    self.Height:= FRM_HEIGHT_MIN;
+  end;
+  
 end;
 
 { ****************************************************************************
@@ -191,10 +201,18 @@ begin
     valeurs[2]:= FrmAjouterFilm.MmoSynopsis.Text;
     valeurs[3]:= FrmAjouterFilm.edtPrixFilm.Text;
 
-    if ajoutUneLigne(valeurs, FICHIER_FILMS) then
-      ShowMessage('Film ajouté avec succès !')
+    // Test si le film exist déjà
+    if not(valeurExists(FICHIER_FILMS, valeurs[0])) then
+    Begin
+      if ajoutUneLigne(valeurs, FICHIER_FILMS) then
+        MessageDlg('Film ajouté avec succès !', mtInformation, [mbOk, mbCancel], 0)
+      else
+        MessageDlg('Une erreur est survenue lors de l''ajout !', mtError, [mbOk, mbCancel], 0);
+    end
     else
-      ShowMessage('Une erreur est survenue lors de l''ajout !');
+    Begin
+      MessageDlg('Ce film exist déjà !', mtError, [mbOk, mbCancel], 0);
+    end;
 
     chargeListeFilm();
   end;
@@ -237,42 +255,57 @@ procedure TFrmGestionFilms.BtnValiderModificationClick(Sender: TObject);
 var
   index, i: integer;
   valeurs: TValeurs;
+  reponse: word;
 begin
+  reponse:= 0;
   index:= LbxListeFilms.ItemIndex;
-  setLength(valeurs, length(listeFilms) + 1, 4);
 
-  // Récupère les informations du film modifier et les mets dans le tableau
-  listeFilms[index].NomFilm:= edtNomFilm.Text;
-  listeFilms[index].Duree:= edtDureeFilm.Text;
-  listeFilms[index].Prix:= edtPrixFilm.Text;
-  listeFilms[index].Synopsis:= MmoSynopsis.Text;
-
-  // Initialise le tableau pour écrire dans le fichier
-  valeurs[0][0]:= 'NomFilm';
-  valeurs[0][1]:= 'Duree';
-  valeurs[0][2]:= 'Synopsis';
-  valeurs[0][3]:= 'Prix';
-  
-  for i:= 0 to length(listeFilms) - 1 do
+  if not(valeurExists(FICHIER_FILMS, edtNomFilm.Text)) then
   Begin
-    valeurs[i + 1][0]:= listeFilms[i].NomFilm;
-    valeurs[i + 1][1]:= listeFilms[i].Duree;
-    valeurs[i + 1][2]:= listeFilms[i].Synopsis;
-    valeurs[i + 1][3]:= listeFilms[i].Prix;
+    setLength(valeurs, length(listeFilms) + 1, 4);
+
+    // Récupère les informations du film modifier et les mets dans le tableau
+    listeFilms[index].NomFilm:= edtNomFilm.Text;
+    listeFilms[index].Duree:= edtDureeFilm.Text;
+    listeFilms[index].Prix:= edtPrixFilm.Text;
+    listeFilms[index].Synopsis:= MmoSynopsis.Text;
+
+    // Initialise le tableau pour écrire dans le fichier
+    valeurs[0][0]:= 'NomFilm';
+    valeurs[0][1]:= 'Duree';
+    valeurs[0][2]:= 'Synopsis';
+    valeurs[0][3]:= 'Prix';
+
+    for i:= 0 to length(listeFilms) - 1 do
+    Begin
+      valeurs[i + 1][0]:= listeFilms[i].NomFilm;
+      valeurs[i + 1][1]:= listeFilms[i].Duree;
+      valeurs[i + 1][2]:= listeFilms[i].Synopsis;
+      valeurs[i + 1][3]:= listeFilms[i].Prix;
+    end;
+
+
+    if ecritDansFichier(valeurs, FICHIER_FILMS) then
+      MessageDlg('Modification effectuée avec succès !', mtInformation, [mbOk, mbCancel], 0)
+    else
+      MessageDlg('Une erreur est survenue lors de la modification !', mtError, [mbOk, mbCancel], 0);
+
+    chargeListeFilm(); // Charge la nouvelle liste
+  end
+  else
+  Begin
+    reponse:= MessageDlg('Ce nom de film est déjà prit !', mtError ,[mbOk, mbRetry, mbCancel], 0);
   end;
 
+  if not(reponse = mrRetry) then
+  Begin
+    // Remet la fenêtre comme elle se trouve au départ
+    changeEtat(true);
+    LbxListeFilms.ItemIndex:= 0;
+    self.Height:= FRM_HEIGHT_MIN;
+  end;
 
-  if ecritDansFichier(valeurs, FICHIER_FILMS) then
-    ShowMessage('Modification effectuée avec succès !')
-  else
-    ShowMessage('Une erreur est survenue lors de la modification !');
-
-  chargeListeFilm(); // Charge la nouvelle liste
-  
-  // Remet la fenêtre comme elle se trouve au départ
-  changeEtat(true);
   LbxListeFilms.ItemIndex:= 0;
-  self.Height:= FRM_HEIGHT_MIN;
 end;
 
 { ****************************************************************************
@@ -282,40 +315,48 @@ procedure TFrmGestionFilms.BtnSupprimerClick(Sender: TObject);
 var
   index, i: integer;
   valeurs: TValeurs;
+  reponse : word;
 begin
-  // Initialisation des variables
-  setLength(valeurs, length(listeFilms) + 1, 4);
-  index:= LbxListeFilms.ItemIndex;
+  // Demande confirmation
+  reponse:= MessageDlg('Voulez-vous vraiment supprimer ce film ?', mtWarning, [mbYes,mbNo], 0);
 
-  // "Suppresion" du film
-  listeFilms[index].NomFilm:= '';
-  listeFilms[index].Duree:= '';
-  listeFilms[index].Prix:= '';
-  listeFilms[index].Synopsis:= '';
-
-  index:= 0;
-  valeurs[0][0]:= 'NomSalle';
-  valeurs[0][1]:= 'Places';
-
-  // Nettoyage du tableau (Enlève l'élément vide)
-  for i:= 0 to length(listeFilms) - 1 do
+  // Test la réponse de la boîte de dialogue
+  if reponse = mrYes then
   Begin
-    if listeFilms[i].NomFilm <> '' then
-    Begin
-      valeurs[index + 1][0]:= listeFilms[i].NomFilm;
-      valeurs[index + 1][1]:= listeFilms[i].Duree;
-      valeurs[index + 1][2]:= listeFilms[i].Synopsis;
-      valeurs[index + 1][3]:= listeFilms[i].Prix;
-      inc(index);
-    end;
-  end;
+    // Initialisation des variables
+    setLength(valeurs, length(listeFilms) + 1, 4);
+    index:= LbxListeFilms.ItemIndex;
 
-  if ecritDansFichier(valeurs, FICHIER_FILMS) then
-    ShowMessage('Le film a bien été supprimé !')
-  else
-    ShowMessage('Une erreur est survenue lors de la suppression !');
-    
-  chargeListeFilm();
+    // "Suppresion" du film
+    listeFilms[index].NomFilm:= '';
+    listeFilms[index].Duree:= '';
+    listeFilms[index].Prix:= '';
+    listeFilms[index].Synopsis:= '';
+
+    index:= 0;
+    valeurs[0][0]:= 'NomSalle';
+    valeurs[0][1]:= 'Places';
+
+    // Nettoyage du tableau (Enlève l'élément vide)
+    for i:= 0 to length(listeFilms) - 1 do
+    Begin
+      if listeFilms[i].NomFilm <> '' then
+      Begin
+        valeurs[index + 1][0]:= listeFilms[i].NomFilm;
+        valeurs[index + 1][1]:= listeFilms[i].Duree;
+        valeurs[index + 1][2]:= listeFilms[i].Synopsis;
+        valeurs[index + 1][3]:= listeFilms[i].Prix;
+        inc(index);
+      end;
+    end;
+
+    if ecritDansFichier(valeurs, FICHIER_FILMS) then
+      MessageDlg('Le film a bien été supprimé !', mtInformation, [mbOk, mbCancel], 0)
+    else
+      MessageDlg('Une erreur est survenue lors de la suppression !', mtError, [mbOk, mbCancel], 0);
+
+    chargeListeFilm();
+  end;
 end;
 
 end.

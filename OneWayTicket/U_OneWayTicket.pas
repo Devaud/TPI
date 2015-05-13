@@ -32,7 +32,6 @@ type
     Timer1: TTimer;
     lblHeureCourante: TLabel;
     Label2: TLabel;
-    PrintDialog1: TPrintDialog;
     procedure Quitter1Click(Sender: TObject);
     procedure Timer1Timer(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -42,6 +41,7 @@ type
     procedure changeSecances(incremente: integer);
     procedure BtnSeanceSuivanteClick(Sender: TObject);
     procedure BtnSeancePrecedenteClick(Sender: TObject);
+    procedure destruction();
   private
     { Déclarations privées }
   public
@@ -70,7 +70,7 @@ CONST
   TAILLE_WIDTH        : integer = 193;
   TAILLE_HEIGHT       : integer = 57;
   MDP_ADMIN           : String  = 'Neko1';
-  MAX_IMAGE_BOUTON    : integer = 12;
+  MAX_IMAGE_BOUTON    : integer = 11;
   MAX_TICKETS_PAGE    : integer = 6;
   CARAC_LIGNE_TICKET  : integer = 59;
   TEMPS_ACTUALISATION : integer = 100;
@@ -280,13 +280,32 @@ begin
   ecritDansFichier(valeurs, FICHIER_STATS);
 end;
 
+{ ****************************************************************************
+  *** Détruit les objets et la liste                                       ***
+  **************************************************************************** }
+procedure TFrmOneWayTickets.destruction();
+var
+  i: integer;
+  bouton: TImageBouton;
+Begin
+  // Parcoure la liste et détruit les objets
+  for i:= 0 to listImageBouton.Count - 1 do
+  Begin
+    bouton:= listImageBouton[i];
+    bouton.Destroy;
+    listImageBouton[i]:= bouton;
+  end;
+
+  listImageBouton.Destroy;
+end;
+
 
 { ****************************************************************************
   *** Change la secance de l'affichage des séances                         ***
   **************************************************************************** }
 procedure TFrmOneWayTickets.changeSecances(incremente: integer);
 Begin
-  listImageBouton.Destroy;
+  destruction();
   secance:= secance + incremente;
   Initialisation();
 end;
@@ -452,17 +471,18 @@ Begin
     reservations[7]:= places;
 
     if ajoutUneLigne(reservations, FICHIER_RESERV)then
-      ShowMessage('Reservation effectuée avec succès !')
+      MessageDlg('Reservation effectuée avec succés !', mtInformation, [mbOk, mbCancel], 0)
     else
-      ShowMessage('Une erreur est survenue lors de la suppression !');
+      MessageDlg('Une erreur est survenue lors de la réservation !', mtError, [mbOk, mbCancel], 0);
 
-    generationTickets(reservations, FrmReservation.lblNomFilm.Caption, FrmReservation.lblSalle.Caption, prix);
+    //generationTickets(reservations, FrmReservation.lblNomFilm.Caption, FrmReservation.lblSalle.Caption, prix);
 
     // Met a jour les statistiques
     statistique();
 
   end;
 
+  //destruction();
   Initialisation();
 end;
 
@@ -534,6 +554,7 @@ Begin
   jourActuelle:= FormatDateTime('dddd', now());
   temp:= 0; // Recommence le compte
   nbPlacesTotal:= 0;
+  i:= 0;
   nbLigne:= nbLignesFichier(FICHIER_SEANCES) div NOMBRE_SECTIONS; // Charge le nombre de séances (nombre de ligne diviser par le nombre de données dans les sections)
   // Initialisation des seances
   SetLength(listSeances, nbLigne);
@@ -546,12 +567,20 @@ Begin
   y:= START; // Position Y de départ du bouton
   index:= secance;
 
-  // Crée la liste des bouton
+  // Crée la liste des boutons
   listImageBouton:= TList.Create();
   nbImageBouton:= length(Seances);
   
-  for i:= 0 to MAX_IMAGE_BOUTON - 1 do
+  for i:= 0 to MAX_IMAGE_BOUTON do
   Begin
+    // Test s'il y a encore des séances à afficher
+    if index = nbImageBouton - 1 then
+    Begin
+      BtnSeanceSuivante.Enabled:= false;
+      Break;
+    end
+    else
+      BtnSeanceSuivante.Enabled:= true;
 
     bouton:= TImageBouton.Create(FrmOneWayTickets, seances[index][0], seances[index][1], seances[index][2], seances[index][3], x, y);
 
@@ -605,9 +634,10 @@ Begin
       y:= y + TAILLE_HEIGHT + ECART_X; // Déplace les prochain bouton sur la seconde ligne
       x:= START; // Redémare la ligne au début
     end;
-      
+
     inc(index);
   end;
+
 
   // Test le nombre de bouton qu'il y a pour activé le bouton des séances
   // suivantes
@@ -730,7 +760,7 @@ begin
     else
     Begin
       // Message d'erreur
-      ShowMessage('Connexion refusée ! Mot de passe administrateur refusé !');
+      MessageDlg('Connexion refusée !' + #13#10 + 'Mot de passe administrateur incorrect !', mtError, [mbOk, mbCancel], 0);
     end;
   end;
 end;
@@ -753,7 +783,7 @@ procedure TFrmOneWayTickets.BtnSeancePrecedenteClick(Sender: TObject);
 begin
   changeSecances(MAX_IMAGE_BOUTON * (-1));
   
-  if secance <= 0 then
+  if secance = 0 then
     BtnSeancePrecedente.Enabled:= false;
 end;
 

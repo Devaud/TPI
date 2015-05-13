@@ -35,6 +35,7 @@ Type
     property pSection : string read section write section;
     property pSalle : String read salle write salle;
     property pPlaces : Integer read places write places;
+    destructor Destroy; overload;
   end;
 
 CONST
@@ -122,6 +123,16 @@ Begin
   OnClick:= Click;
   lblNomFilm.OnClick:= Click;
   lblHoraire.OnClick:= Click;
+end;
+
+{ ****************************************************************************
+  *** Destructeur de l'objet                                 ***
+  **************************************************************************** }
+destructor TImageBouton.Destroy();
+Begin
+  lblNomFilm.Destroy;
+  lblHoraire.Destroy;
+  inherited Destroy;
 end;
 
 { ****************************************************************************

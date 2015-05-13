@@ -112,7 +112,7 @@ Begin
 
   // Charge les valeurs du ficheir salles
   valeur:= lireFichier(FICHIER_SALLES);
-  for i:= 1 to length(valeur) do
+  for i:= 1 to length(valeur) - 1 do
   Begin
     // Test s'il y a une valeur
     if valeur[i] = '' then
@@ -137,9 +137,18 @@ end;
   *** Annule les modification                                              ***
   **************************************************************************** }
 procedure TFrmGestionSalles.BtnAnuulerClick(Sender: TObject);
+var
+  reponse : word;
 begin
-  changeEtat(true);
-  self.Height:= FRM_HEIGHT_MIN;
+  // Récupère la réponse
+  reponse:= MessageDlg('Etes-vous sûr de vouloir annuler les modifications ?', mtConfirmation, [mbYes, mbNo, mbCancel], 0);
+
+  // Test si la réponse est oui
+  if reponse = mrYes then
+  Begin
+    changeEtat(true);
+    self.Height:= FRM_HEIGHT_MIN;
+  end;
 end;
 
 { ****************************************************************************
@@ -179,10 +188,18 @@ begin
     valeurs[0]:= FrmAjouterSalle.edtNomSalle.Text;
     valeurs[1]:= FrmAjouterSalle.edtPlacesMax.Text;
 
-    if ajoutUneLigne(valeurs, FICHIER_SALLES) then
-      ShowMessage('Salle ajoutée avec succès !')
+    // Test si la salle existe déjà
+    if not(valeurExists(FICHIER_SALLES, valeurs[0])) then
+    Begin
+      if ajoutUneLigne(valeurs, FICHIER_SALLES) then
+        MessageDlg('Salle ajoutée avec succès !', mtInformation, [mbOk, mbCancel], 0)
+      else
+        MessageDlg('Une erreur est survenue lors de l''ajout !', mtError, [mbOk, mbCancel], 0);
+    end
     else
-      ShowMessage('Une erreur est survenue lors de la suppression !');
+    Begin
+      MessageDlg('La salle existe déjà !', mtError, [mbOk, mbCancel], 0);
+    end;   
 
     chargeListeSalles();
   end;
@@ -217,33 +234,49 @@ procedure TFrmGestionSalles.BtnValiderModificationClick(Sender: TObject);
 var
   index, i: integer;
   valeurs: TValeurs;
+  reponse : word;
 begin
+  reponse:= 0 ;
   index:= LbxListeSalles.ItemIndex;
-  setLength(valeurs, length(listeSalles) + 1, 2);
-
-  // Récupère les informations du film modifier et les mets dans le tableau
-  listeSalles[index].NomSalle:= edtNomSalle.Text;
-  listeSalles[index].Places:= edtPlacesMax.Text;
-
-  // Initialise le tableau pour écrire dans le fichier
-  valeurs[0][0]:= 'NomSalle';
-  valeurs[0][1]:= 'Places';
-  for i:= 0 to length(listeSalles) - 1 do
+  
+  if not(valeurExists(FICHIER_SALLES, edtNomSalle.Text)) then
   Begin
-    valeurs[i + 1][0]:= listeSalles[i].NomSalle;
-    valeurs[i + 1][1]:= listeSalles[i].Places;
+    setLength(valeurs, length(listeSalles) + 1, 2);
+
+    // Récupère les informations du film modifier et les mets dans le tableau
+    listeSalles[index].NomSalle:= edtNomSalle.Text;
+    listeSalles[index].Places:= edtPlacesMax.Text;
+
+    // Initialise le tableau pour écrire dans le fichier
+    valeurs[0][0]:= 'NomSalle';
+    valeurs[0][1]:= 'Places';
+    for i:= 0 to length(listeSalles) - 1 do
+    Begin
+      valeurs[i + 1][0]:= listeSalles[i].NomSalle;
+      valeurs[i + 1][1]:= listeSalles[i].Places;
+    end;
+
+    if ecritDansFichier(valeurs, FICHIER_SALLES) then
+      MessageDlg('Modification effectuée avec succès !', mtInformation, [mbOk, mbCancel], 0)
+    else
+      MessageDlg('Une erreur est survenue lors de la modificatgion !', mtError, [mbOk, mbCancel], 0);
+
+    chargeListeSalles(); // Charge la nouvelle liste
+  end
+  else
+  Begin
+    reponse:= MessageDlg('Ce nom de salle est déjà prit !', mtError ,[mbOk, mbRetry, mbCancel], 0);
   end;
 
-  if ecritDansFichier(valeurs, FICHIER_SALLES) then
-    ShowMessage('Modification effectuée avec succès !')
-  else
-    ShowMessage('Une erreur est survenue lors de la suppression !');
+  if not(reponse = mrRetry) then
+  Begin
+    // Remet la fenêtre comme elle se trouve au départ
+    changeEtat(true);
+    self.Height:= FRM_HEIGHT_MIN;
+  end;
 
-  chargeListeSalles(); // Charge la nouvelle liste
+  LbxListeSalles.ItemIndex:= index;
   
-  // Remet la fenêtre comme elle se trouve au départ
-  changeEtat(true);
-  self.Height:= FRM_HEIGHT_MIN;
 end;
 
 { ****************************************************************************
@@ -253,36 +286,44 @@ procedure TFrmGestionSalles.BtnSupprimerClick(Sender: TObject);
 var
   index, i: integer;
   valeurs: TValeurs;
+  reponse : word;
 begin
-  // Initialisation des variables
-  setLength(valeurs, length(listeSalles) + 1, 2);
-  index:= LbxListeSalles.ItemIndex;
+  // Demande confirmation
+  reponse:= MessageDlg('Voulez-vous vraiment supprimer cette salle ?', mtWarning, [mbYes,mbNo], 0);
 
-  // "Suppresion" du film
-  listeSalles[index].NomSalle:= '';
-  listeSalles[index].Places:= '';
-
-  index:= 0;
-  valeurs[0][0]:= 'NomSalle';
-  valeurs[0][1]:= 'Places';
-
-  // Nettoyage du tableau (Enlève l'élément vide)
-  for i:= 0 to length(listeSalles) - 1 do
+  // Test la réponse de la boîte de dialogue
+  if reponse = mrYes then
   Begin
-    if listeSalles[i].NomSalle <> '' then
+    // Initialisation des variables
+    setLength(valeurs, length(listeSalles) + 1, 2);
+    index:= LbxListeSalles.ItemIndex;
+
+    // "Suppresion" du film
+    listeSalles[index].NomSalle:= '';
+    listeSalles[index].Places:= '';
+
+    index:= 0;
+    valeurs[0][0]:= 'NomSalle';
+    valeurs[0][1]:= 'Places';
+
+    // Nettoyage du tableau (Enlève l'élément vide)
+    for i:= 0 to length(listeSalles) - 1 do
     Begin
-      valeurs[index + 1][0]:= listeSalles[i].NomSalle;
-      valeurs[index + 1][1]:= listeSalles[i].Places;
-      inc(index);
+      if listeSalles[i].NomSalle <> '' then
+      Begin
+        valeurs[index + 1][0]:= listeSalles[i].NomSalle;
+        valeurs[index + 1][1]:= listeSalles[i].Places;
+        inc(index);
+      end;
     end;
+
+    if ecritDansFichier(valeurs, FICHIER_SALLES) then
+      MessageDlg('La salle a bien étée supprimée !', mtInformation, [mbOk, mbCancel], 0)
+    else
+      MessageDlg('Une erreur est survenue lors de la suppression !', mtError, [mbOk, mbCancel], 0);
+
+    chargeListeSalles();
   end;
-
-  if ecritDansFichier(valeurs, FICHIER_SALLES) then
-    ShowMessage('La salle a bien étée supprimée !')
-  else
-    ShowMessage('Une erreur est survenue lors de la suppression !');
-
-  chargeListeSalles();
 end;
 
 end.

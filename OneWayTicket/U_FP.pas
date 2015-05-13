@@ -24,6 +24,7 @@ type
   function ajoutUneLigne(elements: array of String; fichier: string): boolean;
   function lireFichier(fichier: String): TValeur;
   function nbLignesFichier(fichier: string): integer;
+  function valeurExists(fichier, valeur: string): boolean;
 
 // Information sur les séances
 Type
@@ -296,6 +297,48 @@ Begin
   SL.LoadFromFile(fichier);
   Result:= SL.Count;
   FreeAndNil(SL);
+end;
+
+
+{ ****************************************************************************
+  *** Vérifie si l'élément exist dans le fichier                           ***
+  *** @params String fichier - Chemin du fichier                           ***
+  *** @params String valeur - Valeur à chercher dans le fichier            ***
+  *** @Result integer - renvoi vrai si la valeur est trouvée               ***
+  **************************************************************************** }
+function valeurExists(fichier, valeur: string): boolean;
+var
+  lignes: TValeur;
+  i, j: integer;
+  exist: boolean;
+  OutPutList: TSTringList;
+Begin
+  //Initialise les variables et récupère les données du fichier
+  lignes:= lireFichier(fichier);
+  exist:= false;
+
+  // Tourne dans chaque lignes
+  for i:= 0 to length(valeur) - 1 do
+  Begin
+    // Crée une TStringList pour récupérer les éléments d'une ligne
+    OutPutList:= TStringList.Create;
+    OutPutList:= Split(lignes[i], CARAC_SEPARATION);
+
+    // Tourne dans la lsite
+    for j:= 0 to OutPutList.Count - 1 do
+    Begin
+      // Vérifie si la valeur de la liste[i] vaut la valeur à chercher
+      if UpperCase(OutPutList[j]) = UpperCase(valeur) then
+        exist:= true;
+    end;
+
+    // Test si existe est vrai
+    if exist then
+      Break;
+  end;
+
+  Result:= exist;
+
 end;
 
 end.

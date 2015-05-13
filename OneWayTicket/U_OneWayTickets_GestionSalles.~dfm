@@ -1,6 +1,6 @@
 object FrmGestionSalles: TFrmGestionSalles
-  Left = 679
-  Top = 218
+  Left = 549
+  Top = 160
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
   Caption = 'OneWay Tickets - Gestion des salles'

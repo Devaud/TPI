@@ -525,9 +525,9 @@ begin
 
   // Sauvegarde dans le fichier
   if sauvegardeIni(FICHIER_SEANCES, listeSeances[index].section, CleVal) then
-    ShowMessage('Séance modifiée avec succè !')
+    MessageDlg('Modification effectuée avec succès !', mtInformation, [mbOk, mbCancel], 0)
   else
-    ShowMessage('Une erreur est survenue lors de la suppression !');
+    MessageDlg('Une erreur est survenue lors de la suppression !', mtError, [mbOk, mbCancel], 0);
 
   chargeListeSeances();
   LbxListeSeances.ItemIndex:= index;
@@ -544,67 +544,76 @@ var
   index, i: integer;
   CleVal: TCleVal;
   f: TextFile;
+  reponse: word;
 begin
-  // Initialisation des variables
-  index:= LbxListeSeances.ItemIndex;
+  // Demande confirmation
+  reponse:= MessageDlg('Voulez-vous vraiment supprimer cette séances ?', mtWarning, [mbYes,mbNo], 0);
 
-   // "Suppresion" de la séance
-  ListeSeances[index].film:= '';
-  ListeSeances[index].salle:= '';
-  ListeSeances[index].jourDiff:= '';
-  listeSeances[index].heure1:= '';
-  listeSeances[index].heure2:= '';
-  listeSeances[index].heure3:= '';
-  listeSeances[index].heure4:= '';
-  listeSeances[index].diffuser:= '';
-
-  // Efface le fichier
-  if FileExists(FICHIER_SEANCES) then
+  // Test la réponse de la boîte de dialogue
+  if reponse = mrYes then
   Begin
-    AssignFile(f, FICHIER_SEANCES);
-    Rewrite(f);
-    CloseFile(f);
-  end;
+    // Initialisation des variables
+    index:= LbxListeSeances.ItemIndex;
 
-  index:= 1;
-  // Nettoyage du tableau (Enlève l'élément vide)
-  for i:= 0 to length(listeSeances) - 1 do
-  Begin
-    if listeSeances[i].film <> '' then
+    // "Suppresion" de la séance
+    ListeSeances[index].film:= '';
+    ListeSeances[index].salle:= '';
+    ListeSeances[index].jourDiff:= '';
+    listeSeances[index].heure1:= '';
+    listeSeances[index].heure2:= '';
+    listeSeances[index].heure3:= '';
+    listeSeances[index].heure4:= '';
+    listeSeances[index].diffuser:= '';
+
+    // Efface le fichier
+    if FileExists(FICHIER_SEANCES) then
     Begin
-
-      // Initialisation des valeurs a sauvegarder dans le fichier INI
-      CleVal[0][0]:= 'Film';
-      CleVal[0][1]:= listeSeances[i].film;
-
-      CleVal[1][0]:= 'Salle';
-      CleVal[1][1]:= listeSeances[i].salle;
-
-      CleVal[2][0]:= 'JourDiff';
-      CleVal[2][1]:= listeSeances[i].jourDiff;
-
-      CleVal[3][0]:= 'Heure1';
-      CleVal[3][1]:= listeSeances[i].heure1;
-
-      CleVal[4][0]:= 'Heure2';
-      CleVal[4][1]:= listeSeances[i].heure2;
-
-      CleVal[5][0]:= 'Heure3';
-      CleVal[5][1]:= listeSeances[i].heure3;
-
-      CleVal[6][0]:= 'Heure4';
-      CleVal[6][1]:= listeSeances[i].heure4;
-
-      CleVal[7][0]:= 'Diffuser';
-      CleVal[7][1]:= listeSeances[i].diffuser;
-      
-      sauvegardeIni(FICHIER_SEANCES, IntToStr(index), CleVal);
-      inc(index);
+      AssignFile(f, FICHIER_SEANCES);
+      Rewrite(f);
+      CloseFile(f);
     end;
-  end;
 
-  ShowMessage('La séance a bien été supprimée !');
-  chargeListeSeances();
+    index:= 1;
+
+    // Nettoyage du tableau (Enlève l'élément vide)
+    for i:= 0 to length(listeSeances) - 1 do
+    Begin
+      if listeSeances[i].film <> '' then
+      Begin
+
+        // Initialisation des valeurs a sauvegarder dans le fichier INI
+        CleVal[0][0]:= 'Film';
+        CleVal[0][1]:= listeSeances[i].film;
+
+        CleVal[1][0]:= 'Salle';
+        CleVal[1][1]:= listeSeances[i].salle;
+
+        CleVal[2][0]:= 'JourDiff';
+        CleVal[2][1]:= listeSeances[i].jourDiff;
+
+        CleVal[3][0]:= 'Heure1';
+        CleVal[3][1]:= listeSeances[i].heure1;
+
+        CleVal[4][0]:= 'Heure2';
+        CleVal[4][1]:= listeSeances[i].heure2;
+
+        CleVal[5][0]:= 'Heure3';
+        CleVal[5][1]:= listeSeances[i].heure3;
+
+        CleVal[6][0]:= 'Heure4';
+        CleVal[6][1]:= listeSeances[i].heure4;
+
+        CleVal[7][0]:= 'Diffuser';
+        CleVal[7][1]:= listeSeances[i].diffuser;
+
+        sauvegardeIni(FICHIER_SEANCES, IntToStr(index), CleVal);
+        inc(index);
+      end;
+    end;
+    
+    MessageDlg('La séance a bien été supprimée !', mtInformation, [mbOk, mbCancel], 0);
+    chargeListeSeances();
+  end;
 end;
 
 { ****************************************************************************

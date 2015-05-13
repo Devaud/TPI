@@ -1,6 +1,6 @@
 object FrmAjouterFilm: TFrmAjouterFilm
-  Left = 718
-  Top = 406
+  Left = 471
+  Top = 339
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsDialog
   Caption = 'OneWay Tickets - Ajouter un film'
