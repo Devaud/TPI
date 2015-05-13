@@ -554,6 +554,7 @@ var
   bouton: TImageBouton;
   valeur: TValeur;
 Begin
+
   jourActuelle:= FormatDateTime('dddd', now());
   temp:= 0; // Recommence le compte
   nbPlacesTotal:= 0;

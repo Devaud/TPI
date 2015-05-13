@@ -1,4 +1,4 @@
-NomSalle;Places;;
+NomFilm;Duree;Synopsis;Prix
 The Hobbit;150;dsadasdasfjoaisdas;5
 Mon méga film;150;Pas cher et très bien;2
 Un autre méga film;300;Celui là est mieux mais beaucoup plus chèr;20
@@ -6,5 +6,5 @@ Film2;165;mklsmadkmsladmpoasvfsmvoswmvoimswvoimcvqmdsmadp,msakcmkldsmvpobviswmvo
 JJK;150;dsadasdasfjoaisdas;5
 Minimoise;170;fsadsa;5
 Hercul;250;cdsa;20
-Adios;111;MKsdlas;15
+Adios;118;Meilleurs synopsis;15
 The hobbit 2;250;dadsadsa;12
