@@ -202,7 +202,7 @@ Begin
         element:= element + elements[index][i];
 
         if i < length(elements[index]) - 1 then
-          element:= element + ';';
+          element:= element + CARAC_SEPARATION;
       end;
       writeln(f, element);
       inc(index);

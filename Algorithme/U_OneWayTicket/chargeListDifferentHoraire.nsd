@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root xmlns:nsd="http://structorizer.fisch.lu/" text="&#34;function chargeListDifferentHoraire(list: array of TSeance): TListSeance;&#34;" comment="&#34;&#34;" color="ffffff" type="program" style="nice">
+	<children>
+		<instruction text="&#34;index &#60;- 0&#34;" comment="&#34;&#34;" color="ffffff" rotated="0"></instruction>
+		<instruction text="&#34;SetLength(seances, 1)&#34;" comment="&#34;&#34;" color="ffffff" rotated="0"></instruction>
+		<for text="&#34;pour i &#60;- 0 à length(Seances) - 1&#34;" comment="&#34;&#34;" color="ffffff">
+			<qFor>
+				<alternative text="&#34;listSeances[i].film = ''&#34;" comment="&#34;&#34;" color="ffffff">
+					<qTrue>
+						<instruction text="&#34;Break&#34;" comment="&#34;&#34;" color="ffffff" rotated="0"></instruction>
+					</qTrue>
+					<qFalse>
+					</qFalse>
+				</alternative>
+				<instruction text="&#34;compteHoraire &#60;- 0&#34;,&#34;ajout &#60;- true&#34;" comment="&#34;&#34;" color="ffffff" rotated="0"></instruction>
+				<while text="&#34;tant que ajout&#34;" comment="&#34;&#34;" color="ffffff">
+					<qWhile>
+						<alternative text="&#34;(listSeances[i].heure1 &#60;&#62; '') and (TextEnHeure(listSeances[i].heure1) &#62; TextEnHeure(TimeToStr(now))&#34;" comment="&#34;&#34;" color="ffffff">
+							<qTrue>
+								<instruction text="&#34;Seances[index][2] &#60;- listSeances[i].section&#34;,&#34;Seances[index][1] &#60;- listSeances[i].heure1&#34;,&#34;Seances[index][0] &#60;- listSeances[i].film&#34;,&#34;Seances[index][3] &#60;- listSeances[i].salle&#34;" comment="&#34;&#34;" color="ffffff" rotated="0"></instruction>
+								<instruction text="&#34;inc(index)&#34;,&#34;inc(compteHoraire)&#34;" comment="&#34;&#34;" color="ffffff" rotated="0"></instruction>
+								<instruction text="&#34;SetLength(seances, index + 1)&#34;" comment="&#34;&#34;" color="ffffff" rotated="0"></instruction>
+							</qTrue>
+							<qFalse>
+								<instruction text="&#34;ajout &#60;- false&#34;" comment="&#34;&#34;" color="ffffff" rotated="0"></instruction>
+							</qFalse>
+						</alternative>
+						<alternative text="&#34;(listSeances[i].heure2 &#60;&#62; '') and (TextEnHeure(listSeances[i].heure2) &#62; TextEnHeure(TimeToStr(now))&#34;" comment="&#34;&#34;" color="ffffff">
+							<qTrue>
+								<instruction text="&#34;Seances[index][2] &#60;- listSeances[i].section&#34;,&#34;Seances[index][1] &#60;- listSeances[i].heure2&#34;,&#34;Seances[index][0] &#60;- listSeances[i].film&#34;,&#34;Seances[index][3] &#60;- listSeances[i].salle&#34;" comment="&#34;&#34;" color="ffffff" rotated="0"></instruction>
+								<instruction text="&#34;inc(index)&#34;,&#34;inc(compteHoraire)&#34;" comment="&#34;&#34;" color="ffffff" rotated="0"></instruction>
+								<instruction text="&#34;SetLength(seances, index + 1)&#34;" comment="&#34;&#34;" color="ffffff" rotated="0"></instruction>
+							</qTrue>
+							<qFalse>
+								<instruction text="&#34;ajout &#60;- false&#34;" comment="&#34;&#34;" color="ffffff" rotated="0"></instruction>
+							</qFalse>
+						</alternative>
+						<alternative text="&#34;(listSeances[i].heure3 &#60;&#62; '') and (TextEnHeure(listSeances[i].heure3) &#62; TextEnHeure(TimeToStr(now))&#34;" comment="&#34;&#34;" color="ffffff">
+							<qTrue>
+								<instruction text="&#34;Seances[index][2] &#60;- listSeances[i].section&#34;,&#34;Seances[index][1] &#60;- listSeances[i].heure3&#34;,&#34;Seances[index][0] &#60;- listSeances[i].film&#34;,&#34;Seances[index][3] &#60;- listSeances[i].salle&#34;" comment="&#34;&#34;" color="ffffff" rotated="0"></instruction>
+								<instruction text="&#34;inc(index)&#34;,&#34;inc(compteHoraire)&#34;" comment="&#34;&#34;" color="ffffff" rotated="0"></instruction>
+								<instruction text="&#34;SetLength(seances, index + 1)&#34;" comment="&#34;&#34;" color="ffffff" rotated="0"></instruction>
+							</qTrue>
+							<qFalse>
+								<instruction text="&#34;ajout &#60;- false&#34;" comment="&#34;&#34;" color="ffffff" rotated="0"></instruction>
+							</qFalse>
+						</alternative>
+						<alternative text="&#34;(listSeances[i].heure4 &#60;&#62; '') and (TextEnHeure(listSeances[i].heure4) &#62; TextEnHeure(TimeToStr(now))&#34;" comment="&#34;&#34;" color="ffffff">
+							<qTrue>
+								<instruction text="&#34;Seances[index][2] &#60;-  listSeances[i].section&#34;,&#34;Seances[index][1] &#60;- listSeances[i].heure4&#34;,&#34;Seances[index][0] &#60;- listSeances[i].film&#34;,&#34;Seances[index][3] &#60;- listSeances[i].salle&#34;" comment="&#34;&#34;" color="ffffff" rotated="0"></instruction>
+								<instruction text="&#34;inc(index)&#34;,&#34;inc(compteHoraire)&#34;" comment="&#34;&#34;" color="ffffff" rotated="0"></instruction>
+								<instruction text="&#34;SetLength(seances, index + 1)&#34;" comment="&#34;&#34;" color="ffffff" rotated="0"></instruction>
+							</qTrue>
+							<qFalse>
+								<instruction text="&#34;ajout &#60;- false&#34;" comment="&#34;&#34;" color="ffffff" rotated="0"></instruction>
+							</qFalse>
+						</alternative>
+						<alternative text="&#34;compteHoraire mod NOMBRE_HORAIRE_MAX = 0&#34;" comment="&#34;&#34;" color="ffffff">
+							<qTrue>
+								<instruction text="&#34;ajout &#60;- false&#34;" comment="&#34;&#34;" color="ffffff" rotated="0"></instruction>
+							</qTrue>
+							<qFalse>
+							</qFalse>
+						</alternative>
+					</qWhile>
+				</while>
+				<instruction text="&#34;Result &#60;- seances&#34;" comment="&#34;&#34;" color="ffffff" rotated="0"></instruction>
+			</qFor>
+		</for>
+	</children>
+</root>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root xmlns:nsd="http://structorizer.fisch.lu/" text="&#34;procedure generationTickets(reservation: array of String; film, salle: string; prix: array of real);&#34;" comment="&#34;&#34;" color="ffffff" type="program" style="nice">
+	<children>
+		<instruction text="&#34;SetLength(tickets, StrToInt(reservation[3]) + StrToInt(reservation[4]) + StrToInt(reservation[5]) + 1, 1)&#34;" comment="&#34;&#34;" color="ffffff" rotated="0"></instruction>
+		<instruction text="&#34;nbBilletEnfant &#60;- 0 &#34;,&#34;nbBilletAdulte &#60;- 0&#34;,&#34;nbBilletEAA &#60;- 0&#34;,&#34;nbBilletExistant &#60;- 0&#34;" comment="&#34;&#34;" color="ffffff" rotated="0"></instruction>
+		<while text="&#34;tant que nbBilletEnfant &#60; StrToInt(reservation[3])&#34;" comment="&#34;&#34;" color="ffffff">
+			<qWhile>
+				<instruction text="&#34;tickets[nbBilletEnfant + nbBilletExistant][0] &#60;- ticketAscii('enfant', reservation, prix[1], film, salle)&#34;" comment="&#34;&#34;" color="ffffff" rotated="0"></instruction>
+				<instruction text="&#34;inc(nbBilletEnfant)&#34;" comment="&#34;&#34;" color="ffffff" rotated="0"></instruction>
+			</qWhile>
+		</while>
+		<instruction text="&#34;nbBilletExistant &#60;- nbBilletEnfant + nbBilletExistant&#34;" comment="&#34;&#34;" color="ffffff" rotated="0"></instruction>
+		<while text="&#34;tant que nbBilletAdulte &#60; StrToInt(reservation[4])&#34;" comment="&#34;&#34;" color="ffffff">
+			<qWhile>
+				<instruction text="&#34;tickets[nbBilletAdulte + nbBilletExistant][0] &#60;- ticketAscii('adulte', reservation, prix[0], film, salle)&#34;" comment="&#34;&#34;" color="ffffff" rotated="0"></instruction>
+				<instruction text="&#34;inc(nbBilletAdulte)&#34;" comment="&#34;&#34;" color="ffffff" rotated="0"></instruction>
+			</qWhile>
+		</while>
+		<instruction text="&#34;nbBilletExistant &#60;- nbBilletAdulte + nbBilletExistant&#34;" comment="&#34;&#34;" color="ffffff" rotated="0"></instruction>
+		<while text="&#34;tant que nbBilletEAA &#60; StrToInt(reservation[5])&#34;" comment="&#34;&#34;" color="ffffff">
+			<qWhile>
+				<instruction text="&#34;tickets[nbBilletEAA + nbBilletExistant][0] &#60;- ticketAscii('Etudiant / A.V.S / A.V.I', reservation, prix[2], film, salle)&#34;" comment="&#34;&#34;" color="ffffff" rotated="0"></instruction>
+				<instruction text="&#34;inc(nbBilletEAA)&#34;" comment="&#34;&#34;" color="ffffff" rotated="0"></instruction>
+			</qWhile>
+		</while>
+		<alternative text="&#34;ecritDansFichier(tickets, FICHIER_TICKETS)&#34;" comment="&#34;&#34;" color="ffffff">
+			<qTrue>
+				<instruction text="&#34;ShellExecute(FrmOneWayTickets.Handle, 'Open',Pchar('NotePad'), PChar('/p ' + '&#34;&#34;' + FICHIER_TICKETS + '&#34;&#34;'), nil, SW_HIDE)&#34;" comment="&#34;&#34;" color="ffffff" rotated="0"></instruction>
+				<instruction text="&#34;FrmImpressionEnCours.visible &#60;- true&#34;,&#34;FrmImpressionEnCours.maxSecond &#60;- 20&#34;,&#34;FrmImpressionEnCours.second &#60;- 0&#34;,&#34;FrmImpressionEnCours.Timer1.Enabled &#60;- true&#34;" comment="&#34;&#34;" color="ffffff" rotated="0"></instruction>
+			</qTrue>
+			<qFalse>
+			</qFalse>
+		</alternative>
+	</children>
+</root>

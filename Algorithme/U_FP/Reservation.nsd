@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root xmlns:nsd="http://structorizer.fisch.lu/" text="&#34;procedure TFrmOneWayTickets.Reservation(film, horaire, salle, section : string; placesRestant: integer);&#34;" comment="&#34;&#34;" color="ffffff" type="program" style="nice">
+	<children>
+		<instruction text="&#34;valeur &#60;- lireFichier(FICHIER_FILMS)&#34;" comment="&#34;&#34;" color="ffffff" rotated="0"></instruction>
+		<for text="&#34;pour i &#60;- 0 à length(valeur) -1&#34;" comment="&#34;&#34;" color="ffffff">
+			<qFor>
+				<instruction text="&#34;OutPutList &#60;- Split(valeur[i], CARAC_SEPARATION)&#34;" comment="&#34;&#34;" color="ffffff" rotated="0"></instruction>
+				<alternative text="&#34;OutPutList[0] = film&#34;" comment="&#34;&#34;" color="ffffff">
+					<qTrue>
+						<instruction text="&#34;FrmReservation.lblNomFilm.Caption &#60;- film&#34;,&#34;FrmReservation.lblDuree.Caption &#60;- OutPutList[1]&#34;" comment="&#34;&#34;" color="ffffff" rotated="0"></instruction>
+						<instruction text="&#34;FrmReservation.mmoSynopsis.Clear&#34;" comment="&#34;&#34;" color="ffffff" rotated="0"></instruction>
+						<instruction text="&#34;FrmReservation.mmoSynopsis.Text &#60;- OutPutList[2]&#34;" comment="&#34;&#34;" color="ffffff" rotated="0"></instruction>
+						<instruction text="&#34;Break&#34;" comment="&#34;&#34;" color="ffffff" rotated="0"></instruction>
+					</qTrue>
+					<qFalse>
+					</qFalse>
+				</alternative>
+			</qFor>
+		</for>
+		<instruction text="&#34;valeur &#60;- lireFichier(FICHIER_SALLES)&#34;" comment="&#34;&#34;" color="ffffff" rotated="0"></instruction>
+		<for text="&#34;pour i &#60;- 0 à length(valeur) - 1&#34;" comment="&#34;&#34;" color="ffffff">
+			<qFor>
+				<instruction text="&#34;OutPutList &#60;- Split(valeur[i], CARAC_SEPARATION)&#34;" comment="&#34;&#34;" color="ffffff" rotated="0"></instruction>
+				<alternative text="&#34;OutPutList[0] = salle&#34;" comment="&#34;&#34;" color="ffffff">
+					<qTrue>
+						<instruction text="&#34;FrmReservation.lblSalle.Caption &#60;- salle&#34;,&#34;FrmReservation.lblHoraire.Caption &#60;- horaire&#34;,&#34;FrmReservation.lblPlacesRestantes.Caption &#60;- '0'&#34;" comment="&#34;&#34;" color="ffffff" rotated="0"></instruction>
+						<instruction text="&#34;Break&#34;" comment="&#34;&#34;" color="ffffff" rotated="0"></instruction>
+					</qTrue>
+					<qFalse>
+					</qFalse>
+				</alternative>
+			</qFor>
+		</for>
+		<instruction text="&#34;FrmReservation.lblPrixEnfants.Caption &#60;- 'x ' + FloatToStr(prix[1]) + ' ' + DEVISE&#34;,&#34;FrmReservation.lblPrixAdultes.Caption &#60;- 'x ' + FloatToStr(prix[0]) + ' ' + DEVISE&#34;,&#34;FrmReservation.lblPrixEAA.Caption &#60;- 'x ' + FloatToStr(prix[2]) + ' ' + DEVISE&#34;,&#34;FrmReservation.PrixEnfant &#60;- prix[1]&#34;,&#34;FrmReservation.PrixEAA &#60;- prix[2]&#34;,&#34;FrmReservation.PrixAdulte &#60;- prix[0]&#34;,&#34;FrmReservation.prixTotal &#60;- prix[0]&#34;" comment="&#34;&#34;" color="ffffff" rotated="0"></instruction>
+		<instruction text="&#34;FrmReservation.CalculTotal()&#34;" comment="&#34;&#34;" color="ffffff" rotated="0"></instruction>
+		<instruction text="&#34;FrmReservation.EdtNbBilletsEnfants.Text &#60;- '0'&#34;,&#34;FrmReservation.EdtNbBilletsAdultes.Text &#60;- '1'&#34;,&#34;FrmReservation.EdtNbBilletsEAA.Text &#60;- '0'&#34;,&#34;FrmReservation.lblPlacesRestantes.Caption &#60;- IntToStr(placesRestant)&#34;" comment="&#34;&#34;" color="ffffff" rotated="0"></instruction>
+		<alternative text="&#34;FrmReservation.ShowModal = mrOk&#34;" comment="&#34;&#34;" color="ffffff">
+			<qTrue>
+				<instruction text="&#34;NbBilletsEnfants &#60;- FrmReservation.EdtNbBilletsEnfants.Text&#34;,&#34;NbBilletsAdultes &#60;- FrmReservation.EdtNbBilletsAdultes.Text&#34;,&#34;NbBilletsEAA &#60;- FrmReservation.EdtNbBilletsEAA.Text&#34;,&#34;PrixTotal &#60;- FloatToStr(FrmReservation.prixTotal)&#34;,&#34;Date &#60;- DateToStr(now)&#34;,&#34;places &#60;- IntToStr(StrToInt(NbBilletsEnfants) + StrToInt(NbBilletsAdultes) + StrToInt(NbBilletsEAA))&#34;" comment="&#34;&#34;" color="ffffff" rotated="0"></instruction>
+				<instruction text="&#34;reservations[0] &#60;- Date&#34;,&#34;reservations[1] &#60;- horaire&#34;,&#34;reservations[2] &#60;- section&#34;,&#34;reservations[3] &#60;- NbBilletsEnfants&#34;,&#34;reservations[4] &#60;- NbBilletsAdultes&#34;,&#34;reservations[5] &#60;- NbBilletsEAA&#34;,&#34;reservations[6] &#60;- PrixTotal&#34;,&#34;reservations[7] &#60;- places&#34;" comment="&#34;&#34;" color="ffffff" rotated="0"></instruction>
+				<alternative text="&#34;ajoutUneLigne(reservations, FICHIER_RESERV)&#34;" comment="&#34;&#34;" color="ffffff">
+					<qTrue>
+						<instruction text="&#34;MessageDlg('Reservation effectuée avec succés !', mtInformation, [mbOk, mbCancel], 0)&#34;" comment="&#34;&#34;" color="ffffff" rotated="0"></instruction>
+					</qTrue>
+					<qFalse>
+						<instruction text="&#34;MessageDlg('Une erreur est survenue lors de la réservation !', mtError, [mbOk, mbCancel], 0)&#34;" comment="&#34;&#34;" color="ffffff" rotated="0"></instruction>
+					</qFalse>
+				</alternative>
+				<instruction text="&#34;generationTickets(reservations, FrmReservation.lblNomFilm.Caption, FrmReservation.lblSalle.Caption, prix)&#34;" comment="&#34;&#34;" color="ffffff" rotated="0"></instruction>
+				<instruction text="&#34;statistique()&#34;" comment="&#34;&#34;" color="ffffff" rotated="0"></instruction>
+			</qTrue>
+			<qFalse>
+			</qFalse>
+		</alternative>
+		<instruction text="&#34;Initialisation()&#34;" comment="&#34;&#34;" color="ffffff" rotated="0"></instruction>
+	</children>
+</root>

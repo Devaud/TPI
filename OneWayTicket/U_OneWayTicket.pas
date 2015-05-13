@@ -76,6 +76,7 @@ CONST
   TEMPS_ACTUALISATION : integer = 100;
   MAX_BOUTON_LIGNE    : integer = 3;
   NOMBRE_STATISTIQUE  : integer = 6;
+  NOMBRE_HORAIRE_MAX  : integer = 4;
   
 
 
@@ -108,12 +109,12 @@ end;
   **************************************************************************** }
 function chargeListDifferentHoraire(list: array of TSeance): TListSeance;
 var
-  x, i, compteHoraire: integer;
+  index, i, compteHoraire: integer;
   ajout: boolean;
   seances: TListSeance;
 Begin
   // Charge la liste des séances avec leurs heures différentes
-  x:= 0;
+  index:= 0;
 
   SetLength(seances, 1);
   for i:= 0 to length(listSeances) - 1 do
@@ -130,57 +131,57 @@ Begin
       // Test si l'heure exist et si la séance n'est pas déjà passée
       if (listSeances[i].heure1 <> '') and (TextEnHeure(listSeances[i].heure1) > TextEnHeure(TimeToStr(now()))) then
       Begin
-        Seances[x][2]:= listSeances[i].section;
-        Seances[x][1]:= listSeances[i].heure1;
-        Seances[x][0]:= listSeances[i].film;
-        Seances[x][3]:= listSeances[i].salle;
-        inc(x);
+        Seances[index][2]:= listSeances[i].section;
+        Seances[index][1]:= listSeances[i].heure1;
+        Seances[index][0]:= listSeances[i].film;
+        Seances[index][3]:= listSeances[i].salle;
+        inc(index);
         inc(compteHoraire);
-        SetLength(seances, x + 1);
+        SetLength(seances, index + 1);
       end
       else
         ajout:= false;
 
       if (listSeances[i].heure2 <> '') and (TextEnHeure(listSeances[i].heure2) > TextEnHeure(TimeToStr(now()))) then
       Begin
-        Seances[x][2]:= listSeances[i].section;
-        Seances[x][1]:= listSeances[i].heure2;
-        Seances[x][0]:= listSeances[i].film;
-        Seances[x][3]:= listSeances[i].salle;
-        inc(x);
+        Seances[index][2]:= listSeances[i].section;
+        Seances[index][1]:= listSeances[i].heure2;
+        Seances[index][0]:= listSeances[i].film;
+        Seances[index][3]:= listSeances[i].salle;
+        inc(index);
         inc(compteHoraire);
-        SetLength(seances, x + 1);
+        SetLength(seances, index + 1);
       end
       else
         ajout:= false;
 
       if (listSeances[i].heure3 <> '') and (TextEnHeure(listSeances[i].heure3) > TextEnHeure(TimeToStr(now()))) then
       Begin
-        Seances[x][2]:= listSeances[i].section;
-        Seances[x][1]:= listSeances[i].heure3;
-        Seances[x][0]:= listSeances[i].film;
-        Seances[x][3]:= listSeances[i].salle;
-        inc(x);
+        Seances[index][2]:= listSeances[i].section;
+        Seances[index][1]:= listSeances[i].heure3;
+        Seances[index][0]:= listSeances[i].film;
+        Seances[index][3]:= listSeances[i].salle;
+        inc(index);
         inc(compteHoraire);
-        SetLength(seances, x + 1);
+        SetLength(seances, index + 1);
       end
       else
         ajout:= false;
 
       if (listSeances[i].heure4 <> '') and (TextEnHeure(listSeances[i].heure4) > TextEnHeure(TimeToStr(now()))) then
       Begin
-        Seances[x][2]:= listSeances[i].section;
-        Seances[x][1]:= listSeances[i].heure4;
-        Seances[x][0]:= listSeances[i].film;
-        Seances[x][3]:= listSeances[i].salle;
-        inc(x);
+        Seances[index][2]:= listSeances[i].section;
+        Seances[index][1]:= listSeances[i].heure4;
+        Seances[index][0]:= listSeances[i].film;
+        Seances[index][3]:= listSeances[i].salle;
+        inc(index);
         inc(compteHoraire);
-        SetLength(seances, x + 1);
+        SetLength(seances, index + 1);
       end
       else
         ajout:= false;
 
-      if compteHoraire mod 4 = 0 then
+      if compteHoraire mod NOMBRE_HORAIRE_MAX = 0 then
         ajout:= false;
     end;
   end;
@@ -346,7 +347,7 @@ var
   tickets: TValeurs;
 Begin
   // Initialisation des paramètres
-  SetLength(tickets, StrToInt(reservation[3]) + StrToInt(reservation[4]) + StrToInt(reservation [5]) + 1, 1);
+  SetLength(tickets, StrToInt(reservation[3]) + StrToInt(reservation[4]) + StrToInt(reservation[5]) + 1, 1);
   nbBilletEnfant:= 0 ;
   nbBilletAdulte:= 0;
   nbBilletEAA:= 0;
@@ -408,7 +409,7 @@ Begin
   valeur:= lireFichier(FICHIER_FILMS);
   for i:= 0 to length(valeur) - 1 do
   Begin
-    OutPutList:= Split(valeur[i], ';');
+    OutPutList:= Split(valeur[i], CARAC_SEPARATION);
     if OutPutList[0] = film then
     Begin
       FrmReservation.lblNomFilm.Caption:= film;
@@ -423,7 +424,7 @@ Begin
   valeur:= lireFichier(FICHIER_SALLES);
   for i:= 0 to length(valeur) - 1 do
   Begin
-    OutPutList:= Split(valeur[i], ';');
+    OutPutList:= Split(valeur[i], CARAC_SEPARATION);
     if OutPutList[0] = salle then
     Begin
       FrmReservation.lblSalle.Caption:= salle;
@@ -470,19 +471,19 @@ Begin
     reservations[6]:= PrixTotal;
     reservations[7]:= places;
 
-    if ajoutUneLigne(reservations, FICHIER_RESERV)then
+    if ajoutUneLigne(reservations, FICHIER_RESERV) then
       MessageDlg('Reservation effectuée avec succés !', mtInformation, [mbOk, mbCancel], 0)
     else
       MessageDlg('Une erreur est survenue lors de la réservation !', mtError, [mbOk, mbCancel], 0);
 
-    //generationTickets(reservations, FrmReservation.lblNomFilm.Caption, FrmReservation.lblSalle.Caption, prix);
+    generationTickets(reservations, FrmReservation.lblNomFilm.Caption, FrmReservation.lblSalle.Caption, prix);
 
     // Met a jour les statistiques
     statistique();
 
   end;
 
-  //destruction();
+ // destruction();
   Initialisation();
 end;
 
@@ -637,7 +638,6 @@ Begin
 
     inc(index);
   end;
-
 
   // Test le nombre de bouton qu'il y a pour activé le bouton des séances
   // suivantes

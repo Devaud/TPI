@@ -303,8 +303,8 @@ end;
 { ****************************************************************************
   *** Vérifie si l'élément exist dans le fichier                           ***
   *** @params String fichier - Chemin du fichier                           ***
-  *** @params String valeur - 
-  *** @Result integer - renvoi le nombre de ligne d'un fichier             ***
+  *** @params String valeur - Valeur à chercher dans le fichier            ***
+  *** @Result integer - renvoi vrai si la valeur est trouvée               ***
   **************************************************************************** }
 function valeurExists(fichier, valeur: string): boolean;
 var
