@@ -502,9 +502,9 @@ begin
     NomSection:= IntToStr(compteSectionIni(FICHIER_SEANCES) + 1);
 
     if sauvegardeIni(FICHIER_SEANCES, NomSection, CleVal) then
-      ShowMessage('Séance ajoutée avec succè !')
+      MessageDlg('Séance anoutée avec succès !', mtInformation, [mbOk, mbCancel], 0)
     else
-      ShowMessage('Une erreur est survenue lors de la suppression !');
+      MessageDlg('Une erreur est survenue lors de l''ajout !', mtError, [mbOk, mbCancel], 0);
 
     chargeListeSeances();
   end;
