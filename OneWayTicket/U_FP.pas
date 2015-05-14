@@ -68,6 +68,7 @@ const
   NOMBRE_SECTIONS  : Integer = 9;
   CARAC_SEPARATION : String  = ';';
   FORMAT_DATE      : String  = 'mmmm';  
+  CARAC_TEXT_SUITE : String  = '...';
 
 
 
@@ -158,8 +159,8 @@ Begin
   
   if length(text) > taille then
   Begin
-    text:= copy(text, 1, taille - 3);
-    text:= text + '...';
+    text:= copy(text, 1, taille - length(CARAC_TEXT_SUITE));
+    text:= text + CARAC_TEXT_SUITE;
   end;
 
   if length(text) < taille then

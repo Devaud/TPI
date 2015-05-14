@@ -595,7 +595,7 @@ Begin
     Begin
       if valeur[j] = '' then
         Break;
-      OutPutList:= Split(valeur[j], ';');
+      OutPutList:= Split(valeur[j], CARAC_SEPARATION);
       if OutPutList[0] = seances[index][3] then
       Begin
         nbPlacesTotal:= StrToInt(OutPutList[1]);
@@ -611,7 +611,7 @@ Begin
       if valeur[j] = '' then
         Break;
 
-      OutPutList:= Split(valeur[j], ';');
+      OutPutList:= Split(valeur[j], CARAC_SEPARATION);
       if (OutPutList[0] = DateToStr(now)) and (OutPutList[1] = seances[index][1])
         and (OutPutList[2] = seances[index][2]) then
       Begin
@@ -656,7 +656,7 @@ Begin
     if valeur[i] = '' then
         Break;
 
-    OutPutList:= Split(valeur[i], ';');
+    OutPutList:= Split(valeur[i], CARAC_SEPARATION);
     prix[i]:= StrToInt(OutPutList[1]);
     prix[i]:= StrToInt(OutPutList[1]);
     prix[i]:= StrToInt(OutPutList[1]);

@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root xmlns:nsd="http://structorizer.fisch.lu/" text="&#34;procedure TFrmOneWayTickets.Initialisation();&#34;" comment="&#34;&#34;" color="ffffff" type="program" style="nice">
+	<children>
+		<instruction text="&#34;jourActuelle &#60;- FormatDateTime('dddd', now())&#34;,&#34;temp &#60;- 0&#34;,&#34;nbPlacesTotal &#60;- 0&#34;,&#34;i &#60;- 0&#34;,&#34;nbLigne &#60;- nbLignesFichier(FICHIER_SEANCES) div NOMBRE_SECTIONS&#34;" comment="&#34;&#34;" color="ffffff" rotated="0"></instruction>
+		<instruction text="&#34;SetLength(listSeances, nbLigne)&#34;,&#34;chargeToutesLesSeances()&#34;" comment="&#34;&#34;" color="ffffff" rotated="0"></instruction>
+		<instruction text="&#34;Seances &#60;- chargeListDifferentHoraire(listSeances)&#34;" comment="&#34;&#34;" color="ffffff" rotated="0"></instruction>
+		<instruction text="&#34;x &#60;- START&#34;,&#34;y &#60;- START&#34;,&#34;listImageBouton &#60;- TList.Create()&#34;,&#34;nbImageBouton &#60;- length(Seances)&#34;" comment="&#34;&#34;" color="ffffff" rotated="0"></instruction>
+		<for text="&#34;pour i &#60;- 0 à MAX_IMAGE_BOUTON&#34;" comment="&#34;&#34;" color="ffffff">
+			<qFor>
+				<alternative text="&#34;index = nbImageBouton - 1&#34;" comment="&#34;&#34;" color="ffffff">
+					<qTrue>
+						<instruction text="&#34;BtnSeanceSuivante.Enabled &#60;- false&#34;,&#34;Break&#34;" comment="&#34;&#34;" color="ffffff" rotated="0"></instruction>
+					</qTrue>
+					<qFalse>
+						<instruction text="&#34;BtnSeanceSuivante.Enabled &#60;- true&#34;" comment="&#34;&#34;" color="ffffff" rotated="0"></instruction>
+					</qFalse>
+				</alternative>
+				<instruction text="&#34;bouton &#60;- TImageBouton.Create(FrmOneWayTickets, seances[index][0], seances[index][1], seances[index][2], seances[index][3], x, y)&#34;" comment="&#34;&#34;" color="ffffff" rotated="0"></instruction>
+				<instruction text="&#34;valeur &#60;- lireFichier(FICHIER_SALLES)&#34;" comment="&#34;&#34;" color="ffffff" rotated="0"></instruction>
+				<for text="&#34;pour j &#60;- 0 à length(valeur) - 1&#34;" comment="&#34;&#34;" color="ffffff">
+					<qFor>
+						<alternative text="&#34;valeur[j] = ''&#34;" comment="&#34;&#34;" color="ffffff">
+							<qTrue>
+								<instruction text="&#34;Break&#34;" comment="&#34;&#34;" color="ffffff" rotated="0"></instruction>
+							</qTrue>
+							<qFalse>
+							</qFalse>
+						</alternative>
+						<instruction text="&#34;OutPutList &#60;- Split(valeur[j], CARAC_SEPARATION)&#34;" comment="&#34;&#34;" color="ffffff" rotated="0"></instruction>
+						<alternative text="&#34;OutPutList[0] = seances[index][3]&#34;" comment="&#34;&#34;" color="ffffff">
+							<qTrue>
+								<instruction text="&#34;nbPlacesTotal &#60;- StrToInt(OutPutList[1])&#34;,&#34;Break&#34;" comment="&#34;&#34;" color="ffffff" rotated="0"></instruction>
+							</qTrue>
+							<qFalse>
+							</qFalse>
+						</alternative>
+					</qFor>
+				</for>
+				<instruction text="&#34;nbPlacesVendu &#60;- 0&#34;,&#34;valeur &#60;- lireFichier(FICHIER_RESERV)&#34;" comment="&#34;&#34;" color="ffffff" rotated="0"></instruction>
+				<for text="&#34;pour j &#60;- 0 à length(valeur) - 1&#34;" comment="&#34;&#34;" color="ffffff">
+					<qFor>
+						<alternative text="&#34;valeur[j] = ''&#34;" comment="&#34;&#34;" color="ffffff">
+							<qTrue>
+								<instruction text="&#34;Break&#34;" comment="&#34;&#34;" color="ffffff" rotated="0"></instruction>
+							</qTrue>
+							<qFalse>
+							</qFalse>
+						</alternative>
+						<instruction text="&#34;OutPutList &#60;- Split(valeur[j], CARAC_SEPARATION)&#34;" comment="&#34;&#34;" color="ffffff" rotated="0"></instruction>
+						<alternative text="&#34;(OutPutList[0] = DateToStr(now)) and (OutPutList[1] = seances[index][1])&#34;,&#34;  and (OutPutList[2] = seances[index][2])&#34;" comment="&#34;&#34;" color="ffffff">
+							<qTrue>
+								<instruction text="&#34;nbPlacesVendu &#60;- StrToInt(OutPutList[7]) + nbPlacesVendu&#34;" comment="&#34;&#34;" color="ffffff" rotated="0"></instruction>
+							</qTrue>
+							<qFalse>
+							</qFalse>
+						</alternative>
+					</qFor>
+				</for>
+				<instruction text="&#34;nbPlacesRestant &#60;- nbPlacesTotal - nbPlacesVendu&#34;,&#34;bouton.pPlaces &#60;- nbPlacesRestant&#34;" comment="&#34;&#34;" color="ffffff" rotated="0"></instruction>
+				<alternative text="&#34;nbPlacesRestant &#60;= 0&#34;" comment="&#34;&#34;" color="ffffff">
+					<qTrue>
+						<instruction text="&#34;bouton.Complet()&#34;" comment="&#34;&#34;" color="ffffff" rotated="0"></instruction>
+					</qTrue>
+					<qFalse>
+					</qFalse>
+				</alternative>
+				<instruction text="&#34;listImageBouton.add(bouton)&#34;" comment="&#34;&#34;" color="ffffff" rotated="0"></instruction>
+				<instruction text="&#34;x &#60;- x + TAILLE_WIDTH + ECART_X&#34;" comment="&#34;&#34;" color="ffffff" rotated="0"></instruction>
+				<alternative text="&#34;listImageBouton.Count mod MAX_BOUTON_LIGNE = 0&#34;" comment="&#34;&#34;" color="ffffff">
+					<qTrue>
+						<instruction text="&#34;y &#60;- y + TAILLE_HEIGHT + ECART_X&#34;,&#34;x &#60;- START&#34;" comment="&#34;&#34;" color="ffffff" rotated="0"></instruction>
+					</qTrue>
+					<qFalse>
+					</qFalse>
+				</alternative>
+				<instruction text="&#34;inc(index)&#34;" comment="&#34;&#34;" color="ffffff" rotated="0"></instruction>
+			</qFor>
+		</for>
+		<alternative text="&#34;index &#60; MAX_IMAGE_BOUTON - 1&#34;" comment="&#34;&#34;" color="ffffff">
+			<qTrue>
+				<instruction text="&#34;BtnSeanceSuivante.Enabled &#60;- false&#34;" comment="&#34;&#34;" color="ffffff" rotated="0"></instruction>
+			</qTrue>
+			<qFalse>
+			</qFalse>
+		</alternative>
+		<instruction text="&#34;valeur &#60;- lireFichier(FICHIER_PRIX)&#34;,&#34;OutPutList &#60;- TStringList.Create&#34;" comment="&#34;&#34;" color="ffffff" rotated="0"></instruction>
+		<for text="&#34;pour i &#60;- 0 à length(valeur) - 1&#34;" comment="&#34;&#34;" color="ffffff">
+			<qFor>
+				<alternative text="&#34;valeur[i] = ''&#34;" comment="&#34;&#34;" color="ffffff">
+					<qTrue>
+						<instruction text="&#34;Break&#34;" comment="&#34;&#34;" color="ffffff" rotated="0"></instruction>
+					</qTrue>
+					<qFalse>
+					</qFalse>
+				</alternative>
+				<instruction text="&#34;OutPutList:= Split(valeur[i], CARAC_SEPARATION)&#34;,&#34;prix[i]:= StrToInt(OutPutList[1])&#34;,&#34;prix[i]:= StrToInt(OutPutList[1])&#34;,&#34;prix[i]:= StrToInt(OutPutList[1])&#34;" comment="&#34;&#34;" color="ffffff" rotated="0"></instruction>
+			</qFor>
+		</for>
+		<instruction text="&#34;OutPutList.Free&#34;,&#34;statistique()&#34;" comment="&#34;&#34;" color="ffffff" rotated="0"></instruction>
+	</children>
+</root>
