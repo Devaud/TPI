@@ -485,9 +485,6 @@ Begin
     statistique();
 
   end;
-
-  //destruction();
-  //Initialisation();
 end;
 
 

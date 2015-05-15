@@ -319,11 +319,12 @@ Begin
   exist:= false;
 
   // Tourne dans chaque lignes
-  for i:= 0 to length(valeur) - 1 do
+  for i:= 0 to length(lignes) - 1 do
   Begin
     // Crée une TStringList pour récupérer les éléments d'une ligne
     OutPutList:= TStringList.Create;
     OutPutList:= Split(lignes[i], CARAC_SEPARATION);
+
 
     // Tourne dans la lsite
     for j:= 0 to OutPutList.Count - 1 do
@@ -331,6 +332,7 @@ Begin
       // Vérifie si la valeur de la liste[i] vaut la valeur à chercher
       if UpperCase(OutPutList[j]) = UpperCase(valeur) then
         exist:= true;
+      
     end;
 
     // Test si existe est vrai

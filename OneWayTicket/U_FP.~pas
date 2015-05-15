@@ -68,6 +68,7 @@ const
   NOMBRE_SECTIONS  : Integer = 9;
   CARAC_SEPARATION : String  = ';';
   FORMAT_DATE      : String  = 'mmmm';  
+  CARAC_TEXT_SUITE : String  = '...';
 
 
 
@@ -158,8 +159,8 @@ Begin
   
   if length(text) > taille then
   Begin
-    text:= copy(text, 1, taille - 3);
-    text:= text + '...';
+    text:= copy(text, 1, taille - length(CARAC_TEXT_SUITE));
+    text:= text + CARAC_TEXT_SUITE;
   end;
 
   if length(text) < taille then
@@ -202,7 +203,7 @@ Begin
         element:= element + elements[index][i];
 
         if i < length(elements[index]) - 1 then
-          element:= element + ';';
+          element:= element + CARAC_SEPARATION;
       end;
       writeln(f, element);
       inc(index);
@@ -318,11 +319,13 @@ Begin
   exist:= false;
 
   // Tourne dans chaque lignes
-  for i:= 0 to length(valeur) - 1 do
+  for i:= 0 to length(lignes) - 1 do
   Begin
+    if
     // Crée une TStringList pour récupérer les éléments d'une ligne
     OutPutList:= TStringList.Create;
     OutPutList:= Split(lignes[i], CARAC_SEPARATION);
+
 
     // Tourne dans la lsite
     for j:= 0 to OutPutList.Count - 1 do
@@ -330,6 +333,7 @@ Begin
       // Vérifie si la valeur de la liste[i] vaut la valeur à chercher
       if UpperCase(OutPutList[j]) = UpperCase(valeur) then
         exist:= true;
+      
     end;
 
     // Test si existe est vrai

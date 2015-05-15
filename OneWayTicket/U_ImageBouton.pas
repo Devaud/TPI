@@ -42,7 +42,7 @@ CONST
   WIDTH_IMAGE   : integer = 193;
   HEIGHT_IMAGE  : integer = 57;
   MIN_CARACTERE : integer = 1;
-  MAX_CARACTERE : integer = 20;
+  MAX_CARACTERE : integer = 30;
 
 implementation
 

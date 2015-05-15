@@ -119,7 +119,7 @@ Begin
       break;
 
     // Split la ligne
-    OutPutList:= Split(valeur[i], ';');
+    OutPutList:= Split(valeur[i], CARAC_SEPARATION);
 
     // Formate le text pour l'affichage
     ligneFormate:= ajusterText(OutPutList[0], 20) + AjoutEspace(28);

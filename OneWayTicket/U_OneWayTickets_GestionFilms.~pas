@@ -305,7 +305,7 @@ begin
     self.Height:= FRM_HEIGHT_MIN;
   end;
 
-  LbxListeFilms.ItemIndex:= 0;
+  LbxListeFilms.ItemIndex:= index;
 end;
 
 { ****************************************************************************
